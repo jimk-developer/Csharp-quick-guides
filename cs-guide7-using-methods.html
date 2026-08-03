@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 7: Microsoft Visual C# - Using Methods</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C026D3;
+            --primary-dark: #86198F;
+            --primary-light: #F5D0FE;
+            --accent: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #C026D3 0%, #86198F 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #F5D0FE 0%, #F0ABFC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(192, 38, 211, 0.25);
+            color: #F5D0FE;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(192, 38, 211, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(192, 38, 211, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #F5D0FE;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #FDF4FF 0%, #F5D0FE 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(192, 38, 211, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #FDF4FF 0%, #F5D0FE 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #F5D0FE;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #FDF4FF 0%, #F5D0FE 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #A21CAF;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 7: Microsoft Visual C# - Using Methods</h1>
+        <p>Method Fundamentals, Method Structure, Accessibility and
+            Modifiers, Scope, Parameters and Arguments, Return Values,
+            Passing Arrays, Main() Method Variations, and Methods in GUI
+            Applications</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Method Fundamentals</a>
+            <a href="#section-structure" class="nav-pill">Method Structure</a>
+            <a href="#section-accessibility" class="nav-pill">Accessibility &amp; Modifiers</a>
+            <a href="#section-scope" class="nav-pill">Scope</a>
+            <a href="#section-parameters" class="nav-pill">Parameters &amp; Arguments</a>
+            <a href="#section-returns" class="nav-pill">Return Values</a>
+            <a href="#section-arrays" class="nav-pill">Passing Arrays</a>
+            <a href="#section-main" class="nav-pill">Main() Variations</a>
+            <a href="#section-gui" class="nav-pill">Methods in GUIs</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">07</div>
+                <div>
+                    <h2>Organizing Code into Reusable Units</h2>
+                    <p>As a program grows, repeating the same statements
+                        again and again makes it harder to read, harder to
+                        fix, and harder to trust. Methods solve this by
+                        packaging a task into a single named unit that can be
+                        called wherever it is needed. This guide covers what
+                        a method is and how it is structured, how
+                        accessibility and static modifiers control who can
+                        use a method and how, variable scope inside a
+                        method, how parameters and arguments work, how
+                        methods return values, how arrays behave when passed
+                        to a method, the several valid ways to write
+                        Main(), and how methods are used inside GUI
+                        applications.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">🧩 Method Fundamentals</h2>
+
+            <p>A <strong>method</strong> is an encapsulated series of
+                statements that carries out a task. Organizing a program's
+                logic into methods, rather than repeating the same
+                statements throughout a program, helps avoid
+                <strong>code bloat</strong>: a program that is unnecessarily
+                large and repetitive because the same logic appears in
+                multiple places instead of being written once and reused.
+            </p>
+
+            <h3>Calling Methods and Called Methods</h3>
+            <p>When your code uses a method's name to make that method
+                perform its task, you are <strong>calling</strong> the
+                method. The method that does the calling is known as the
+                <strong>calling method</strong>, and the method being used is
+                the <strong>called method</strong>. A method that uses
+                another method is therefore considered a calling method with
+                respect to whatever it calls.</p>
+
+            <h3>Implementation Hiding</h3>
+            <p><strong>Implementation hiding</strong> is the technique that
+                allows a programmer to change how a method works internally
+                without affecting any program that already uses that
+                method, as long as the method's name, parameters, and
+                return type stay the same. A <strong>method client</strong>
+                is any program or code that uses a method without needing to
+                know how that method accomplishes its task internally, much
+                like a <strong>black box</strong>: any device you can use
+                without understanding its inner workings.</p>
+
+            <div class="tip-box">
+                Implementation hiding is what lets you improve or rewrite a
+                method's internal logic later, perhaps to make it faster or
+                fix a bug, without forcing every program that already calls
+                that method to change anything about how it calls it.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-structure">🏗️ Method Structure</h2>
+
+            <p>A <strong>method declaration</strong>, also called a method
+                header, follows a specific order of parts, some required and
+                some optional.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Method Declaration</h4>
+                <pre><code><span class="comment">// [accessibility] [static] returnType MethodName(parameterList)</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">ConvertMilesToKilometers</span>(<span class="type">double</span> <span class="var">miles</span>)
+{
+    <span class="keyword">return</span> <span class="var">miles</span> * <span class="num">1.60934</span>;
+}</code></pre>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Part</th>
+                        <th>Required?</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Accessibility (<code>public</code>,
+                            <code>private</code>)</td>
+                        <td>Optional</td>
+                        <td>Controls which other code can call the method</td>
+                    </tr>
+                    <tr>
+                        <td><code>static</code></td>
+                        <td>Optional</td>
+                        <td>Marks the method as callable through the class
+                            itself, without an object</td>
+                    </tr>
+                    <tr>
+                        <td>Return type (or <code>void</code>)</td>
+                        <td>Required</td>
+                        <td>The data type of the value the method sends
+                            back, or void if it sends nothing back</td>
+                    </tr>
+                    <tr>
+                        <td>Identifier</td>
+                        <td>Required</td>
+                        <td>The method's name</td>
+                    </tr>
+                    <tr>
+                        <td>Parameter list</td>
+                        <td>Required (parentheses), even if empty</td>
+                        <td>Declares what data, if any, the method accepts
+                            when called</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Every C# method begins with this same pattern: an optional
+                accessibility modifier, an optional <code>static</code>
+                modifier, a required return type, a required identifier, and
+                a required parameter list enclosed in parentheses, even when
+                that parameter list is empty. The statements that make up
+                the method's body follow inside curly braces.</p>
+
+            <div class="tip-box">
+                A method with an empty parameter list, written as simply
+                <code>()</code>, is a completely valid method; it just
+                accepts no arguments when it is called. Every method
+                requires the parentheses themselves, whether or not anything
+                appears inside them.
+            </div>
+
+            <h3>The Return Type</h3>
+            <p>A method's <strong>type</strong> is determined by its
+                declared return type. If a method's header shows
+                <code>int</code> as its return type, that tells you the
+                method sends an integer value back to whatever called it.
+                The keyword <code>void</code> in a method header, in place
+                of a return type, means the method performs its task but
+                does not send any value back to its caller at all.</p>
+
+            <h3>Indentation Convention</h3>
+            <p>By convention, C# programmers indent the statements inside a
+                method's body, not the method header itself. The header
+                starts flush with the surrounding code, while every
+                statement within its curly braces is indented one level in,
+                making the boundaries of the method body easy to see at a
+                glance.</p>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-accessibility">🔐 Accessibility and Modifiers</h2>
+
+            <h3>Private vs. Public Access</h3>
+            <p>If a method declaration does not include an accessibility
+                modifier at all, C# treats that method as
+                <strong>private access</strong> by default: usable only
+                from within the class that contains it. Adding the
+                <code>public</code> keyword instead grants
+                <strong>public access</strong>, allowing the method to be
+                called from other classes as well.</p>
+
+            <div class="warning-box">
+                Leaving off an accessibility modifier does not make a method
+                public by default; C# always defaults to private access
+                unless <code>public</code> is explicitly written in the
+                method header.
+            </div>
+
+            <h3>Fully Qualified Names</h3>
+            <p>Calling a method that belongs to a different class often
+                requires its <strong>fully qualified name</strong>: the
+                class name followed by a period and the method name, such as
+                <code>Bakery.MixDough()</code>. Using a method's complete
+                name this way makes clear exactly which class the method
+                belongs to.</p>
+
+            <h3>Static vs. Nonstatic Methods</h3>
+            <p>A <strong>static</strong> method is called by referring to
+                the class itself, without needing an object created from
+                that class. A <strong>nonstatic</strong> method, which is
+                the default unless <code>static</code> is explicitly
+                written, instead requires an object reference; a nonstatic
+                method call always needs an actual object to call it on,
+                rather than the class name alone.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Static vs. Nonstatic Method Calls</h4>
+                <pre><code><span class="comment">// Static method: called through the class name</span>
+<span class="type">double</span> <span class="var">kilometers</span> = <span class="type">UnitConverter</span>.<span class="func">ConvertMilesToKilometers</span>(<span class="num">10</span>);
+
+<span class="comment">// Nonstatic method: requires an object reference</span>
+<span class="type">Robot</span> <span class="var">helper</span> = <span class="keyword">new</span> <span class="type">Robot</span>();
+<span class="var">helper</span>.<span class="func">Greet</span>();</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-scope">🔍 Scope</h2>
+
+            <p>A <strong>local variable</strong> or local constant is one
+                declared within a method's body. Locally declared items are
+                <strong>visible</strong>, meaning usable, only within the
+                specific method where they are declared; they are entirely
+                unknown to every other method in the program.</p>
+
+            <div class="warning-box">
+                A variable declared inside one method cannot be referenced
+                by name inside a different method, even another method in
+                the same class. Once execution leaves the method where a
+                local variable was declared, that variable is no longer
+                available anywhere; this is exactly why it is described as
+                being only in scope until the end of its own method.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-parameters">📥 Parameters and Arguments</h2>
+
+            <h3>Formal Parameters vs. Actual Parameters</h3>
+            <p>A <strong>formal parameter</strong> is a variable listed in a
+                method's header that is designed to accept a value when the
+                method is called; it is the placeholder that appears in the
+                method declaration itself. An <strong>actual parameter</strong>,
+                more commonly called an <strong>argument</strong>, is the
+                real value supplied in the method call that gets copied into
+                the formal parameter.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Formal Parameters vs. Arguments</h4>
+                <pre><code><span class="comment">// mealCost is the formal parameter, declared in the header</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">SuggestGratuity</span>(<span class="type">double</span> <span class="var">mealCost</span>)
+{
+    <span class="type">double</span> <span class="var">gratuity</span> = <span class="var">mealCost</span> * <span class="num">0.18</span>;
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Suggested gratuity: {0:C2}"</span>, <span class="var">gratuity</span>);
+}
+
+<span class="comment">// 42.50 is the actual parameter (argument) in this call</span>
+<span class="func">SuggestGratuity</span>(<span class="num">42.50</span>);</code></pre>
+            </div>
+
+            <p>A formal parameter that receives a copy of the value passed
+                to it is described as an example of a parameter
+                <strong>passed by value</strong>: the method works with its
+                own separate copy, so changes made to that parameter inside
+                the method have no effect on the original argument back in
+                the calling method.</p>
+
+            <h3>Matching Arguments to Parameters</h3>
+            <p>The arguments passed in a method call must match the
+                method's declared parameters in both number and type, with
+                two notable exceptions.</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Default Arguments</h4>
+                    <p>A parameter can be given a default value in the
+                        method declaration itself, which allows the method
+                        to be called with fewer arguments than parameters,
+                        as long as the omitted parameters are the ones with
+                        defaults.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Type Promotion</h4>
+                    <p>An argument does not always need to exactly match its
+                        parameter's declared type. A value can be
+                        automatically promoted to a larger, compatible type,
+                        such as passing an <code>int</code> argument to a
+                        <code>double</code> parameter.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                C# still requires a data type to be written for every single
+                formal parameter in a method's header, even when two
+                consecutive parameters happen to share the same type. There
+                is no shorthand that lets you list a type once and apply it
+                to multiple parameter names.
+            </div>
+
+            <h3>Nested Method Calls</h3>
+            <p>Using the result of one method call directly as the argument
+                to another method call is called a <strong>nested method
+                    call</strong>. C# evaluates the inner method call first,
+                then passes its returned value into the outer method call.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: A Nested Method Call</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="func">ConvertMilesToKilometers</span>(<span class="num">10</span>));
+<span class="comment">// ConvertMilesToKilometers(10) is evaluated first, and its
+// returned value becomes the argument passed to WriteLine()</span></code></pre>
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-returns">↩️ Return Values</h2>
+
+            <p>The <strong>return statement</strong> sends a value from an
+                executing method back to whatever method called it. A C#
+                method can return, at most, one value to its caller; there
+                is no way for a single method call to hand back two separate
+                return values at once.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Method with a Return Value</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">bool</span> <span class="func">IsEligibleForDiscount</span>(<span class="type">int</span> <span class="var">customerAge</span>)
+{
+    <span class="keyword">return</span> <span class="var">customerAge</span> &gt;= <span class="num">65</span>;
+}</code></pre>
+            </div>
+
+            <h3>Boolean-Returning Methods in Conditions</h3>
+            <p>A method that returns a <code>bool</code> value can be called
+                directly inside a conditional expression, exactly as if it
+                were a Boolean variable.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Calling a Boolean Method in an if Statement</h4>
+                <pre><code><span class="keyword">if</span> (<span class="func">IsEligibleForDiscount</span>(<span class="var">age</span>))
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Senior discount applied."</span>);
+}</code></pre>
+            </div>
+
+            <p>A Boolean-returning method can also control a loop directly,
+                such as in the test expression of a while loop, since the
+                loop simply needs an expression that evaluates to true or
+                false on each pass.</p>
+
+            <div class="warning-box">
+                When a compound Boolean expression combines two method calls
+                with <code>&&</code> or <code>||</code>, short-circuit
+                evaluation can prevent the second method from ever being
+                called. If that second method is expected to run every time,
+                such as one that also updates some other value as a side
+                effect, relying on it to always execute inside a
+                short-circuited expression can produce unintended results.
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-arrays">📦 Passing Arrays to Methods</h2>
+
+            <h3>Passing a Single Array Element</h3>
+            <p>Passing a single element of an array with a built-in type,
+                such as one <code>int</code> or one <code>char</code> from
+                an array, behaves exactly like passing any other value: it
+                is <strong>passed by value</strong>. The method receives its
+                own separate copy of that element, so changing the
+                parameter inside the method does not affect the original
+                array element back where the array was declared.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Passing a Single Array Element</h4>
+                <pre><code><span class="type">char</span>[] <span class="var">passwordChars</span> = { <span class="string">'s'</span>, <span class="string">'i'</span>, <span class="string">'l'</span>, <span class="string">'k'</span> };
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">ReplaceCharacter</span>(<span class="type">char</span> <span class="var">letter</span>)
+{
+    <span class="var">letter</span> = <span class="string">'u'</span>;
+}
+
+<span class="func">ReplaceCharacter</span>(<span class="var">passwordChars</span>[<span class="num">1</span>]);
+<span class="comment">// passwordChars still contains { 's', 'i', 'l', 'k' };
+// only the method's local copy of the character changed</span></code></pre>
+            </div>
+
+            <h3>Passing an Entire Array</h3>
+            <p>Passing an entire array, rather than one of its elements,
+                works differently. Because arrays are objects, passing a
+                whole array to a method is <strong>passed by reference</strong>:
+                the method receives the array's memory address, giving it
+                direct access to the actual values stored in the original
+                array back in the calling code, not a separate copy.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Passing an Entire Array by Reference</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DoubleAllValues</span>(<span class="type">int</span>[] <span class="var">numbers</span>)
+{
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="num">0</span>; <span class="var">i</span> &lt; <span class="var">numbers</span>.<span class="var">Length</span>; ++<span class="var">i</span>)
+    {
+        <span class="var">numbers</span>[<span class="var">i</span>] *= <span class="num">2</span>;
+    }
+}
+
+<span class="type">int</span>[] <span class="var">scores</span> = { <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span> };
+<span class="func">DoubleAllValues</span>(<span class="var">scores</span>);
+<span class="comment">// scores is now { 20, 40, 60 }, because the method
+// modified the original array's actual elements</span></code></pre>
+            </div>
+
+            <p>The square brackets, <code>[]</code>, placed after the data
+                type in a parameter list, as in <code>int[] numbers</code>,
+                are exactly what indicate to the compiler that a parameter
+                is an entire array rather than a single value of that type.
+            </p>
+
+            <div class="tip-box">
+                Passing multidimensional or jagged arrays to a method works
+                the same way, by matching the appropriate bracket pattern in
+                the parameter list. A rectangular array parameter uses
+                <code>double[,]</code>, while a jagged array parameter uses
+                <code>int[][]</code>, mirroring however the array itself was
+                declared.
+            </div>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-main">🚪 Main() Method Variations</h2>
+
+            <p>C# allows several valid ways to write the <code>Main()</code>
+                method header, and it is useful to recognize each of them,
+                since different projects and different needs call for
+                different versions.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Main() Variation</th>
+                        <th>When to Use It</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>static void Main()</code></td>
+                        <td>The conventional, most common form; no
+                            command-line arguments needed, nothing returned
+                            to the operating system</td>
+                    </tr>
+                    <tr>
+                        <td><code>static void Main(string[] args)</code></td>
+                        <td>Accepts command-line arguments typed after the
+                            program's name when it is run</td>
+                    </tr>
+                    <tr>
+                        <td><code>static int Main()</code></td>
+                        <td>Returns an integer exit code to the operating
+                            system or calling program when the application
+                            finishes</td>
+                    </tr>
+                    <tr>
+                        <td><code>public static void Main()</code></td>
+                        <td>Allows Main() to be called from another class
+                            using its fully qualified name, though there is
+                            rarely a practical reason to do this</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>If no access specifier is written for <code>Main()</code>, it
+                defaults to <code>private</code> access, the same default
+                that applies to any other method. In practice,
+                <code>Main()</code> is conventionally left with private
+                access; C# programmers rarely add <code>public</code> to it.
+                <code>Main()</code> always includes the <code>static</code>
+                keyword because it is associated with its containing class
+                as a whole, not with any individual object created from that
+                class.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Reading Command-Line Arguments</h4>
+                <pre><code><span class="keyword">static</span> <span class="type">void</span> <span class="func">Main</span>(<span class="type">string</span>[] <span class="var">args</span>)
+{
+    <span class="keyword">if</span> (<span class="var">args</span>.<span class="var">Length</span> &gt; <span class="num">0</span>)
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"First argument: {0}"</span>, <span class="var">args</span>[<span class="num">0</span>]);
+    }
+}</code></pre>
+            </div>
+
+            <p>A program compiled with this <code>Main()</code> header,
+                named <code>HandyTool</code>, would be launched from a
+                command prompt simply by typing its name followed by
+                whatever arguments it should receive, such as
+                <code>HandyTool report.txt</code>, with the arguments
+                separated from the program name and from each other by
+                spaces.</p>
+
+            <div class="tip-box">
+                Ending a <code>static int Main()</code> method with
+                <code>return 0;</code> is a common convention that signals
+                successful completion to the operating system or to whatever
+                program launched it; by convention, a return value of 0
+                indicates success, while a nonzero value typically signals
+                that some kind of error occurred.
+            </div>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-gui">🖱️ Methods in GUI Applications</h2>
+
+            <p>When you place a control such as a Button on a form in the
+                Visual Studio IDE and double-click it, Visual Studio
+                automatically generates an empty event-handling method
+                header for you, ready to be filled in.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Automatically Generated Click Method</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">okButton_Click</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">EventArgs</span> <span class="var">e</span>)
+{
+
+}</code></pre>
+            </div>
+
+            <p>The two parameters shown here, <code>sender</code> and
+                <code>e</code>, are generated automatically by the IDE as
+                part of the standard pattern every event-handling method
+                follows; you do not need to write this parameter list
+                yourself.</p>
+
+            <div class="tip-box">
+                Because a generated Click method is associated with a Form
+                object rather than with the class as a whole, it is, by
+                default, a <strong>nonstatic</strong> method. Methods
+                associated with Form objects are typically nonstatic for
+                exactly this reason.
+            </div>
+
+            <h3>Scope Across Multiple Event Methods</h3>
+            <p>A GUI application frequently defines several separate
+                event-handling methods, one for each control's event, such
+                as a Click method for one button and another Click method
+                for a different button. When a variable or constant needs to
+                be available to more than one of these event-handling
+                methods, it must be defined outside of any single method,
+                within the Form class itself, rather than inside just one
+                event handler.</p>
+
+            <div class="warning-box">
+                If a variable is instead declared inside just one event
+                method, ordinary method scope rules still apply: that
+                variable is only visible within that one method and unknown
+                to every other event-handling method in the class, even
+                though they all belong to the same form. Because variables
+                are frequently needed by multiple event-handling methods in
+                a GUI application, you must constantly stay aware of each
+                variable's or constant's scope when deciding where to
+                declare it.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 7 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Method</td>
+                            <td>An encapsulated series of statements that
+                                carries out a task</td>
+                        </tr>
+                        <tr>
+                            <td>Code bloat</td>
+                            <td>Unnecessary repetition that methods help
+                                avoid</td>
+                        </tr>
+                        <tr>
+                            <td>Calling method / called method</td>
+                            <td>The method that uses another / the method
+                                being used</td>
+                        </tr>
+                        <tr>
+                            <td>Implementation hiding</td>
+                            <td>Changing a method's internals without
+                                affecting its callers</td>
+                        </tr>
+                        <tr>
+                            <td>Black box / method client</td>
+                            <td>Usable without knowing internals / code that
+                                calls a method without needing to</td>
+                        </tr>
+                        <tr>
+                            <td>Method declaration order</td>
+                            <td>[accessibility] [static] returnType
+                                Identifier(parameters)</td>
+                        </tr>
+                        <tr>
+                            <td>Optional header parts</td>
+                            <td>Accessibility and static are optional;
+                                return type, identifier, parentheses are not</td>
+                        </tr>
+                        <tr>
+                            <td>void</td>
+                            <td>Means the method returns no value</td>
+                        </tr>
+                        <tr>
+                            <td>Private access (default)</td>
+                            <td>Usable only within the containing class</td>
+                        </tr>
+                        <tr>
+                            <td>Public access</td>
+                            <td>Usable from other classes</td>
+                        </tr>
+                        <tr>
+                            <td>Fully qualified name</td>
+                            <td>ClassName.MethodName(), used to call across
+                                classes</td>
+                        </tr>
+                        <tr>
+                            <td>Static method</td>
+                            <td>Called through the class name; no object
+                                needed</td>
+                        </tr>
+                        <tr>
+                            <td>Nonstatic method (default)</td>
+                            <td>Requires an object reference to call</td>
+                        </tr>
+                        <tr>
+                            <td>Local variable scope</td>
+                            <td>Visible only within the method where it is
+                                declared</td>
+                        </tr>
+                        <tr>
+                            <td>Formal parameter</td>
+                            <td>Placeholder in the method header that
+                                accepts a value</td>
+                        </tr>
+                        <tr>
+                            <td>Actual parameter (argument)</td>
+                            <td>The real value supplied in the method call</td>
+                        </tr>
+                        <tr>
+                            <td>Passed by value</td>
+                            <td>Method gets a copy; changes do not affect
+                                the original</td>
+                        </tr>
+                        <tr>
+                            <td>Fewer arguments than parameters</td>
+                            <td>Allowed only when default arguments are used</td>
+                        </tr>
+                        <tr>
+                            <td>Type promotion</td>
+                            <td>An argument can be promoted to a larger
+                                compatible parameter type</td>
+                        </tr>
+                        <tr>
+                            <td>Nested method call</td>
+                            <td>Using one method's return value as another
+                                method's argument</td>
+                        </tr>
+                        <tr>
+                            <td>return statement</td>
+                            <td>Sends at most one value back to the caller</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean-returning methods</td>
+                            <td>Can be used directly in if and while
+                                conditions</td>
+                        </tr>
+                        <tr>
+                            <td>Single array element passed</td>
+                            <td>By value; the original array is unaffected</td>
+                        </tr>
+                        <tr>
+                            <td>Entire array passed</td>
+                            <td>By reference; the method can modify the
+                                original array</td>
+                        </tr>
+                        <tr>
+                            <td>Array parameter syntax</td>
+                            <td>Square brackets after the type, such as
+                                int[] numbers</td>
+                        </tr>
+                        <tr>
+                            <td>Main() variations</td>
+                            <td>void or int return type; optional string[]
+                                args; rarely public</td>
+                        </tr>
+                        <tr>
+                            <td>return 0 in Main()</td>
+                            <td>Signals successful completion to the
+                                operating system</td>
+                        </tr>
+                        <tr>
+                            <td>Generated Click method</td>
+                            <td>private void controlName_Click(object
+                                sender, EventArgs e)</td>
+                        </tr>
+                        <tr>
+                            <td>Form methods</td>
+                            <td>Typically nonstatic, since they are
+                                associated with a Form object</td>
+                        </tr>
+                        <tr>
+                            <td>Shared GUI variables</td>
+                            <td>Must be declared at the class level to be
+                                visible to multiple event methods</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 7: Microsoft Visual C# - Using
+                Methods &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

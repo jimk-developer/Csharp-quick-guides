@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 8: Microsoft Visual C# - Advanced Method Concepts</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #65A30D;
+            --primary-dark: #3F6212;
+            --primary-light: #D9F99D;
+            --accent: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #65A30D 0%, #3F6212 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #D9F99D 0%, #BEF264 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(101, 163, 13, 0.25);
+            color: #D9F99D;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(101, 163, 13, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(101, 163, 13, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #D9F99D;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #F7FEE7 0%, #D9F99D 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(101, 163, 13, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #F7FEE7 0%, #D9F99D 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #D9F99D;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #F7FEE7 0%, #D9F99D 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #4D7C0F;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 8: Microsoft Visual C# - Advanced Method Concepts</h1>
+        <p>Value vs. Reference Parameters, Mandatory and Optional
+            Parameters, ref and out Parameters, Parameter Arrays, Returning
+            References, Method Overloading, Overload Resolution, Ambiguous
+            Methods, and Named and Optional Arguments</p>
+        <nav class="nav-pills">
+            <a href="#section-value-reference" class="nav-pill">Value vs. Reference</a>
+            <a href="#section-mandatory-optional" class="nav-pill">Mandatory &amp; Optional</a>
+            <a href="#section-ref" class="nav-pill">ref Parameters</a>
+            <a href="#section-out" class="nav-pill">out Parameters</a>
+            <a href="#section-params" class="nav-pill">Parameter Arrays</a>
+            <a href="#section-returning-refs" class="nav-pill">Returning References</a>
+            <a href="#section-overloading" class="nav-pill">Method Overloading</a>
+            <a href="#section-resolution" class="nav-pill">Overload Resolution</a>
+            <a href="#section-ambiguous" class="nav-pill">Ambiguous Methods</a>
+            <a href="#section-named" class="nav-pill">Named &amp; Optional Arguments</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">08</div>
+                <div>
+                    <h2>Giving Methods More Flexibility</h2>
+                    <p>Basic methods take a fixed list of parameters, do
+                        their job, and hand back at most one value. C#
+                        offers several tools that go beyond that basic
+                        pattern: parameters that let a method alter the
+                        caller's original data, parameters that don't need a
+                        starting value, methods that accept any number of
+                        arguments, multiple versions of the same method name,
+                        and arguments that can be labeled or skipped
+                        entirely. This guide covers each of these advanced
+                        method features and the rules that govern how they
+                        work together.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-value-reference">🔄 Value Parameters vs. Reference Parameters</h2>
+
+            <p>A <strong>value parameter</strong> is declared with just a
+                type and a name in a method header, and the method receives
+                a copy of whatever value was passed to it. Because the
+                method is working with its own separate copy, changes made
+                to a value parameter inside the method never affect the
+                original variable back in the calling code.</p>
+
+            <p>A <strong>reference parameter</strong> works differently: it
+                acts as an alias, or pseudonym, for the exact same memory
+                location occupied by the original variable being passed in.
+                Changes made to a reference parameter inside the method
+                directly change the original variable itself, since there is
+                only one underlying value being shared between the caller
+                and the method.</p>
+
+            <div class="warning-box">
+                To guarantee that a variable's original value remains
+                unchanged after a method executes, pass it as a
+                <strong>value parameter</strong>, not as a reference or
+                output parameter. Reference and output parameters exist
+                specifically to let a method alter the caller's original
+                data; using either one when the goal is to protect that
+                original value works against the purpose of choosing that
+                parameter type in the first place.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-mandatory-optional">📋 Mandatory vs. Optional Parameters</h2>
+
+            <p>A <strong>mandatory parameter</strong> requires a
+                corresponding argument in every single call to the method;
+                leaving one out is a compile-time error. Value parameters,
+                reference parameters, and output parameters are all
+                mandatory in this sense: an argument must always be supplied
+                for each of them, even though an output parameter's argument
+                does not need to hold a value beforehand.</p>
+
+            <p>An <strong>optional parameter</strong>, by contrast,
+                automatically receives a default value if the method is
+                called without an explicit argument for it. Optional
+                parameters give a method flexibility: the same method can be
+                called with fewer arguments in common cases and with more
+                arguments when a caller needs to override a default.</p>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-ref">🔗 Reference Parameters (ref)</h2>
+
+            <p>C# uses the <code>ref</code> keyword to declare a reference
+                parameter. The keyword must appear in both places: in the
+                method header, in front of the parameter's type, and again
+                in the method call, in front of the argument being passed.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Method with a Reference Parameter</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">ApplyInterest</span>(<span class="keyword">ref</span> <span class="type">double</span> <span class="var">balance</span>)
+{
+    <span class="var">balance</span> += <span class="var">balance</span> * <span class="num">0.02</span>;
+}
+
+<span class="type">double</span> <span class="var">accountBalance</span> = <span class="num">1000.00</span>;
+<span class="func">ApplyInterest</span>(<span class="keyword">ref</span> <span class="var">accountBalance</span>);
+<span class="comment">// accountBalance is now 1020.00, because ApplyInterest
+// modified the original variable directly</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                A reference parameter's argument must already hold an
+                assigned value before the method is called. Passing an
+                uninitialized variable as a <code>ref</code> argument is a
+                compiler error, since <code>ref</code> assumes the variable
+                already has meaningful data that the method may read from as
+                well as write to.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-out">📤 Output Parameters (out)</h2>
+
+            <p>The <code>out</code> keyword declares an
+                <strong>output parameter</strong>, used when the argument
+                passed in does not need to hold a value before the method is
+                called. Like a reference parameter, an output parameter
+                gives the method direct access to the original variable, but
+                without requiring that variable to already be initialized.
+            </p>
+
+            <div class="warning-box">
+                Every output parameter must be assigned a value inside the
+                method's body before the method returns. The compiler
+                enforces this rule, since the entire purpose of an out
+                parameter is to guarantee the caller receives a value
+                through it.
+            </div>
+
+            <h3>Declaring an Out Variable Inline</h3>
+            <p>C# allows an <strong>out variable</strong> to be declared
+                directly at the point it is passed into a method call,
+                rather than requiring a separate declaration statement
+                beforehand.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring an Out Variable Inline</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">SplitFullName</span>(<span class="type">string</span> <span class="var">fullName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">firstName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">lastName</span>)
+{
+    <span class="type">string</span>[] <span class="var">parts</span> = <span class="var">fullName</span>.<span class="func">Split</span>(<span class="string">' '</span>);
+    <span class="var">firstName</span> = <span class="var">parts</span>[<span class="num">0</span>];
+    <span class="var">lastName</span> = <span class="var">parts</span>[<span class="num">1</span>];
+}
+
+<span class="comment">// firstName and lastName are declared right here, inline, with "out"</span>
+<span class="func">SplitFullName</span>(<span class="string">"Jordan Reyes"</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">firstName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">lastName</span>);
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Welcome, {0} {1}!"</span>, <span class="var">firstName</span>, <span class="var">lastName</span>);</code></pre>
+            </div>
+
+            <div class="warning-box">
+                If <code>firstName</code> and <code>lastName</code> were used
+                in the method call without either a prior declaration or the
+                inline <code>out string</code> (or <code>out var</code>)
+                syntax shown above, the program would fail to compile, since
+                the compiler would have no declared variable to attach the
+                output values to.
+            </div>
+
+            <p>Output parameters are the natural choice whenever a method
+                needs to send back more than one value, since a method's
+                <code>return</code> statement can only hand back a single
+                value on its own; one or more <code>out</code> parameters let
+                a single method call effectively produce several results at
+                once.</p>
+
+            <h3>Avoiding Conversion Exceptions with TryParse()</h3>
+            <p>Several of C#'s built-in conversion methods use an output
+                parameter specifically to avoid throwing an exception when a
+                value cannot be converted. <code>TryParse()</code> is the
+                most common example: instead of throwing an exception on
+                invalid input the way <code>Parse()</code> does, it returns
+                a <code>bool</code> indicating success or failure and places
+                the converted result into an out parameter only when the
+                conversion succeeds.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Avoiding an Exception with TryParse()</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">Write</span>(<span class="string">"Enter your age: "</span>);
+<span class="type">string</span> <span class="var">input</span> = <span class="type">Console</span>.<span class="func">ReadLine</span>();
+
+<span class="keyword">if</span> (<span class="type">int</span>.<span class="func">TryParse</span>(<span class="var">input</span>, <span class="keyword">out</span> <span class="type">int</span> <span class="var">age</span>))
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You are {0} years old."</span>, <span class="var">age</span>);
+}
+<span class="keyword">else</span>
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"That wasn't a valid whole number."</span>);
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                Unlike <code>int.Parse()</code>, which throws an exception if
+                its argument cannot be converted, <code>int.TryParse()</code>
+                simply returns <code>false</code> and leaves the out
+                parameter set to its default value, letting a program handle
+                invalid input gracefully without needing exception-handling
+                code at all.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-params">📦 Parameter Arrays (params)</h2>
+
+            <p>The <code>params</code> keyword declares a local array in a
+                method header that can accept any number of elements, all of
+                the same type, without the caller needing to build an array
+                explicitly. Use <code>params</code> when you know what data
+                type is appropriate for a method's arguments, but you do not
+                know in advance how many arguments a particular call might
+                need to send.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Method with a Parameter Array</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">SumPrices</span>(<span class="keyword">params</span> <span class="type">double</span>[] <span class="var">prices</span>)
+{
+    <span class="type">double</span> <span class="var">total</span> = <span class="num">0</span>;
+    <span class="keyword">foreach</span> (<span class="type">double</span> <span class="var">price</span> <span class="keyword">in</span> <span class="var">prices</span>)
+    {
+        <span class="var">total</span> += <span class="var">price</span>;
+    }
+    <span class="keyword">return</span> <span class="var">total</span>;
+}
+
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="func">SumPrices</span>(<span class="num">4.99</span>));
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="func">SumPrices</span>(<span class="num">4.99</span>, <span class="num">2.50</span>, <span class="num">19.95</span>));</code></pre>
+            </div>
+
+            <p>Both calls above are legal, even though they pass a different
+                number of arguments; a method declared with
+                <code>params double[] prices</code> gathers whatever
+                arguments are supplied into a single array named
+                <code>prices</code> for use inside the method body.</p>
+
+            <div class="warning-box">
+                Only one <code>params</code> keyword is permitted in a
+                single method declaration, and it must be the very last
+                parameter listed in the parameter list. No other parameters
+                can follow a parameter array in the same method header.
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-returning-refs">↪️ Returning References</h2>
+
+            <p>C# also allows a method to return a reference rather than a
+                copy of a value, using the <code>ref</code> keyword in front
+                of both the method's return type and its return statement.
+            </p>
+
+            <div class="warning-box">
+                A method may only return a reference to something that was
+                itself originally passed into that method as a reference. It
+                is not safe, and not allowed, to return a reference to a
+                local variable created entirely inside the method, since
+                that local variable stops existing once the method finishes
+                executing.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Syntax: Returning a Reference</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">ref</span> <span class="type">int</span> <span class="func">GetLarger</span>(<span class="keyword">ref</span> <span class="type">int</span> <span class="var">first</span>, <span class="keyword">ref</span> <span class="type">int</span> <span class="var">second</span>)
+{
+    <span class="keyword">if</span> (<span class="var">first</span> &gt;= <span class="var">second</span>)
+    {
+        <span class="keyword">return</span> <span class="keyword">ref</span> <span class="var">first</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">ref</span> <span class="var">second</span>;
+}</code></pre>
+            </div>
+
+            <p><code>GetLarger()</code> is safe to write this way because
+                both <code>first</code> and <code>second</code> were already
+                passed into the method by reference; the method simply hands
+                back a reference to whichever one it already had access to,
+                rather than creating a brand new value of its own.</p>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-overloading">🧬 Method Overloading</h2>
+
+            <p><strong>Overloading</strong> is the technique that allows a
+                programmer to write multiple versions of a method using the
+                same identifier, as long as each version has a different
+                <strong>signature</strong>. A method's signature consists of
+                its name and its parameter list combined; two methods with
+                the same name but a different number of parameters, a
+                different order of parameter types, or different parameter
+                types altogether have different signatures and are legal
+                overloads of one another.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Overloaded Methods</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateArea</span>(<span class="type">double</span> <span class="var">side</span>)
+{
+    <span class="keyword">return</span> <span class="var">side</span> * <span class="var">side</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateArea</span>(<span class="type">double</span> <span class="var">length</span>, <span class="type">double</span> <span class="var">width</span>)
+{
+    <span class="keyword">return</span> <span class="var">length</span> * <span class="var">width</span>;
+}</code></pre>
+            </div>
+
+            <p>Both methods above share the identifier
+                <code>CalculateArea</code>, but their differing parameter
+                counts give them different signatures, making this a legal
+                overload rather than a duplicate declaration.</p>
+
+            <div class="warning-box">
+                The return type is not part of a method's signature.
+                Overloaded methods sharing the same identifier do not need
+                to share the same return type, but two methods with
+                identical names and identical parameter lists that differ
+                only in return type are illegal; the compiler cannot tell
+                them apart based on return type alone, so this situation is
+                a compile error rather than a valid overload.
+            </div>
+
+            <h3>Why Programmers Overload Methods</h3>
+            <p>The most common reason an experienced programmer overloads a
+                method is to let callers use the same, logically meaningful
+                method name to accomplish essentially the same task, no
+                matter what combination of data happens to be available at
+                the call site, rather than inventing several differently
+                named methods for what is conceptually one operation.</p>
+
+            <p>C#'s own built-in library methods make heavy use of
+                overloading. <code>Convert.ToInt32()</code>, for example, is
+                overloaded many times over, with separate versions that
+                accept a <code>string</code>, a <code>double</code>, a
+                <code>bool</code>, and several other types, all under the
+                same familiar method name.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-resolution">⚖️ Overload Resolution</h2>
+
+            <p>When a method call could potentially match more than one
+                overloaded version, C# performs <strong>overload
+                    resolution</strong> to determine exactly which version
+                to actually call.</p>
+
+            <h3>Applicable Methods</h3>
+            <p>Any and all overloaded versions that could legally accept a
+                given call, whether through an exact type match or through
+                implicit conversion of one or more arguments, are called
+                <strong>applicable methods</strong> for that call.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Multiple Applicable Overloads</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">string</span> <span class="func">Describe</span>(<span class="type">int</span> <span class="var">value</span>)
+{
+    <span class="keyword">return</span> <span class="string">"Whole number: "</span> + <span class="var">value</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">string</span> <span class="func">Describe</span>(<span class="type">double</span> <span class="var">value</span>)
+{
+    <span class="keyword">return</span> <span class="string">"Decimal number: "</span> + <span class="var">value</span>;
+}
+
+<span class="type">int</span> <span class="var">quantity</span> = <span class="num">7</span>;
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="func">Describe</span>(<span class="var">quantity</span>));
+<span class="comment">// Both overloads are applicable, since quantity could implicitly
+// convert to double, but the int overload is an exact match</span></code></pre>
+            </div>
+
+            <h3>Betterness Rules</h3>
+            <p>When more than one overload is applicable to a call, C# uses
+                its <strong>betterness rules</strong> to select the single
+                best match among them. An overload that matches an
+                argument's type exactly, with no conversion needed at all,
+                is always considered better than an overload that requires
+                implicitly converting that argument to a different,
+                compatible type. In the example above, calling
+                <code>Describe(quantity)</code> with an <code>int</code>
+                argument calls the <code>int</code> overload directly,
+                because an exact match is always preferred over triggering
+                an implicit conversion to reach the <code>double</code>
+                overload.</p>
+
+            <div class="tip-box">
+                Reference and output arguments are excluded from the
+                betterness rules' type-conversion comparisons, since a
+                <code>ref</code> or <code>out</code> argument must match its
+                parameter's type exactly; no implicit conversion is possible
+                for them in the first place, so there is nothing for the
+                betterness rules to weigh for those particular arguments.
+            </div>
+
+            <h3>Finding Method Information in the IDE</h3>
+            <p>Visual Studio's <strong>IntelliSense</strong> feature displays
+                a method's available overloads, its parameter names and
+                types, and its return type as you type a method call,
+                making it a convenient way to discover exactly which
+                overloads exist and what each one expects.</p>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-ambiguous">❓ Ambiguous Methods</h2>
+
+            <p>Sometimes more than one applicable overload is equally good
+                by the betterness rules, with neither one clearly better
+                than the other for a specific call. When the compiler cannot
+                determine which overloaded version to use, that method call
+                is described as <strong>ambiguous</strong>, and the program
+                fails to compile.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Potentially Ambiguous Pair of Overloads</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateFee</span>(<span class="type">double</span> <span class="var">amount</span>, <span class="type">int</span> <span class="var">days</span>)
+{
+    <span class="keyword">return</span> <span class="var">amount</span> * <span class="num">0.01</span> * <span class="var">days</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateFee</span>(<span class="type">int</span> <span class="var">amount</span>, <span class="type">double</span> <span class="var">days</span>)
+{
+    <span class="keyword">return</span> <span class="var">amount</span> * <span class="num">0.015</span> * <span class="var">days</span>;
+}
+
+<span class="comment">// CalculateFee(6, 45) is genuinely ambiguous:
+// int 6 could convert to double for the first overload,
+// or int 45 could convert to double for the second overload,
+// and neither conversion is a better match than the other</span></code></pre>
+            </div>
+
+            <p>These two overloads are only <strong>potentially
+                    ambiguous</strong> as declarations; they become
+                <strong>truly ambiguous</strong> only at the moment a
+                specific call is made that both versions could equally well
+                satisfy, with no available exact match and no way for the
+                betterness rules to prefer one implicit conversion over the
+                other. Calling <code>CalculateFee(6, 45)</code> with two
+                integer arguments triggers exactly that situation, since
+                either argument could be the one that gets converted to
+                <code>double</code>.</p>
+
+            <!-- ===================== SECTION 10 ===================== -->
+            <h2 id="section-named">🏷️ Named and Optional Arguments</h2>
+
+            <h3>Creating Optional Parameters</h3>
+            <p>A parameter becomes optional by assigning it a default value
+                directly in the method declaration. Only <strong>value
+                    parameters</strong> can be made optional this way;
+                reference and output parameters cannot be given default
+                values.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Method with an Optional Parameter</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="func">AwardPoints</span>(<span class="type">int</span> <span class="var">basePoints</span>, <span class="type">string</span> <span class="var">bonusReason</span> = <span class="string">"Standard play"</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0} points awarded for: {1}"</span>, <span class="var">basePoints</span>, <span class="var">bonusReason</span>);
+    <span class="keyword">return</span> <span class="var">basePoints</span>;
+}
+
+<span class="func">AwardPoints</span>(<span class="num">10</span>);
+<span class="comment">// Displays: 10 points awarded for: Standard play</span>
+
+<span class="func">AwardPoints</span>(<span class="num">25</span>, <span class="string">"Perfect round"</span>);
+<span class="comment">// Displays: 25 points awarded for: Perfect round</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                When you add optional parameters to a parameter list, they
+                must come after every mandatory parameter, positioned to the
+                right of them in the list. Once a parameter has been given a
+                default value, every parameter that follows it in the list
+                must also be given a default value; C# does not allow a
+                mandatory parameter to appear after an optional one.
+            </div>
+
+            <h3>Named Arguments</h3>
+            <p>A <strong>named argument</strong> is written by preceding the
+                value with the parameter's own name from the method
+                declaration, followed by a colon. This lets a caller assign
+                a value to a specific parameter directly by name, in any
+                order, rather than relying purely on position.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Calling a Method with a Named Argument</h4>
+                <pre><code><span class="func">AwardPoints</span>(<span class="var">basePoints</span>: <span class="num">15</span>, <span class="var">bonusReason</span>: <span class="string">"Assist bonus"</span>);
+<span class="comment">// Same result as AwardPoints(15, "Assist bonus"), written by name instead</span></code></pre>
+            </div>
+
+            <p>An unnamed argument, matched to its parameter purely by its
+                position in the call, is called a <strong>positional
+                    argument</strong>. C# requires every positional argument
+                in a method call to be listed before any named arguments;
+                once a named argument appears, every argument after it must
+                also be named.</p>
+
+            <h3>Advantages and Disadvantages of Named Arguments</h3>
+            <div class="comparison">
+                <div class="comparison-item good">
+                    <h4>✅ Advantages</h4>
+                    <p>Named arguments make a method call more
+                        self-documenting, since each value's purpose is
+                        stated right where it is used. They can also serve
+                        as a convenient shortcut around writing a new
+                        overload just to skip past one optional parameter
+                        while supplying a later one.</p>
+                </div>
+                <div class="comparison-item caution">
+                    <h4>⚠️ Disadvantages</h4>
+                    <p>Because a named argument depends on the method's
+                        actual internal parameter name, it links the calling
+                        code directly to an implementation detail. This
+                        compromises implementation hiding: if the method's
+                        author later renames a parameter, every call that
+                        named that parameter explicitly breaks, even though
+                        the method's overall behavior never changed.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                Passing an expression, rather than a plain value, as one of
+                several arguments is more likely to produce unintended
+                results with positional arguments than with named ones,
+                since a positional mistake can silently place an expression
+                into the wrong parameter without causing a compiler error,
+                while a named argument makes the intended target explicit
+                and unambiguous.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 8 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Value parameter</td>
+                            <td>Method gets a copy; original stays unchanged</td>
+                        </tr>
+                        <tr>
+                            <td>Reference parameter</td>
+                            <td>Alias for the original's memory location;
+                                changes affect the original</td>
+                        </tr>
+                        <tr>
+                            <td>Protecting the original value</td>
+                            <td>Use a value parameter, not ref or out</td>
+                        </tr>
+                        <tr>
+                            <td>Mandatory parameters</td>
+                            <td>Value, reference, and output parameters all
+                                require an argument every call</td>
+                        </tr>
+                        <tr>
+                            <td>Optional parameter</td>
+                            <td>Receives a default value automatically if no
+                                argument is sent</td>
+                        </tr>
+                        <tr>
+                            <td>ref keyword</td>
+                            <td>Required in both header and call; argument
+                                must already have a value</td>
+                        </tr>
+                        <tr>
+                            <td>out keyword</td>
+                            <td>Argument needs no prior value; method must
+                                assign it before returning</td>
+                        </tr>
+                        <tr>
+                            <td>Out variable</td>
+                            <td>Can be declared inline at the point it is
+                                passed into the call</td>
+                        </tr>
+                        <tr>
+                            <td>TryParse()</td>
+                            <td>Uses an out parameter to avoid throwing a
+                                conversion exception</td>
+                        </tr>
+                        <tr>
+                            <td>params keyword</td>
+                            <td>Accepts any number of same-type arguments as
+                                a local array</td>
+                        </tr>
+                        <tr>
+                            <td>params restrictions</td>
+                            <td>Only one per method; must be the last
+                                parameter</td>
+                        </tr>
+                        <tr>
+                            <td>Returning a reference</td>
+                            <td>Only safe if the reference was itself passed
+                                into the method</td>
+                        </tr>
+                        <tr>
+                            <td>Overloading</td>
+                            <td>Multiple methods sharing a name with
+                                different signatures</td>
+                        </tr>
+                        <tr>
+                            <td>Signature</td>
+                            <td>A method's name plus its parameter list</td>
+                        </tr>
+                        <tr>
+                            <td>Return type and overloading</td>
+                            <td>Not part of the signature; identical
+                                signatures with different return types are
+                                illegal</td>
+                        </tr>
+                        <tr>
+                            <td>Applicable methods</td>
+                            <td>All overloads that could legally accept a
+                                given call</td>
+                        </tr>
+                        <tr>
+                            <td>Betterness rules</td>
+                            <td>Determine the best applicable match; exact
+                                match beats implicit conversion</td>
+                        </tr>
+                        <tr>
+                            <td>ref/out and betterness</td>
+                            <td>Excluded from conversion comparisons; must
+                                match exactly</td>
+                        </tr>
+                        <tr>
+                            <td>Ambiguous method call</td>
+                            <td>Compiler cannot pick a single best applicable
+                                match; fails to compile</td>
+                        </tr>
+                        <tr>
+                            <td>Optional parameters (default values)</td>
+                            <td>Only value parameters; must follow all
+                                mandatory parameters</td>
+                        </tr>
+                        <tr>
+                            <td>Named argument</td>
+                            <td>parameterName: value; can be listed in any
+                                order</td>
+                        </tr>
+                        <tr>
+                            <td>Positional argument</td>
+                            <td>Matched by position; must precede any named
+                                arguments</td>
+                        </tr>
+                        <tr>
+                            <td>Named argument tradeoff</td>
+                            <td>Improves clarity but compromises
+                                implementation hiding</td>
+                        </tr>
+                        <tr>
+                            <td>IntelliSense</td>
+                            <td>IDE feature for discovering a method's
+                                overloads and parameters</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 8: Microsoft Visual C# -
+                Advanced Method Concepts &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

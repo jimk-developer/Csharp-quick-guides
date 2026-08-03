@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 12: Microsoft Visual C# - Using Controls</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C2410C;
+            --primary-dark: #7C2D12;
+            --primary-light: #FED7AA;
+            --accent: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #C2410C 0%, #7C2D12 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #FED7AA 0%, #FDBA74 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(194, 65, 12, 0.25);
+            color: #FED7AA;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(194, 65, 12, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(194, 65, 12, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #FED7AA;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(194, 65, 12, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #FED7AA;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #9A3412;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 12: Microsoft Visual C# - Using Controls</h1>
+        <p>Control Fundamentals and IDE Code, Fonts, Color, Selection
+            Controls, Grouping, Graphics, List Controls, Date/Time
+            Controls, Multiple Forms, Layout, and Menus</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Control Fundamentals</a>
+            <a href="#section-fonts" class="nav-pill">Fonts</a>
+            <a href="#section-color" class="nav-pill">Color</a>
+            <a href="#section-selection" class="nav-pill">Selection Controls</a>
+            <a href="#section-grouping" class="nav-pill">Grouping Controls</a>
+            <a href="#section-graphics" class="nav-pill">Graphics</a>
+            <a href="#section-lists" class="nav-pill">List Controls</a>
+            <a href="#section-datetime" class="nav-pill">Date/Time Controls</a>
+            <a href="#section-forms" class="nav-pill">Multiple Forms</a>
+            <a href="#section-layout" class="nav-pill">Layout</a>
+            <a href="#section-menus" class="nav-pill">Menus</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">12</div>
+                <div>
+                    <h2>Building Richer User Interfaces</h2>
+                    <p>Buttons, labels, and text boxes only scratch the
+                        surface of what a Windows Forms application can
+                        offer. This guide covers the wider family of GUI
+                        controls Visual Studio provides: how controls and
+                        their IDE-generated code are structured, how to work
+                        with fonts and color, checkboxes and radio buttons,
+                        pictures, lists, calendars, secondary forms, layout
+                        tools, and menus, so you can design interfaces that
+                        are both functional and easy to use.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">🧰 Control Fundamentals and IDE Code</h2>
+
+            <p>The <code>Control</code> class provides the definitions for
+                GUI objects in C#; every button, label, list box, and other
+                visual element you place on a form ultimately derives from
+                it. A <code>Control</code> exposes a large surface of
+                functionality, with more than 80 public properties
+                available on every control you use.</p>
+
+            <p>The <code>Component</code> class, meanwhile, provides
+                containment and cleanup for other objects. Because classes
+                in this part of the framework are designed to support being
+                used remotely, some of these objects can even be
+                instantiated on a remote computer, letting your program
+                manipulate a reference to that remote object rather than
+                working with a local copy of it.</p>
+
+            <h3>A Term for GUI Controls</h3>
+            <p>A term commonly used specifically for GUI controls, borrowed
+                from general software terminology, is <strong>widget</strong>:
+                a small, reusable interface element such as a button, label,
+                or list box.</p>
+
+            <h3>The IDE's Generated Code</h3>
+            <p>When you drag controls onto a Form in the Visual Studio IDE,
+                the automatically generated statements that construct those
+                controls and set their properties end up inside the
+                project's <code>.Designer.cs</code> file, specifically
+                within a method named <code>InitializeComponent()</code>.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Generated Designer Code</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">InitializeComponent</span>()
+{
+    <span class="var">titleLabel</span> = <span class="keyword">new</span> <span class="type">Label</span>();
+    <span class="var">submitButton</span> = <span class="keyword">new</span> <span class="type">Button</span>();
+    <span class="func">SuspendLayout</span>();
+    <span class="comment">//
+    // titleLabel
+    //</span>
+    <span class="var">titleLabel</span>.<span class="var">AutoSize</span> = <span class="keyword">true</span>;
+    <span class="comment">// ...more generated lines follow...</span>
+}</code></pre>
+            </div>
+
+            <p>Lines that use the <code>new</code> keyword, such as
+                <code>titleLabel = new Label();</code> and
+                <code>submitButton = new Button();</code> above, are exactly
+                the lines that construct each control object. The
+                <code>SuspendLayout()</code> call that follows temporarily
+                pauses layout logic while the remaining controls are
+                configured, which improves performance and prevents the
+                form from visually flickering while the IDE's generated
+                statements run.</p>
+
+            <div class="tip-box">
+                When designing a Form, the IDE's Form Designer, the visual,
+                drag-and-drop surface for arranging controls, is the
+                recommended feature to use rather than hand-writing every
+                control's construction and property statements yourself.
+            </div>
+
+            <h3>Default Events and Default Methods</h3>
+            <p>Every control has a <strong>default event</strong>: the
+                specific event that Visual Studio automatically generates a
+                handler for when you double-click that control in the Form
+                Designer. A control's default method executes automatically
+                whenever that control's default event occurs, and it is
+                exactly this shell of a method that appears in your code the
+                moment you double-click the control.</p>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-fonts">🔤 Fonts</h2>
+
+            <p>The <code>Font</code> class is used to change the appearance
+                of printed text on your Forms. The <code>Font</code> class
+                is overloaded with multiple constructors, letting you
+                specify different combinations of font family name, point
+                size, and style, such as bold or italic, depending on which
+                constructor you choose.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Creating a Font</h4>
+                <pre><code><span class="type">Font</span> <span class="var">headingFont</span> = <span class="keyword">new</span> <span class="type">Font</span>(<span class="string">"Calibri"</span>, <span class="num">14.5</span><span class="type">f</span>);</code></pre>
+            </div>
+
+            <p>This statement creates a <code>Font</code> object named
+                <code>headingFont</code> that formats text in a 14.5-point
+                Calibri typeface, using the same pattern, a font family
+                name followed by a point size, that any similar Font
+                constructor call would follow.</p>
+
+            <h3>Serif vs. Sans Serif Fonts</h3>
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Serif Fonts</h4>
+                    <p>Contain small lines, called serifs, at the ends of
+                        their letters, giving text a more traditional look.
+                        Times New Roman is a common example.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Sans Serif Fonts</h4>
+                    <p>"Sans" means without: sans serif fonts lack those
+                        small end lines entirely, giving text a cleaner,
+                        more modern look. Arial and Calibri are common
+                        examples.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                It is serif fonts, not sans serif fonts, that contain the
+                small lines at the ends of letters associated with a
+                traditional look. Sans serif fonts are specifically the
+                ones without those lines.
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-color">🎨 Color</h2>
+
+            <p>The <code>Color</code> class is used to add color to your
+                Forms and controls, most often through a control's
+                <code>BackColor</code> (background color) and
+                <code>ForeColor</code> (foreground, or text, color)
+                properties.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Setting BackColor and ForeColor</h4>
+                <pre><code><span class="var">submitButton</span>.<span class="var">BackColor</span> = <span class="type">Color</span>.<span class="var">Yellow</span>;
+<span class="var">submitButton</span>.<span class="var">ForeColor</span> = <span class="type">Color</span>.<span class="var">Black</span>;</code></pre>
+            </div>
+
+            <p>To change a control's foreground color, you set its
+                <code>ForeColor</code> property, exactly as shown above; the
+                same pattern of assigning a <code>Color</code> value applies
+                to background color through <code>BackColor</code>. C#
+                provides a long list of predefined color names like
+                <code>Color.Yellow</code>, and it also allows you to create
+                fully custom colors, most commonly with
+                <code>Color.FromArgb()</code>, specifying your own exact red,
+                green, and blue values.</p>
+
+            <h3>Color and Accessibility</h3>
+            <div class="warning-box">
+                To make applications more accessible, use sufficiently high
+                contrast between text and background colors for users with
+                vision impairments, and never rely on color alone to convey
+                important information. People with red-green color
+                blindness specifically have difficulty distinguishing red
+                from green, so a design that uses only red versus green,
+                such as marking an error in red and success in green with
+                no other visual cue, can be genuinely unusable for these
+                users.
+            </div>
+
+            <div class="tip-box">
+                One popular assumption about how color choices affect
+                consumers is that a GUI relying heavily on shades of blue
+                tends to feel calming and mature, which is part of why blue
+                appears so often in professional and financial software
+                interfaces.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-selection">☑️ Selection Controls</h2>
+
+            <h3>CheckBox and RadioButton</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Control</th>
+                        <th>Selection Behavior</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>CheckBox</code></td>
+                        <td>Independent options; the user can select any
+                            number of check boxes at the same time, including
+                            none or all of them</td>
+                    </tr>
+                    <tr>
+                        <td><code>RadioButton</code></td>
+                        <td>Grouped, mutually exclusive options; the user can
+                            select only one radio button at a time within
+                            the same group</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Both classes descend from the common <code>ButtonBase</code>
+                class, alongside the ordinary <code>Button</code> class
+                itself; <code>Button</code>, <code>CheckBox</code>, and
+                <code>RadioButton</code> are all descendants of
+                <code>ButtonBase</code>.</p>
+
+            <h3>The Checked Property and CheckedChanged Event</h3>
+            <p>Both <code>CheckBox</code> and <code>RadioButton</code>
+                objects expose a read/write Boolean <code>Checked</code>
+                property, indicating whether the control is currently
+                selected. The default event shared by both control types,
+                automatically generated when you double-click either one in
+                the Form Designer, is <code>CheckedChanged</code>, which
+                fires whenever the control's checked state changes.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Responding to CheckedChanged</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">expressRadioButton_CheckedChanged</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">EventArgs</span> <span class="var">e</span>)
+{
+    <span class="keyword">const</span> <span class="type">double</span> <span class="var">EXPRESS_FEE</span> = <span class="num">35.00</span>;
+
+    <span class="keyword">if</span> (<span class="var">expressRadioButton</span>.<span class="var">Checked</span>)
+    {
+        <span class="var">orderCost</span> += <span class="var">EXPRESS_FEE</span>;
+    }
+    <span class="keyword">else</span>
+    {
+        <span class="var">orderCost</span> -= <span class="var">EXPRESS_FEE</span>;
+    }
+}</code></pre>
+            </div>
+
+            <p>Testing <code>expressRadioButton.Checked</code> directly like
+                this is the standard way to determine whether that
+                particular radio button is the one currently selected within
+                its group.</p>
+
+            <h3>The Text Property and Access Keys</h3>
+            <p>A <code>RadioButton</code>'s <code>Text</code> property holds
+                the string that appears to the right of the button on the
+                form. Placing an ampersand (<code>&amp;</code>) character
+                immediately before a letter in a <code>ButtonBase</code>
+                object's <code>Text</code> property value turns that letter
+                into an <strong>access key</strong>: the user can then press
+                Alt plus that letter to activate the control from the
+                keyboard, without needing to click it with the mouse.</p>
+
+            <h3>Naming Controls Before Writing Code</h3>
+            <p>After dragging several <code>CheckBox</code> objects onto a
+                form, the way to give them meaningful names, making the
+                IDE-generated source code far easier to work with, is to
+                rename each one using its <strong>(Name)</strong> property
+                in the Properties window before generating any
+                event-handling code for them.</p>
+
+            <div class="tip-box">
+                Double-clicking a control in the Form Designer is the quick
+                way to generate a shell for that control's default method
+                directly in your source code, ready for you to fill in with
+                your own statements.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-grouping">🗂️ Grouping Controls</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Container</th>
+                        <th>Supports Captions?</th>
+                        <th>Supports Scroll Bars?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>GroupBox</code></td>
+                        <td>Yes</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><code>Panel</code></td>
+                        <td>No</td>
+                        <td>Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>A <code>GroupBox</code> displays a labeled border around the
+                controls it contains but has no scroll bars, while a
+                <code>Panel</code> supports scroll bars but does not display
+                any caption at all. Choose between them based on which
+                feature, a visible caption or scrollable content, your
+                layout actually needs.</p>
+
+            <h3>Grouping Radio Buttons into Separate Sets</h3>
+            <p>Radio buttons are mutually exclusive only within the same
+                container. If a form needs two independent sets of radio
+                buttons, such as one group for a color choice and a
+                separate group for a size choice, placing each set inside
+                its own separate <code>GroupBox</code> (or <code>Panel</code>)
+                is what keeps the two sets from interfering with each
+                other's selection.</p>
+
+            <p>To arrange a set of <code>RadioButton</code> objects so they
+                can be moved together as a unit in the Form Designer, first
+                drag a <code>GroupBox</code> from the Toolbox onto the form,
+                and then drag each <code>RadioButton</code> control onto
+                that <code>GroupBox</code>, placing them visually inside it.
+            </p>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-graphics">🖼️ Graphics</h2>
+
+            <p>A <code>PictureBox</code> control displays graphics from a
+                bitmap, icon, JPEG, GIF, or other supported image file type
+                inside your program.</p>
+
+            <div class="tip-box">
+                To display a photograph saved as a JPEG, the first step in
+                Visual Studio is to add a PictureBox control to your form.
+                From there, you select an image for it directly through the
+                PictureBox's <strong>Image</strong> property in the
+                Properties window, which opens a dialog for importing an
+                image file, all without needing to write any code at all
+                for the basic task of displaying it.
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-lists">📋 List Controls</h2>
+
+            <p><code>ListBox</code>, <code>ComboBox</code>, and
+                <code>CheckedListBox</code> all descend from a shared parent
+                class, <code>ListControl</code>, and all three display a
+                collection of items the user can choose from, each with its
+                own particular twist.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">📄</span>
+                    <h4>ListBox</h4>
+                    <p>Displays a straightforward list of items the user
+                        selects by clicking.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🔽</span>
+                    <h4>ComboBox</h4>
+                    <p>Combines a list box with an editing control, letting
+                        the user either pick from the list or type in new
+                        text.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">✅</span>
+                    <h4>CheckedListBox</h4>
+                    <p>Displays a list with a check box next to each item,
+                        so several items can be marked at once.</p>
+                </div>
+            </div>
+
+            <h3>Adding Items to a ListBox</h3>
+            <p>To add items to a <code>ListBox</code> in Visual Studio, use
+                the <strong>Items</strong> property in the Properties
+                window, which opens a String Collection Editor for typing
+                in the list's entries directly, without writing code.</p>
+
+            <h3>Useful ListBox Properties and Events</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>MultiColumn</code></td>
+                        <td>Boolean property; configures whether items
+                            display in columns instead of a single vertical
+                            list</td>
+                    </tr>
+                    <tr>
+                        <td><code>SelectionMode</code></td>
+                        <td>Determines how many items a user can select at
+                            once: none, one, or multiple</td>
+                    </tr>
+                    <tr>
+                        <td><code>SelectedItem</code></td>
+                        <td>Holds the currently selected item</td>
+                    </tr>
+                    <tr>
+                        <td><code>Items.Count</code></td>
+                        <td>Returns the total number of items currently in
+                            the list</td>
+                    </tr>
+                    <tr>
+                        <td><code>SelectedIndexChanged</code></td>
+                        <td>Event that fires when the user selects a
+                            different item; add code here to react to that
+                            change</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>When you resize a <code>ListBox</code> so that not every
+                item can be displayed at once, a scroll bar is provided
+                automatically along the side, without any extra code needed
+                to enable it.</p>
+
+            <div class="tip-box">
+                To obtain a Boolean value indicating whether a particular
+                item in a ListBox has been selected, call the ListBox's
+                <code>GetSelected(index)</code> method, passing in that
+                item's position; it returns true or false depending on
+                whether the item at that index is currently selected.
+            </div>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-datetime">📅 Date/Time Controls</h2>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>MonthCalendar</h4>
+                    <p>Always displays a full, persistent calendar grid
+                        directly on the form.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>DateTimePicker</h4>
+                    <p>Displays as a compact, editable field, and shows a
+                        month calendar only when the user clicks its
+                        down-arrow control.</p>
+                </div>
+            </div>
+
+            <p>The default event for a <code>MonthCalendar</code> object is
+                <code>DateChanged</code>, which fires whenever the user
+                selects a different date on the calendar.</p>
+
+            <h3>Working with Dates</h3>
+            <p>A selected date range is represented through a
+                <code>MonthCalendar</code>'s <code>SelectionStart</code> and
+                <code>SelectionEnd</code> properties. Several useful methods
+                can be applied to the date values these properties hold.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ToShortDateString()</code></td>
+                        <td>Formats a date compactly, such as 3/14/2026</td>
+                    </tr>
+                    <tr>
+                        <td><code>ToLongDateString()</code></td>
+                        <td>Formats a date in full, such as Saturday, March
+                            14, 2026</td>
+                    </tr>
+                    <tr>
+                        <td><code>AddDays()</code></td>
+                        <td>Returns a new date a specified number of days
+                            later (or earlier, with a negative value)</td>
+                    </tr>
+                    <tr>
+                        <td><code>AddMonths()</code></td>
+                        <td>Returns a new date a specified number of months
+                            later</td>
+                    </tr>
+                    <tr>
+                        <td><code>AddYears()</code></td>
+                        <td>Returns a new date a specified number of years
+                            later</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: Working with SelectionStart</h4>
+                <pre><code><span class="type">DateTime</span> <span class="var">chosenDate</span> = <span class="var">reservationCalendar</span>.<span class="var">SelectionStart</span>;
+<span class="type">DateTime</span> <span class="var">checkoutDate</span> = <span class="var">chosenDate</span>.<span class="func">AddDays</span>(<span class="num">3</span>);
+
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">chosenDate</span>.<span class="func">ToLongDateString</span>());
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">checkoutDate</span>.<span class="func">ToShortDateString</span>());</code></pre>
+            </div>
+
+            <p>A <code>MonthCalendar</code> object's <code>MaxDate</code>
+                property specifies the last day that can be selected on it,
+                which is useful for preventing a user from choosing a date
+                too far in the future.</p>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-forms">🪟 Multiple Forms and Navigation</h2>
+
+            <h3>LinkLabel</h3>
+            <p>A <code>LinkLabel</code> control provides a way for users to
+                link to other sources, such as web pages or files, directly
+                from your GUI. Visually, a freshly dragged
+                <code>LinkLabel</code> appears as underlined text, and the
+                mouse pointer changes to a hand when it hovers over one.
+                <code>LinkLabel</code> is a child class of <code>Label</code>,
+                inheriting from it and adding link-specific behavior on top.
+            </p>
+
+            <div class="tip-box">
+                By default, a LinkLabel's unvisited link text renders in
+                blue (its LinkColor property), while its VisitedLinkColor
+                defaults to purple, following the long-standing hyperlink
+                convention of showing visited links in a different shade
+                than unvisited ones.
+            </div>
+
+            <p>The method executed when a click event fires from a
+                <code>LinkLabel</code> is its <code>LinkClicked</code> event
+                handler, the control's default method, generated
+                automatically when you double-click a LinkLabel in the Form
+                Designer.</p>
+
+            <h3>Adding Secondary Forms</h3>
+            <p>A C# project can include more than one <code>Form</code>. A
+                secondary form that takes control of a program, preventing
+                the user from interacting with any other open window until
+                it is closed, is known as a <strong>modal window</strong>
+                (or modal form).</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Behavior</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Show()</code></td>
+                        <td>Displays a secondary form while still allowing
+                            the user to continue interacting with other open
+                            forms; non-modal</td>
+                    </tr>
+                    <tr>
+                        <td><code>ShowDialog()</code></td>
+                        <td>Displays a secondary form modally, blocking
+                            interaction with other forms until it closes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: Displaying a Secondary Form Non-Modally</h4>
+                <pre><code><span class="type">SettingsForm</span> <span class="var">settingsForm</span> = <span class="keyword">new</span> <span class="type">SettingsForm</span>();
+<span class="var">settingsForm</span>.<span class="func">Show</span>();
+<span class="comment">// The main form remains fully interactive while settingsForm is open</span></code></pre>
+            </div>
+
+            <p>Calling <code>Show()</code> on a secondary form, rather than
+                <code>ShowDialog()</code>, is exactly how you let a user
+                continue taking action on the original form while a second
+                form is also open on screen at the same time.</p>
+
+            <!-- ===================== SECTION 10 ===================== -->
+            <h2 id="section-layout">📐 Form Layout</h2>
+
+            <h3>Snap Lines</h3>
+            <p>When you drag multiple controls onto a Form in the IDE,
+                temporary blue <strong>snap lines</strong> appear to help
+                you align new controls with controls that are already in
+                place, such as lining up the left edges of several labels.
+            </p>
+
+            <h3>Location, Anchor, and Dock</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Location</code></td>
+                        <td>Sets a control's fixed position on its container</td>
+                    </tr>
+                    <tr>
+                        <td><code>Anchor</code></td>
+                        <td>Keeps a control a fixed distance from a
+                            specified side of its container, even as the
+                            user resizes that container</td>
+                    </tr>
+                    <tr>
+                        <td><code>Dock</code></td>
+                        <td>Attaches a control to a side of its container so
+                            the control stretches along with the container
+                            as it is resized</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Focus and Mouse Capture</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ContainsFocus</code></td>
+                        <td>Public Control property; determines whether the
+                            control, or one of its child controls, currently
+                            has input focus</td>
+                    </tr>
+                    <tr>
+                        <td><code>Capture</code></td>
+                        <td>Gets or sets whether the control has captured
+                            the mouse</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ===================== SECTION 11 ===================== -->
+            <h2 id="section-menus">📜 Menus</h2>
+
+            <p>A <code>MenuStrip</code> control provides a horizontal list
+                of general options, such as File, Edit, and Help, that
+                appears underneath a window's title bar.</p>
+
+            <p>Just as with a <code>ButtonBase</code> object's
+                <code>Text</code> property, placing an ampersand
+                (<code>&amp;</code>) in front of a unique letter in a
+                <code>MenuStrip</code> menu item's text lets the user press
+                Alt plus that letter to activate the menu choice as a
+                keyboard alternative to clicking it with the mouse.</p>
+
+            <div class="tip-box">
+                While filling in the items of a MenuStrip control in the
+                Form Designer, double-clicking any individual entry
+                automatically generates a Click() event-handling method for
+                that menu item, ready for you to fill in.
+            </div>
+
+            <h3>Conventional Menu Order</h3>
+            <p>By long-standing convention, a Help option belongs at the
+                rightmost position on the main menu bar, following whatever
+                other menu categories, such as File, Edit, and View, a
+                program's menu strip includes.</p>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 12 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Control class</td>
+                            <td>Defines GUI objects; more than 80 public
+                                properties each</td>
+                        </tr>
+                        <tr>
+                            <td>Component class</td>
+                            <td>Provides containment and cleanup for other
+                                objects</td>
+                        </tr>
+                        <tr>
+                            <td>Widget</td>
+                            <td>General term for a GUI control</td>
+                        </tr>
+                        <tr>
+                            <td>.Designer.cs / InitializeComponent()</td>
+                            <td>Where IDE-generated control construction and
+                                property code lives</td>
+                        </tr>
+                        <tr>
+                            <td>SuspendLayout()</td>
+                            <td>Pauses layout updates while controls are
+                                configured</td>
+                        </tr>
+                        <tr>
+                            <td>Default event / default method</td>
+                            <td>Generated by double-clicking a control in
+                                the Form Designer</td>
+                        </tr>
+                        <tr>
+                            <td>Font class</td>
+                            <td>Changes printed text appearance; multiple
+                                overloaded constructors</td>
+                        </tr>
+                        <tr>
+                            <td>Serif vs. sans serif</td>
+                            <td>Serif has end-line strokes; sans serif does
+                                not</td>
+                        </tr>
+                        <tr>
+                            <td>BackColor / ForeColor</td>
+                            <td>Background / foreground (text) color
+                                properties, using the Color class</td>
+                        </tr>
+                        <tr>
+                            <td>Color accessibility</td>
+                            <td>High contrast; never rely on color alone;
+                                mind red-green color blindness</td>
+                        </tr>
+                        <tr>
+                            <td>CheckBox</td>
+                            <td>Independent options; any number selectable</td>
+                        </tr>
+                        <tr>
+                            <td>RadioButton</td>
+                            <td>Mutually exclusive within its group; one
+                                selectable at a time</td>
+                        </tr>
+                        <tr>
+                            <td>ButtonBase descendants</td>
+                            <td>Button, CheckBox, RadioButton</td>
+                        </tr>
+                        <tr>
+                            <td>Checked / CheckedChanged</td>
+                            <td>Boolean selection property / shared default
+                                event</td>
+                        </tr>
+                        <tr>
+                            <td>Access key (&amp;)</td>
+                            <td>Marks a letter as an Alt-key shortcut in Text</td>
+                        </tr>
+                        <tr>
+                            <td>GroupBox vs. Panel</td>
+                            <td>Caption, no scroll bars vs. scroll bars, no
+                                caption</td>
+                        </tr>
+                        <tr>
+                            <td>PictureBox</td>
+                            <td>Displays bitmap, icon, JPEG, GIF, and other
+                                image types</td>
+                        </tr>
+                        <tr>
+                            <td>ListControl descendants</td>
+                            <td>ListBox, ComboBox, CheckedListBox</td>
+                        </tr>
+                        <tr>
+                            <td>SelectionMode / MultiColumn</td>
+                            <td>Controls how many items select / column
+                                display</td>
+                        </tr>
+                        <tr>
+                            <td>GetSelected(index)</td>
+                            <td>Returns whether a specific ListBox item is
+                                selected</td>
+                        </tr>
+                        <tr>
+                            <td>MonthCalendar vs. DateTimePicker</td>
+                            <td>Always visible grid vs. compact field with a
+                                dropdown calendar</td>
+                        </tr>
+                        <tr>
+                            <td>SelectionStart / SelectionEnd</td>
+                            <td>Hold the selected date(s); support
+                                AddDays()/AddMonths()/AddYears()</td>
+                        </tr>
+                        <tr>
+                            <td>LinkLabel</td>
+                            <td>Child of Label; links to other sources;
+                                default event is LinkClicked</td>
+                        </tr>
+                        <tr>
+                            <td>Modal window</td>
+                            <td>A secondary form that takes control until
+                                closed</td>
+                        </tr>
+                        <tr>
+                            <td>Show() vs. ShowDialog()</td>
+                            <td>Non-modal, other forms usable vs. modal,
+                                blocks other forms</td>
+                        </tr>
+                        <tr>
+                            <td>Snap lines</td>
+                            <td>Blue guides for aligning controls while
+                                dragging</td>
+                        </tr>
+                        <tr>
+                            <td>Anchor vs. Dock</td>
+                            <td>Fixed distance from a side vs. attached and
+                                stretched along a side</td>
+                        </tr>
+                        <tr>
+                            <td>MenuStrip</td>
+                            <td>Horizontal option list under the title bar;
+                                Help conventionally goes last</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 12: Microsoft Visual C# - Using
+                Controls &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

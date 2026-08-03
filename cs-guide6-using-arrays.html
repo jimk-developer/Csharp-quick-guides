@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 6: Microsoft Visual C# - Using Arrays</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0D9488;
+            --primary-dark: #115E59;
+            --primary-light: #99F6E4;
+            --accent: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #0D9488 0%, #115E59 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #99F6E4 0%, #5EEAD4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(13, 148, 136, 0.25);
+            color: #99F6E4;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(13, 148, 136, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(13, 148, 136, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #99F6E4;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #F0FDFA 0%, #99F6E4 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #F0FDFA 0%, #99F6E4 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #99F6E4;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #F0FDFA 0%, #99F6E4 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #0F766E;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 6: Microsoft Visual C# - Using Arrays</h1>
+        <p>Declaring and Initializing Arrays, Accessing Elements, the foreach
+            Loop, Searching Arrays, Parallel Arrays, Built-in Array Methods,
+            Multidimensional and Jagged Arrays, and Arrays in GUI
+            Applications</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Array Fundamentals</a>
+            <a href="#section-declaring" class="nav-pill">Declaring &amp; Initializing</a>
+            <a href="#section-accessing" class="nav-pill">Accessing Elements</a>
+            <a href="#section-foreach" class="nav-pill">The foreach Loop</a>
+            <a href="#section-searching" class="nav-pill">Searching Arrays</a>
+            <a href="#section-parallel" class="nav-pill">Parallel Arrays</a>
+            <a href="#section-methods" class="nav-pill">Array Methods</a>
+            <a href="#section-multidim" class="nav-pill">Multidimensional &amp; Jagged</a>
+            <a href="#section-gui" class="nav-pill">Arrays in GUIs</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">06</div>
+                <div>
+                    <h2>Storing Many Values Under One Name</h2>
+                    <p>Many programming tasks involve working with a whole
+                        collection of related values at once, not just a
+                        single number or string. C# handles this with
+                        arrays: structures that group many values of the
+                        same type under one variable name. This guide covers
+                        how arrays are declared and initialized, how to
+                        access and search their contents, how to work with
+                        several related arrays together, the built-in
+                        methods C# provides for sorting and searching, arrays
+                        with more than one dimension, and how arrays behave
+                        inside GUI applications.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">📚 Array Fundamentals</h2>
+
+            <p>An <strong>array</strong> is a list of data items that all
+                share the same data type and the same name, distinguished
+                from one another only by their position in the list. Each
+                individual data item stored in an array is called an
+                <strong>array element</strong>.</p>
+
+            <div class="tip-box">
+                Arrays are most useful for the opposite situation from
+                storing just one value: they let a program manage many
+                related values, such as every quiz score in a class or every
+                item in an order, under a single variable name instead of
+                creating a separate variable for each one.
+            </div>
+
+            <h3>Arrays Are Objects</h3>
+            <p>In C#, arrays are <strong>objects</strong>, instances of the
+                built-in <code>System.Array</code> class. Because an array is
+                an object, it is created using the same <code>new</code>
+                operator used to instantiate any other object, and once
+                created, C# manages where that array lives in memory
+                automatically; a program does not choose or control an
+                array's specific memory location.</p>
+
+            <h3>Indexes and Subscripts</h3>
+            <p>Each array element is distinguished from the others by its
+                <strong>index</strong>, also called a <strong>subscript</strong>:
+                an integer enclosed in square brackets that indicates an
+                element's position within the array. C# array subscripts are
+                always zero-based, meaning the first element's subscript is
+                0, not 1. For an array with 15 elements, the valid
+                subscripts run from 0 through 14, so the highest legal
+                subscript is always one less than the array's total number
+                of elements.</p>
+
+            <div class="warning-box">
+                A subscript must be an integer, or an expression that
+                evaluates to an integer; it cannot be a floating-point value
+                or any other data type. This is exactly what makes arrays
+                powerful in a loop: using a variable as the subscript, rather
+                than a hardcoded constant, lets a single loop step through
+                every element in order simply by changing that variable's
+                value.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-declaring">📝 Declaring and Initializing Arrays</h2>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring an Array</h4>
+                <pre><code><span class="type">double</span>[] <span class="var">weeklySales</span> = <span class="keyword">new</span> <span class="type">double</span>[<span class="num">7</span>];
+<span class="type">bool</span>[] <span class="var">attendanceFlags</span> = <span class="keyword">new</span> <span class="type">bool</span>[<span class="num">20</span>];</code></pre>
+            </div>
+
+            <p>Declaring an array this way, without supplying values,
+                creates an array of the specified size where every element
+                automatically receives a default value based on the array's
+                data type.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Array Type</th>
+                        <th>Default Element Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Numeric (<code>int</code>, <code>double</code>,
+                            and similar)</td>
+                        <td><code>0</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>char</code></td>
+                        <td>The null character, <code>\u0000</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bool</code></td>
+                        <td><code>false</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Initializer Lists</h3>
+            <p>An <strong>initializer list</strong> assigns a list of
+                nondefault values to an array's elements at the moment it is
+                declared, instead of relying on default values.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring and Initializing an Array Together</h4>
+                <pre><code><span class="type">string</span>[] <span class="var">shirtSizes</span> = { <span class="string">"XS"</span>, <span class="string">"S"</span>, <span class="string">"M"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span> };
+<span class="type">int</span>[] <span class="var">winningNumbers</span> = { <span class="num">4</span>, <span class="num">17</span>, <span class="num">22</span>, <span class="num">38</span> };</code></pre>
+            </div>
+
+            <p>Both statements above correctly declare an array and supply
+                its initial values in a single step, with the values listed
+                inside curly braces and separated by commas. Once declared
+                this way, an array's size is fixed to however many values
+                appear in the initializer list.</p>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-accessing">🎯 Accessing Array Elements</h2>
+
+            <p>An individual array element is accessed by writing the
+                array's name followed by that element's subscript in square
+                brackets, such as <code>shirtSizes[0]</code> for the first
+                element.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Accessing a Specific Element</h4>
+                <pre><code><span class="type">string</span>[] <span class="var">rainbowColors</span> = { <span class="string">"red"</span>, <span class="string">"orange"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>, <span class="string">"indigo"</span>, <span class="string">"violet"</span> };
+
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"My favorite color is {0}"</span>, <span class="var">rainbowColors</span>[<span class="num">4</span>]);
+<span class="comment">// Displays: My favorite color is blue</span></code></pre>
+            </div>
+
+            <h3>The Length Property</h3>
+            <p>Every array, as an instance of <code>System.Array</code>,
+                automatically has a <strong>Length</strong> property that
+                holds the total number of elements it contains. A loop that
+                navigates through an entire array typically runs its
+                subscript variable from 0 up through, but not including,
+                <code>Length</code>.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Looping Through an Array with Length</h4>
+                <pre><code><span class="keyword">for</span> (<span class="type">int</span> <span class="var">i</span> = <span class="num">0</span>; <span class="var">i</span> &lt; <span class="var">rainbowColors</span>.<span class="var">Length</span>; ++<span class="var">i</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">rainbowColors</span>[<span class="var">i</span>]);
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                Comparing the loop control variable to the array's
+                <code>Length</code> property, rather than to a hardcoded
+                integer, means the loop automatically adjusts if the array's
+                size ever changes. A hardcoded upper bound can silently
+                become wrong, either skipping elements or causing an
+                out-of-range error, the moment the array's actual size no
+                longer matches that constant.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-foreach">🔁 The foreach Loop</h2>
+
+            <p>C# provides a dedicated <strong>foreach</strong> statement
+                that cycles through every element of an array without using
+                a subscript at all.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A foreach Loop</h4>
+                <pre><code><span class="keyword">foreach</span> (<span class="type">string</span> <span class="var">color</span> <span class="keyword">in</span> <span class="var">rainbowColors</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">color</span>);
+}</code></pre>
+            </div>
+
+            <p>The variable declared right after <code>foreach</code>, here
+                <code>color</code>, is called the <strong>iteration
+                    variable</strong>. It automatically holds each array
+                value in turn for one pass of the loop, without the program
+                ever writing a subscript expression.</p>
+
+            <div class="warning-box">
+                The foreach iteration variable is <strong>read-only</strong>:
+                its value can be read and used, but it cannot be assigned a
+                new value in a way that changes the underlying array
+                element. Avoid using foreach when a loop needs to modify
+                array elements as it goes, or whenever the loop body needs
+                to know the current subscript itself, such as when
+                displaying each element's position alongside its value; a
+                traditional for loop is the right tool for either of those
+                situations instead.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-searching">🔍 Searching Arrays</h2>
+
+            <h3>Sequential Search</h3>
+            <p>A <strong>sequential search</strong> examines each element of
+                an array in order, one after another, comparing it to a
+                target value until either a match is found or the entire
+                array has been checked. Sequential searches can be written
+                using either a for loop or a while loop.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Sequential Search with a for Loop</h4>
+                <pre><code><span class="type">string</span>[] <span class="var">inventoryItems</span> = { <span class="string">"wrench"</span>, <span class="string">"hammer"</span>, <span class="string">"pliers"</span>, <span class="string">"screwdriver"</span> };
+<span class="type">string</span> <span class="var">requested</span> = <span class="string">"pliers"</span>;
+<span class="type">bool</span> <span class="var">containsItem</span> = <span class="keyword">false</span>;
+
+<span class="keyword">for</span> (<span class="type">int</span> <span class="var">count</span> = <span class="num">0</span>; <span class="var">count</span> &lt; <span class="var">inventoryItems</span>.<span class="var">Length</span>; ++<span class="var">count</span>)
+{
+    <span class="keyword">if</span> (<span class="var">inventoryItems</span>[<span class="var">count</span>] == <span class="var">requested</span>)
+    {
+        <span class="var">containsItem</span> = <span class="keyword">true</span>;
+    }
+}</code></pre>
+            </div>
+
+            <p>A reasonable searching technique uses a loop that continues
+                comparing elements until it either finds a match or reaches
+                the end of the array, whichever happens first. If the loop
+                completes and its subscript variable has reached a value
+                equal to the array's <code>Length</code>, that outcome means
+                the target value was never found anywhere in the array.</p>
+
+            <h3>Improving Search Efficiency</h3>
+            <p>Searching an array becomes inefficient whenever the code
+                keeps examining elements after a match has already been
+                found, since any comparisons made after that point are
+                wasted work. A few strategies reduce unnecessary
+                comparisons:</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">🥇</span>
+                    <h4>Most Common Items First</h4>
+                    <p>Arranging array elements so the values most likely to
+                        be searched for come first reduces the average
+                        number of comparisons a sequential search needs to
+                        perform.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🚪</span>
+                    <h4>Early Exit</h4>
+                    <p>Stopping the search loop as soon as a match is found,
+                        rather than continuing to check the remaining
+                        elements, avoids comparisons that can no longer
+                        change the outcome.</p>
+                </div>
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: A For Loop with an Early Exit</h4>
+                <pre><code><span class="keyword">for</span> (<span class="type">int</span> <span class="var">count</span> = <span class="num">0</span>; <span class="var">count</span> &lt; <span class="var">inventoryItems</span>.<span class="var">Length</span>; ++<span class="var">count</span>)
+{
+    <span class="keyword">if</span> (<span class="var">inventoryItems</span>[<span class="var">count</span>] == <span class="var">requested</span>)
+    {
+        <span class="var">containsItem</span> = <span class="keyword">true</span>;
+        <span class="keyword">break</span>;
+    }
+}</code></pre>
+            </div>
+
+            <p>Adding <code>break</code> immediately after a match is found
+                is one straightforward way to exit a for loop early once the
+                target has been located, rather than letting the loop run
+                through every remaining element regardless.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Early-Exit Search with a While Loop</h4>
+                <pre><code><span class="type">int</span> <span class="var">count</span> = <span class="num">0</span>;
+<span class="type">bool</span> <span class="var">found</span> = <span class="keyword">false</span>;
+
+<span class="keyword">while</span> (<span class="var">count</span> &lt; <span class="var">inventoryItems</span>.<span class="var">Length</span> &amp;&amp; !<span class="var">found</span>)
+{
+    <span class="keyword">if</span> (<span class="var">inventoryItems</span>[<span class="var">count</span>] == <span class="var">requested</span>)
+    {
+        <span class="var">found</span> = <span class="keyword">true</span>;
+    }
+    <span class="var">count</span>++;
+}</code></pre>
+            </div>
+
+            <p>When using a while loop to search an array, include the
+                "not yet found" condition as part of the loop's own test
+                expression, alongside the subscript boundary check. This
+                lets the loop stop naturally the moment a match is found,
+                without needing a separate <code>break</code> statement.</p>
+
+            <h3>Validating User Input Against a List</h3>
+            <p>Storing a set of valid values in an array and then using a
+                search loop to check whether user input matches one of them
+                is a recommended, reliable strategy for validating that
+                input, rather than writing a long chain of individual
+                comparisons by hand.</p>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-parallel">🔗 Parallel Arrays</h2>
+
+            <p><strong>Parallel arrays</strong> are two or more arrays that
+                share the same number of elements, where corresponding data
+                is stored in elements that share the same subscript across
+                each array. Accessing element 3 of one parallel array and
+                element 3 of another retrieves two different pieces of
+                information about the same underlying record.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Parallel Arrays</h4>
+                <pre><code><span class="type">int</span>[] <span class="var">petIDs</span> = { <span class="num">101</span>, <span class="num">102</span>, <span class="num">103</span> };
+<span class="type">string</span>[] <span class="var">petNames</span> = { <span class="string">"Bit"</span>, <span class="string">"Beau"</span>, <span class="string">"Tim"</span> };
+<span class="type">double</span>[] <span class="var">adoptionFees</span> = { <span class="num">50.50</span>, <span class="num">75.35</span>, <span class="num">55.00</span> };
+
+<span class="comment">// Subscript 1 across all three arrays describes the same pet: Beau</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0} (ID {1}): {2:C2}"</span>, <span class="var">petNames</span>[<span class="num">1</span>], <span class="var">petIDs</span>[<span class="num">1</span>], <span class="var">adoptionFees</span>[<span class="num">1</span>]);</code></pre>
+            </div>
+
+            <p>Because <code>petIDs</code>, <code>petNames</code>, and
+                <code>adoptionFees</code> are parallel arrays, subscript 1
+                identifies the same pet across all three: its ID, its name,
+                and its adoption fee.</p>
+
+            <h3>Range Matches</h3>
+            <p>A <strong>range match</strong> uses an array of upper or
+                lower limit values to determine which pair of limiting
+                values a given number falls between, and a parallel array to
+                hold the result that corresponds to each range.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Range Match with a Parallel Array</h4>
+                <pre><code><span class="type">double</span>[] <span class="var">weightLimits</span> = { <span class="num">5</span>, <span class="num">10</span>, <span class="num">20</span> };
+<span class="type">double</span>[] <span class="var">shippingFees</span> = { <span class="num">6.00</span>, <span class="num">8.50</span>, <span class="num">12.50</span>, <span class="num">15.80</span> };
+
+<span class="type">double</span> <span class="var">orderWeight</span> = <span class="num">12</span>;
+<span class="type">int</span> <span class="var">tier</span> = <span class="num">0</span>;
+
+<span class="keyword">while</span> (<span class="var">tier</span> &lt; <span class="var">weightLimits</span>.<span class="var">Length</span> &amp;&amp; <span class="var">orderWeight</span> &gt;= <span class="var">weightLimits</span>[<span class="var">tier</span>])
+{
+    <span class="var">tier</span>++;
+}
+
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Shipping fee: {0:C2}"</span>, <span class="var">shippingFees</span>[<span class="var">tier</span>]);
+<span class="comment">// weightLimits marks the upper edge of each of the first three tiers;
+// shippingFees has one extra element to cover everything above the last limit</span></code></pre>
+            </div>
+
+            <p>Here, <code>weightLimits</code> holds the boundary values
+                used to determine which tier an order's weight falls into,
+                while the parallel array <code>shippingFees</code> holds the
+                dollar amount that applies to each resulting tier.</p>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-methods">🛠️ Built-in Array Methods</h2>
+
+            <p>The <code>System.Array</code> class provides several static
+                methods that perform common array operations without
+                requiring you to write the underlying loop yourself.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Array.Sort()</code></td>
+                        <td>Arranges an array's elements in ascending order,
+                            either numerically or alphabetically depending
+                            on the array's data type</td>
+                    </tr>
+                    <tr>
+                        <td><code>Array.Reverse()</code></td>
+                        <td>Reverses the existing order of an array's
+                            elements without sorting them first</td>
+                    </tr>
+                    <tr>
+                        <td><code>Array.BinarySearch()</code></td>
+                        <td>Finds the position of a target value by
+                            repeatedly splitting a sorted array in half</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: Sort() and Reverse()</h4>
+                <pre><code><span class="type">int</span>[] <span class="var">prizeNumbers</span> = { <span class="num">42</span>, <span class="num">7</span>, <span class="num">19</span>, <span class="num">3</span> };
+
+<span class="type">Array</span>.<span class="func">Sort</span>(<span class="var">prizeNumbers</span>);
+<span class="comment">// prizeNumbers is now { 3, 7, 19, 42 }</span>
+
+<span class="type">Array</span>.<span class="func">Reverse</span>(<span class="var">prizeNumbers</span>);
+<span class="comment">// prizeNumbers is now { 42, 19, 7, 3 }, reversed from its prior order</span></code></pre>
+            </div>
+
+            <div class="tip-box">
+                To display an array's elements in descending order, sort it
+                first with <code>Array.Sort()</code> and then reverse that
+                sorted result with <code>Array.Reverse()</code>. Calling
+                <code>Array.Reverse()</code> alone only flips whatever order
+                the elements were already in; it does not sort them.
+            </div>
+
+            <h3>Binary Search</h3>
+            <p><strong>Binary search</strong> locates a target value by
+                repeatedly dividing a sorted array in half and discarding
+                the half that cannot contain the target, continuing until an
+                exact match is found or the search space is exhausted.
+                <code>Array.BinarySearch()</code> is most appropriate when
+                the array is already sorted and reasonably large, since
+                binary search eliminates roughly half of the remaining
+                elements from consideration with each comparison, making it
+                far faster than a sequential search through a large sorted
+                array.</p>
+
+            <div class="warning-box">
+                <code>Array.BinarySearch()</code> only produces correct
+                results on an array that has already been sorted in
+                ascending order. Running it on an unsorted array can return
+                an incorrect or misleading result, since the method's
+                halving strategy assumes the data is already in order.
+            </div>
+
+            <h3>Calling Array Methods Without the Class Prefix</h3>
+            <p>Adding a <code>using static System.Array;</code> directive
+                near the top of a file allows methods such as
+                <code>Sort()</code> and <code>BinarySearch()</code> to be
+                called directly, without repeatedly typing the
+                <code>Array.</code> prefix before each call.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-multidim">🧮 Multidimensional and Jagged Arrays</h2>
+
+            <h3>Two-Dimensional (Rectangular) Arrays</h3>
+            <p>A <strong>multidimensional array</strong> requires more than
+                one subscript to access its elements. The most common form
+                is the <strong>two-dimensional array</strong>, also called a
+                <strong>rectangular array</strong>, which can be pictured as
+                a table or matrix of rows and columns where every row has
+                exactly the same number of columns.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Rectangular Array</h4>
+                <pre><code><span class="type">double</span>[<span class="punct">,</span>] <span class="var">quarterlyRevenue</span> = {
+    { <span class="num">12000</span>, <span class="num">15000</span>, <span class="num">11000</span> },   <span class="comment">// Store 1: Q1, Q2, Q3</span>
+    { <span class="num">9800</span>,  <span class="num">10200</span>, <span class="num">9600</span>  },   <span class="comment">// Store 2: Q1, Q2, Q3</span>
+    { <span class="num">14300</span>, <span class="num">13800</span>, <span class="num">15100</span> }    <span class="comment">// Store 3: Q1, Q2, Q3</span>
+};
+
+<span class="comment">// Store 2's Q2 revenue, accessed with two subscripts</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">quarterlyRevenue</span>[<span class="num">1</span>, <span class="num">1</span>]);</code></pre>
+            </div>
+
+            <p>Reading a statement like this, each inner set of braces
+                represents one row, and the values within it represent that
+                row's columns; the statement above creates a rectangular
+                array with 3 rows and 3 columns. Data that naturally forms a
+                consistent grid, such as a matrix with a fixed number of
+                rows and an identical number of columns in every row, is a
+                good candidate for a rectangular array rather than any other
+                structure.</p>
+
+            <h3>Jagged Arrays</h3>
+            <p>A <strong>jagged array</strong> is a one-dimensional array
+                whose elements are themselves one-dimensional arrays,
+                possibly of different lengths. Unlike a rectangular array,
+                a jagged array's "rows" do not need to be the same size as
+                one another.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Jagged Array</h4>
+                <pre><code><span class="type">int</span>[][] <span class="var">seatsPerRow</span> = <span class="keyword">new</span> <span class="type">int</span>[<span class="num">3</span>][];
+<span class="var">seatsPerRow</span>[<span class="num">0</span>] = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span> };
+<span class="var">seatsPerRow</span>[<span class="num">1</span>] = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">1</span>, <span class="num">2</span> };
+<span class="var">seatsPerRow</span>[<span class="num">2</span>] = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+
+<span class="comment">// Access row 1's second seat number using two subscripts</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">seatsPerRow</span>[<span class="num">1</span>][<span class="num">1</span>]);
+<span class="comment">// Displays: 2</span></code></pre>
+            </div>
+
+            <p>Notice that a jagged array element is accessed using two
+                separate sets of square brackets, one for the outer array's
+                subscript and one for the inner array's subscript, rather
+                than a single comma-separated pair as with a rectangular
+                array.</p>
+
+            <div class="tip-box">
+                When a table of data naturally has the same number of
+                columns in every row, such as a large matrix of numeric
+                data with a fixed number of rows and columns, a rectangular
+                array is usually the simpler and more natural fit. Reach for
+                a jagged array only when the rows genuinely differ in
+                length, such as varying numbers of seats in different rows
+                of a theater.
+            </div>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-gui">🖱️ Arrays in GUI Applications</h2>
+
+            <p>An event-handling method, such as a button's Click method,
+                runs fresh each time its event occurs. Any variable declared
+                inside that method, including an array, is created new and
+                loses its previous values every time the method runs again.
+            </p>
+
+            <div class="warning-box">
+                If an array's values need to change based on user input
+                across multiple separate events, such as accumulating a
+                total every time a user clicks a button, that array must be
+                declared outside of any single event-handling method, at the
+                class level, rather than inside the method that reacts to
+                the event. Declaring it inside the event method instead
+                would reset the array back to its starting values every
+                single time the event fired, discarding whatever had
+                already been accumulated.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: An Array Declared at the Class Level</h4>
+                <pre><code><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="type">DonationForm</span> : <span class="type">Form</span>
+{
+    <span class="comment">// Declared at the class level so it persists across every button click</span>
+    <span class="keyword">private</span> <span class="type">double</span>[] <span class="var">projectDonations</span> = { <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span> };
+
+    <span class="keyword">private</span> <span class="type">void</span> <span class="func">OkButton_Click</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">EventArgs</span> <span class="var">e</span>)
+    {
+        <span class="comment">// Uses and updates projectDonations without recreating it</span>
+    }
+}</code></pre>
+            </div>
+
+            <p>Placing the declaration here, above any individual event
+                method but still inside the class, means every event method
+                in the class shares the same array instance and can both
+                read from it and add to it without losing earlier updates.
+            </p>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 6 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Array</td>
+                            <td>A list of same-type, same-name values
+                                distinguished by position</td>
+                        </tr>
+                        <tr>
+                            <td>Array element</td>
+                            <td>One individual data item stored in an array</td>
+                        </tr>
+                        <tr>
+                            <td>Arrays are objects</td>
+                            <td>Instances of System.Array; created with the
+                                new operator</td>
+                        </tr>
+                        <tr>
+                            <td>Index / subscript</td>
+                            <td>Integer in square brackets marking an
+                                element's position; zero-based</td>
+                        </tr>
+                        <tr>
+                            <td>Highest valid subscript</td>
+                            <td>One less than the array's total number of
+                                elements</td>
+                        </tr>
+                        <tr>
+                            <td>Default values</td>
+                            <td>0 (numeric), \u0000 (char), false (bool)</td>
+                        </tr>
+                        <tr>
+                            <td>Initializer list</td>
+                            <td>Assigns nondefault starting values at
+                                declaration, in curly braces</td>
+                        </tr>
+                        <tr>
+                            <td>Length property</td>
+                            <td>Total element count; safer than a hardcoded
+                                loop bound</td>
+                        </tr>
+                        <tr>
+                            <td>foreach loop</td>
+                            <td>Cycles through elements without a subscript</td>
+                        </tr>
+                        <tr>
+                            <td>Iteration variable</td>
+                            <td>Read-only; cannot be used to modify the
+                                array or reveal the subscript</td>
+                        </tr>
+                        <tr>
+                            <td>Sequential search</td>
+                            <td>Examines elements in order until a match is
+                                found or the array ends</td>
+                        </tr>
+                        <tr>
+                            <td>Search efficiency</td>
+                            <td>Place common items first; exit the loop as
+                                soon as a match is found</td>
+                        </tr>
+                        <tr>
+                            <td>Parallel arrays</td>
+                            <td>Share the same subscript to relate data
+                                stored in separate arrays</td>
+                        </tr>
+                        <tr>
+                            <td>Range match</td>
+                            <td>Uses a limits array and a parallel results
+                                array to classify a value</td>
+                        </tr>
+                        <tr>
+                            <td>Array.Sort()</td>
+                            <td>Arranges elements in ascending order</td>
+                        </tr>
+                        <tr>
+                            <td>Array.Reverse()</td>
+                            <td>Flips existing order; does not sort</td>
+                        </tr>
+                        <tr>
+                            <td>Array.BinarySearch()</td>
+                            <td>Requires a sorted array; halves the search
+                                space each comparison</td>
+                        </tr>
+                        <tr>
+                            <td>using static System.Array</td>
+                            <td>Lets you call Sort()/BinarySearch() without
+                                the Array. prefix</td>
+                        </tr>
+                        <tr>
+                            <td>Rectangular (2D) array</td>
+                            <td>Every row has the same number of columns;
+                                accessed with [row, col]</td>
+                        </tr>
+                        <tr>
+                            <td>Jagged array</td>
+                            <td>Array of arrays with potentially different
+                                lengths; accessed with [row][col]</td>
+                        </tr>
+                        <tr>
+                            <td>Arrays in GUIs</td>
+                            <td>Must be declared at the class level to
+                                persist across repeated events</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 6: Microsoft Visual C# - Using
+                Arrays &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

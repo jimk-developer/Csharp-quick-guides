@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 10: Microsoft Visual C# - Introduction to Inheritance</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #3730A3;
+            --primary-light: #C7D2FE;
+            --accent: #0891B2;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #C7D2FE 0%, #A5B4FC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(79, 70, 229, 0.25);
+            color: #C7D2FE;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(79, 70, 229, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(79, 70, 229, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #C7D2FE;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #C7D2FE;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #3730A3;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 10: Microsoft Visual C# - Introduction to Inheritance</h1>
+        <p>Inheritance Basics, Protected Access, Polymorphism and
+            Overriding, Implicit Reference Conversions, the Object Class,
+            Base Class Constructors, Abstract and Sealed Classes,
+            Interfaces, Extension Methods, and GUI Inheritance</p>
+        <nav class="nav-pills">
+            <a href="#section-basics" class="nav-pill">Inheritance Basics</a>
+            <a href="#section-protected" class="nav-pill">Protected Access</a>
+            <a href="#section-polymorphism" class="nav-pill">Polymorphism &amp; Overriding</a>
+            <a href="#section-conversions" class="nav-pill">Implicit Conversions</a>
+            <a href="#section-object" class="nav-pill">The Object Class</a>
+            <a href="#section-base-constructors" class="nav-pill">Base Constructors</a>
+            <a href="#section-abstract-sealed" class="nav-pill">Abstract &amp; Sealed</a>
+            <a href="#section-interfaces" class="nav-pill">Interfaces</a>
+            <a href="#section-extension" class="nav-pill">Extension Methods</a>
+            <a href="#section-gui" class="nav-pill">GUI Inheritance</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">10</div>
+                <div>
+                    <h2>Building New Classes from Existing Ones</h2>
+                    <p>Rather than writing every class completely from
+                        scratch, C# lets you build a new, more specific
+                        class on top of an existing, more general one, and
+                        automatically gain everything that existing class
+                        already offers. This guide covers how inheritance
+                        relationships are declared, how methods can be
+                        redefined in a more specific class, the root
+                        <code>Object</code> class every type ultimately
+                        descends from, how base class constructors fit into
+                        the picture, classes designed purely to be inherited
+                        from, interfaces, extension methods, and how
+                        inheritance shows up in GUI applications.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-basics">🌳 Inheritance Basics</h2>
+
+            <p><strong>Inheritance</strong> is the principle that lets a new
+                class acquire the fields and methods of an existing class,
+                then add its own more specific fields and methods on top of
+                them. The existing class being built upon is called the
+                <strong>base class</strong>, and the new class built from it
+                is called the <strong>derived class</strong>.</p>
+
+            <div class="warning-box">
+                It is the derived class, not the base class, that ends up
+                containing everything: a derived class contains all the
+                fields and methods of its base class, plus whatever
+                additional, more specific fields and methods it defines
+                itself. A base class does not automatically gain anything
+                from classes derived from it.
+            </div>
+
+            <h3>Terminology Synonyms</h3>
+            <p>C# literature uses several interchangeable pairs of terms for
+                this same relationship.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Base Class Synonyms</th>
+                        <th>Derived Class Synonyms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Parent class</td>
+                        <td>Child class</td>
+                    </tr>
+                    <tr>
+                        <td>Superclass</td>
+                        <td>Subclass</td>
+                    </tr>
+                    <tr>
+                        <td>(no separate synonym)</td>
+                        <td>Extended class</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Declaring an Inheritance Relationship</h3>
+            <p>A derived class declares its base class using a single colon
+                after the derived class's identifier, followed by the base
+                class's name.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring a Derived Class</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Animal</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+}
+
+<span class="keyword">class</span> <span class="type">Dog</span> : <span class="type">Animal</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Breed</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+}</code></pre>
+            </div>
+
+            <p>Here, <code>Dog</code> is a derived class (or child class, or
+                subclass) of the base class (or parent class, or superclass)
+                <code>Animal</code>. A <code>Dog</code> object automatically
+                has a <code>Name</code> property, inherited from
+                <code>Animal</code>, in addition to its own
+                <code>Breed</code> property.</p>
+
+            <h3>Identifying Base and Derived Classes with "Is A"</h3>
+            <p>One reliable way to check whether two classes truly have a
+                base/derived relationship is to use them in a sentence on
+                either side of the phrase <strong>"is a"</strong>: "A Dog
+                is an Animal" reads naturally and correctly, confirming that
+                <code>Animal</code> belongs on the base class side and
+                <code>Dog</code> belongs on the derived class side of the
+                relationship.</p>
+
+            <h3>Inheritance Is Transitive</h3>
+            <p>Inheritance is <strong>transitive</strong>: a class inherits
+                the members of every class above it in the inheritance
+                chain, not just its immediate base class. If
+                <code>Puppy</code> were derived from <code>Dog</code>, a
+                <code>Puppy</code> object would inherit members from both
+                <code>Dog</code> and, transitively, from <code>Animal</code>
+                as well; every class further up the chain is considered one
+                of its <strong>ancestors</strong>.</p>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-protected">🔒 Protected Access</h2>
+
+            <p>The <strong>protected</strong> access specifier makes a field
+                or method usable within its own class and within any class
+                derived from it, but not usable by any "outside," unrelated
+                class. It sits between <code>private</code>, which blocks
+                even derived classes, and <code>public</code>, which allows
+                every class access.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Protected Field</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Animal</span>
+{
+    <span class="keyword">protected</span> <span class="type">string</span> <span class="var">diet</span>;
+}</code></pre>
+            </div>
+
+            <p>Changing a field's access from <code>private</code> to
+                <code>protected</code>, as shown above, is exactly how you
+                make a base class field accessible to its descendants while
+                still keeping it inaccessible to unrelated classes.</p>
+
+            <h3>Fragile Classes</h3>
+            <div class="warning-box">
+                A derived class that depends directly on a base class's
+                specific field names, rather than going through properties
+                or methods, is considered <strong>fragile</strong>: prone to
+                breaking if the base class's author ever renames or
+                restructures those fields, even in ways that would otherwise
+                be a harmless internal change.
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-polymorphism">🎭 Polymorphism and Overriding</h2>
+
+            <p><strong>Polymorphism</strong> is using the same method name
+                to produce different implementations depending on the
+                specific class involved, such as one <code>Play()</code>
+                method that produces a string of notes for a
+                <code>Violin</code> and a different <code>Play()</code>
+                method that produces a drum pattern for a <code>Drum</code>,
+                even though both classes might share a common base class.
+            </p>
+
+            <h3>Virtual Methods and Overriding</h3>
+            <p>To allow a derived class to redefine a base class method,
+                that method must be declared <code>virtual</code> in the
+                base class. The derived class then uses the
+                <code>override</code> modifier to provide its own version.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Overriding a Virtual Method</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Instrument</span>
+{
+    <span class="keyword">public</span> <span class="keyword">virtual</span> <span class="type">void</span> <span class="func">Play</span>()
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"An instrument makes a sound."</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Violin</span> : <span class="type">Instrument</span>
+{
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="type">void</span> <span class="func">Play</span>()
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"The violin sings a melody."</span>);
+    }
+}</code></pre>
+            </div>
+
+            <p>When you declare a method in a derived class using
+                <code>override</code>, matching a method that was declared
+                <code>virtual</code> in the base class, that override
+                completely replaces the base class's implementation with
+                the derived class's own version whenever the method is
+                called on an object of the derived class.</p>
+
+            <div class="warning-box">
+                Overriding requires an identical signature: the same method
+                name and the same parameter list. If a derived class
+                defines a method with the same name as a base class method
+                but a <em>different</em> parameter list, that is ordinary
+                method overloading, not overriding; the two methods remain
+                entirely separate rather than one replacing the other.
+            </div>
+
+            <h3>Hiding a Method with new</h3>
+            <p>If a derived class defines a method with the exact same name
+                and parameter list as a base class method, but the base
+                class method was <em>not</em> declared <code>virtual</code>,
+                the derived class's version <strong>hides</strong> the base
+                version rather than overriding it. Adding the
+                <code>new</code> keyword to the derived class method
+                signals that this hiding is intentional, silencing the
+                compiler warning that would otherwise appear.</p>
+
+            <h3>Members That Are Not Hidden or Overridden</h3>
+            <p>Any base class member that a derived class does not
+                explicitly hide or override remains fully <strong>visible</strong>
+                and usable in the derived class exactly as the base class
+                defined it, inherited without any change at all.</p>
+
+            <h3>Accessing the Base Class Version with base</h3>
+            <p>The <code>base</code> keyword always refers to the superclass
+                of whatever class it is used in, and it lets a derived class
+                explicitly call the base class's own version of a method or
+                property it has overridden.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Calling the Base Class Version</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Violin</span> : <span class="type">Instrument</span>
+{
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="type">void</span> <span class="func">Play</span>()
+    {
+        <span class="keyword">base</span>.<span class="func">Play</span>();
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"The violin sings a melody."</span>);
+    }
+}</code></pre>
+            </div>
+
+            <p>Calling <code>base.Play()</code> here runs
+                <code>Instrument</code>'s original <code>Play()</code>
+                implementation first, before <code>Violin</code>'s own
+                additional statement executes.</p>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-conversions">🔄 Implicit Reference Conversions</h2>
+
+            <p>You can assign a derived class object to a variable of any
+                of its base class types. C# performs this automatically
+                through an <strong>implicit reference conversion</strong>,
+                requiring no explicit cast at all.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Implicit Reference Conversion</h4>
+                <pre><code><span class="type">Violin</span> <span class="var">fiddle</span> = <span class="keyword">new</span> <span class="type">Violin</span>();
+<span class="type">Instrument</span> <span class="var">someInstrument</span> = <span class="var">fiddle</span>;
+<span class="comment">// Legal without a cast: a Violin is an Instrument</span></code></pre>
+            </div>
+
+            <p>This same conversion happens automatically whenever a derived
+                class object is passed as an argument to a method whose
+                parameter is declared using a base class type. A method with
+                a parameter declared as <code>Instrument</code> can accept
+                an argument of type <code>Instrument</code>,
+                <code>Violin</code>, <code>Drum</code>, or any other class
+                derived from <code>Instrument</code>, without the caller
+                needing to write any explicit conversion.</p>
+
+            <div class="tip-box">
+                You assign an object to its ancestor's type specifically
+                whenever you pass a more specific, derived-class object into
+                code, such as a variable or a method parameter, that expects
+                a more general, base-class type; C# relies on the "is a"
+                relationship to allow this conversion safely.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-object">🌐 The Object Class</h2>
+
+            <p>Every class you create in C# is ultimately derived from a
+                single built-in <strong>root class</strong>:
+                <code>System.Object</code>. The keyword <code>object</code>
+                (lowercase) is simply an alias for
+                <code>System.Object</code>. Because every class descends
+                from <code>Object</code>, either directly or transitively
+                through its ancestors, every object you create automatically
+                has access to a small set of methods defined by
+                <code>Object</code> itself.</p>
+
+            <div class="tip-box">
+                When you create any C# object, you implicitly call the
+                Object class's own constructor as part of that object's
+                construction, even though you never write that call
+                yourself; it happens automatically as the first step in
+                building any object, since every class ultimately descends
+                from Object.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Object Method</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>GetType()</code></td>
+                        <td>Returns a Type object representing the object's
+                            class, which can in turn provide the class's
+                            name</td>
+                    </tr>
+                    <tr>
+                        <td><code>ToString()</code></td>
+                        <td>By default, returns a string containing the
+                            object's fully qualified class name; often
+                            overridden as a useful debugging aid to describe
+                            an object's contents instead</td>
+                    </tr>
+                    <tr>
+                        <td><code>Equals()</code></td>
+                        <td>By default, tests for reference equality:
+                            whether two variables refer to the exact same
+                            object in memory, not merely equal values</td>
+                    </tr>
+                    <tr>
+                        <td><code>GetHashCode()</code></td>
+                        <td>Returns an integer that acts like a fingerprint
+                            for the object, intended to uniquely identify it</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Reference Equality</h3>
+            <p>Two objects exhibit <strong>reference equality</strong> when
+                they refer to the exact same memory location, meaning they
+                are literally the same object rather than two separate
+                objects that merely happen to hold identical field values.
+                A call such as <code>firstCoin.Equals(secondCoin)</code>,
+                left unmodified, tests exactly this: it returns
+                <code>true</code> only if <code>firstCoin</code> and
+                <code>secondCoin</code> are references to the very same
+                object, not simply two different objects with matching
+                data.</p>
+
+            <h3>Overriding ToString()</h3>
+            <p>Overriding <code>ToString()</code> to describe an object's
+                own data, rather than just its class name, is a common and
+                useful debugging technique.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Overriding ToString()</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Membership</span>
+{
+    <span class="keyword">public</span> <span class="type">int</span> <span class="var">MemberID</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">HolderName</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="type">string</span> <span class="func">ToString</span>()
+    {
+        <span class="keyword">return</span> <span class="type">string</span>.<span class="func">Format</span>(<span class="string">"{0}: #{1}, {2}"</span>, <span class="func">GetType</span>().<span class="var">Name</span>, <span class="var">MemberID</span>, <span class="var">HolderName</span>);
+    }
+}</code></pre>
+            </div>
+
+            <p>Calling <code>GetType().Name</code> inside
+                <code>ToString()</code> retrieves just the class's simple
+                name, "Membership," as a clean string, which is also the
+                general technique for displaying an object's class name to
+                a user without any extra namespace text attached.</p>
+
+            <h3>Overriding Equals() and GetHashCode()</h3>
+            <div class="warning-box">
+                A correctly overridden <code>Equals()</code> method must
+                still return <code>bool</code>, and it should accept a
+                parameter of type <code>object</code> to properly match the
+                signature it is overriding from the Object class; declaring
+                it with a return type of <code>int</code>, or a parameter
+                type matching only your own class, fails to correctly
+                override <code>Equals(object)</code> at all. By convention,
+                whenever you override <code>Equals()</code> to compare
+                objects by value instead of by reference, you should also
+                override <code>GetHashCode()</code> so that two objects
+                considered equal always produce the same hash code.
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-base-constructors">🏗️ Base Class Constructors</h2>
+
+            <p>A base class's constructor always executes before a derived
+                class's own constructor. When you instantiate a derived
+                class object, C# first runs the appropriate base class
+                constructor, building the inherited portion of the object,
+                before running any statements in the derived class's own
+                constructor body.</p>
+
+            <h3>Passing Arguments to a Base Constructor</h3>
+            <p>If a base class does not provide an accessible parameterless
+                constructor, a derived class must explicitly call one of the
+                base class's constructors using <code>: base(...)</code>
+                syntax, supplying whatever arguments that base constructor
+                requires.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Calling a Base Constructor</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Animal</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="type">Animal</span>(<span class="type">string</span> <span class="var">name</span>)
+    {
+        <span class="var">Name</span> = <span class="var">name</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Dog</span> : <span class="type">Animal</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Breed</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="type">Dog</span>(<span class="type">string</span> <span class="var">name</span>, <span class="type">string</span> <span class="var">breed</span>) : <span class="keyword">base</span>(<span class="var">name</span>)
+    {
+        <span class="var">Breed</span> = <span class="var">breed</span>;
+    }
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Because <code>Animal</code> here only defines a
+                one-parameter constructor, and no parameterless constructor
+                at all, <code>Dog</code> is required to write a constructor
+                for itself and use <code>: base(name)</code> to satisfy
+                <code>Animal</code>'s constructor requirement. If
+                <code>Animal</code> instead provided an accessible
+                parameterless constructor, <code>Dog</code> would not be
+                required to write any constructor of its own at all.
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-abstract-sealed">🧱 Abstract and Sealed Classes</h2>
+
+            <h3>Abstract Classes</h3>
+            <p>An <strong>abstract class</strong> is a class from which you
+                cannot create concrete objects, but from which you can still
+                inherit. A class capable of being instantiated normally, by
+                contrast, is called a <strong>concrete class</strong>. Mark
+                a class abstract with the <code>abstract</code> keyword in
+                its header.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: An Abstract Class</h4>
+                <pre><code><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="type">Instrument</span>
+{
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">void</span> <span class="func">Play</span>();
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Attempting <code>new Instrument()</code> against an abstract
+                class is always a compiler error; abstract classes exist
+                purely to serve as a foundation for derived, concrete
+                classes to build on.
+            </div>
+
+            <h3>Choosing virtual vs. abstract</h3>
+            <p>Declare a base class method <code>virtual</code>, rather than
+                <code>abstract</code>, whenever the method should be
+                overridden in some derived classes but not necessarily all
+                of them; a virtual method always includes a working default
+                implementation that a derived class is free to use as-is.
+                An <code>abstract</code> method, by contrast, has no body at
+                all in the base class and forces every derived class to
+                supply its own implementation before it can be
+                instantiated.</p>
+
+            <h3>Sealed Classes</h3>
+            <p>A <strong>sealed class</strong> is one that cannot be
+                extended by any other class at all. Marking a class
+                <code>sealed</code> prevents any further inheritance from
+                it, which is exactly what prevents a class such as C#'s own
+                <code>System.Console</code> from being extended by other
+                code.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Sealed Class</h4>
+                <pre><code><span class="keyword">sealed</span> <span class="keyword">class</span> <span class="type">FinalReport</span>
+{
+    <span class="comment">// No other class can inherit from FinalReport</span>
+}</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-interfaces">🔌 Interfaces and Multiple Inheritance</h2>
+
+            <p>An <strong>interface</strong> is a collection of purely
+                abstract methods (and possibly other members), all without
+                any implementation, that any class can use as long as it
+                supplies its own working definition for every method the
+                interface declares.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring an Interface</h4>
+                <pre><code><span class="keyword">interface</span> <span class="type">IPlayable</span>
+{
+    <span class="type">void</span> <span class="func">Play</span>();
+}</code></pre>
+            </div>
+
+            <h3>No Multiple Inheritance for Classes</h3>
+            <p>C# prohibits <strong>multiple inheritance</strong> for
+                classes: a class can have, at most, one base class. This
+                differs from languages such as C++, where a class can
+                inherit directly from more than one parent class at once.
+                One major reason multiple inheritance causes problems is
+                ambiguity: if two separate parent classes each define a
+                member with the same name, there is no clear, unambiguous
+                way to decide which parent's version a derived class should
+                use.</p>
+
+            <div class="tip-box">
+                While a C# class can only extend one base class, it can
+                implement as many interfaces as needed at the same time.
+                This gives C# a controlled, unambiguous alternative to
+                multiple inheritance: a class inherits behavior from a
+                single base class while also being required to fulfill the
+                contracts of any number of interfaces.
+            </div>
+
+            <h3>Abstract Classes vs. Interfaces</h3>
+            <p>An important distinction between the two: a class may extend
+                only one abstract (or concrete) base class, but that same
+                class may implement several interfaces simultaneously. Both
+                abstract classes and interfaces can declare methods that
+                derived or implementing classes must define, but only an
+                abstract class can also supply fields, constructors, and
+                fully implemented (nonabstract) methods alongside its
+                abstract ones; an interface's methods are exclusively
+                abstract.</p>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-extension">🧵 Extension Methods</h2>
+
+            <p>An <strong>extension method</strong> is a static method,
+                written inside a static class, that can be called as though
+                it were an instance method of a completely different,
+                often preexisting, type. Extension methods can be described
+                as static methods that are called like instance methods.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Syntax: An Extension Method</h4>
+                <pre><code><span class="keyword">static</span> <span class="keyword">class</span> <span class="type">NumberExtensions</span>
+{
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">ToFahrenheit</span>(<span class="keyword">this</span> <span class="type">double</span> <span class="var">celsius</span>)
+    {
+        <span class="keyword">return</span> <span class="var">celsius</span> * <span class="num">9</span> / <span class="num">5</span> + <span class="num">32</span>;
+    }
+}
+
+<span class="comment">// Called as though ToFahrenheit() were a built-in double method:</span>
+<span class="type">double</span> <span class="var">boilingPoint</span> = <span class="num">100.0</span>.<span class="func">ToFahrenheit</span>();
+<span class="comment">// boilingPoint is 212.0</span></code></pre>
+            </div>
+
+            <p>The <code>this</code> keyword placed on the first parameter,
+                <code>this double celsius</code>, is what marks
+                <code>ToFahrenheit()</code> as an extension method and
+                identifies exactly which type, <code>double</code>, it
+                extends. The class containing an extension method must
+                itself be declared <code>static</code>.</p>
+
+            <!-- ===================== SECTION 10 ===================== -->
+            <h2 id="section-gui">🖱️ GUI Application Inheritance</h2>
+
+            <p>Every Form created inside the Visual Studio IDE inherits from
+                the built-in <code>Form</code> base class. This is exactly
+                the same inheritance mechanism covered throughout this
+                guide, simply applied automatically by the IDE's project
+                templates.</p>
+
+            <div class="tip-box">
+                When Visual Studio generates a Form object for you, you can
+                double-click it and examine its generated code to see
+                exactly which class it inherits from. Its class header will
+                read something like <code>public partial class Form1 :
+                    Form</code>, immediately revealing <code>Form</code> as
+                that class's immediate ancestor, in exactly the same
+                <code>class Identifier : BaseClassName</code> pattern used
+                throughout this guide.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 10 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base class / derived class</td>
+                            <td>Existing general class / new, more specific
+                                class built from it</td>
+                        </tr>
+                        <tr>
+                            <td>Synonyms</td>
+                            <td>Parent/superclass = base; child/subclass/
+                                extended class = derived</td>
+                        </tr>
+                        <tr>
+                            <td>Derived class syntax</td>
+                            <td>class Derived : Base</td>
+                        </tr>
+                        <tr>
+                            <td>"Is a" test</td>
+                            <td>Confirms which class is base and which is
+                                derived</td>
+                        </tr>
+                        <tr>
+                            <td>Transitive</td>
+                            <td>A class inherits from every ancestor, not
+                                just its immediate base class</td>
+                        </tr>
+                        <tr>
+                            <td>Derived class contents</td>
+                            <td>All base class members, plus its own; not
+                                the reverse</td>
+                        </tr>
+                        <tr>
+                            <td>protected access</td>
+                            <td>Usable in the class and its derived classes
+                                only</td>
+                        </tr>
+                        <tr>
+                            <td>Fragile class</td>
+                            <td>Depends on a base class's specific field
+                                names</td>
+                        </tr>
+                        <tr>
+                            <td>Polymorphism</td>
+                            <td>Same method name, different implementations
+                                per class</td>
+                        </tr>
+                        <tr>
+                            <td>virtual / override</td>
+                            <td>Base declares virtual; derived redefines
+                                with override; requires identical signature</td>
+                        </tr>
+                        <tr>
+                            <td>Overloading vs. overriding</td>
+                            <td>Different parameter list is overloading, not
+                                overriding</td>
+                        </tr>
+                        <tr>
+                            <td>new keyword</td>
+                            <td>Hides a non-virtual base method
+                                intentionally; suppresses the warning</td>
+                        </tr>
+                        <tr>
+                            <td>base keyword</td>
+                            <td>Refers to the superclass; calls its version
+                                of a member</td>
+                        </tr>
+                        <tr>
+                            <td>Implicit reference conversion</td>
+                            <td>Assigning/passing a derived object as its
+                                base type, no cast needed</td>
+                        </tr>
+                        <tr>
+                            <td>Object / object</td>
+                            <td>Root class of every C# type; object is its
+                                alias</td>
+                        </tr>
+                        <tr>
+                            <td>GetType()</td>
+                            <td>Returns a Type object; .Name gives the class
+                                name</td>
+                        </tr>
+                        <tr>
+                            <td>ToString()</td>
+                            <td>Default returns the class name; often
+                                overridden for debugging</td>
+                        </tr>
+                        <tr>
+                            <td>Equals()</td>
+                            <td>Default tests reference equality, not value
+                                equality</td>
+                        </tr>
+                        <tr>
+                            <td>GetHashCode()</td>
+                            <td>Returns a unique integer fingerprint for the
+                                object</td>
+                        </tr>
+                        <tr>
+                            <td>Overriding Equals() correctly</td>
+                            <td>Must return bool and accept an object
+                                parameter; also override GetHashCode()</td>
+                        </tr>
+                        <tr>
+                            <td>Base constructor order</td>
+                            <td>Base class constructor always runs before
+                                the derived class constructor</td>
+                        </tr>
+                        <tr>
+                            <td>: base(...)</td>
+                            <td>Required when the base class has no
+                                accessible parameterless constructor</td>
+                        </tr>
+                        <tr>
+                            <td>Abstract class</td>
+                            <td>Cannot be instantiated; exists to be
+                                inherited from</td>
+                        </tr>
+                        <tr>
+                            <td>Concrete class</td>
+                            <td>A class that can be instantiated normally</td>
+                        </tr>
+                        <tr>
+                            <td>Sealed class</td>
+                            <td>Cannot be extended by any other class</td>
+                        </tr>
+                        <tr>
+                            <td>Interface</td>
+                            <td>Collection of purely abstract methods</td>
+                        </tr>
+                        <tr>
+                            <td>No multiple class inheritance</td>
+                            <td>One base class max; many interfaces allowed</td>
+                        </tr>
+                        <tr>
+                            <td>Extension method</td>
+                            <td>Static method in a static class; this on the
+                                first parameter</td>
+                        </tr>
+                        <tr>
+                            <td>GUI Form inheritance</td>
+                            <td>Every generated Form inherits from the base
+                                Form class</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 10: Microsoft Visual C# -
+                Introduction to Inheritance &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

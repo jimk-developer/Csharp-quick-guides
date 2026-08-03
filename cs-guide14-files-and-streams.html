@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 14: Microsoft Visual C# - Files and Streams</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #CA8A04;
+            --primary-dark: #854D0E;
+            --primary-light: #FEF08A;
+            --accent: #4F46E5;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #CA8A04 0%, #854D0E 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #FEF08A 0%, #FDE047 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(202, 138, 4, 0.25);
+            color: #FEF08A;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(202, 138, 4, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(202, 138, 4, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #FEF08A;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #FEFCE8 0%, #FEF08A 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(202, 138, 4, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #FEFCE8 0%, #FEF08A 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #FEF08A;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #FEFCE8 0%, #FEF08A 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #854D0E;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 14: Microsoft Visual C# - Files and Streams</h1>
+        <p>Storage Fundamentals, Files and Paths, the Data Hierarchy,
+            Sequential vs. Random Access Files, Streams, Reading and
+            Writing Text Files, Searching Files, and Serialization</p>
+        <nav class="nav-pills">
+            <a href="#section-storage" class="nav-pill">Storage Fundamentals</a>
+            <a href="#section-files-paths" class="nav-pill">Files &amp; Paths</a>
+            <a href="#section-file-classes" class="nav-pill">File &amp; Directory Classes</a>
+            <a href="#section-hierarchy" class="nav-pill">Data Hierarchy</a>
+            <a href="#section-access-types" class="nav-pill">Sequential vs. Random</a>
+            <a href="#section-streams" class="nav-pill">Streams</a>
+            <a href="#section-reading-writing" class="nav-pill">Reading &amp; Writing Text</a>
+            <a href="#section-searching" class="nav-pill">Searching Files</a>
+            <a href="#section-serialization" class="nav-pill">Serialization</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">14</div>
+                <div>
+                    <h2>Making Data Last Beyond the Program</h2>
+                    <p>Every variable a program creates disappears the
+                        moment that program ends, unless the data is saved
+                        somewhere more permanent. This guide covers the
+                        difference between temporary and permanent storage,
+                        how files and directories are organized, the data
+                        hierarchy from characters up to files, sequential
+                        and random access files, the stream objects C#
+                        uses to move data in and out of a program, reading
+                        and writing text files, searching through file data,
+                        and converting whole objects into a form that can be
+                        saved and restored.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-storage">💾 Storage Fundamentals</h2>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Volatile (Temporary) Storage</h4>
+                    <p><strong>Random access memory (RAM)</strong> holds
+                        data only while a program runs. A value stored in a
+                        variable is lost the moment the program ends or the
+                        computer loses power.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Nonvolatile (Permanent) Storage</h4>
+                    <p>Hard disks, solid state drives, USB drives, magnetic
+                        tape, and optical discs retain data even after the
+                        program that created it ends or the computer is
+                        powered off.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                Writing a C# program's source code and saving it to disk
+                uses <strong>permanent</strong>, nonvolatile storage, not
+                temporary storage. It is the values held in a running
+                program's variables, kept in RAM while that program
+                executes, that count as temporary, volatile storage.
+            </div>
+
+            <p>Because data stored on a disk can still be deliberately
+                erased or overwritten, some programmers prefer the term
+                <strong>persistent</strong> storage over "permanent"
+                storage; the data survives a loss of power, but it isn't
+                necessarily permanent in every sense.</p>
+
+            <p>Storing data on a persistent storage device is described as
+                <strong>writing</strong> to a file. Copying data from a file
+                on a storage device back into RAM, so a running program can
+                work with it, is described as <strong>reading</strong> from
+                that file.</p>
+
+            <h3>File Sizes</h3>
+            <p>File and storage sizes are measured using a family of
+                related units, each one roughly a thousand times larger
+                than the one before it.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Unit</th>
+                        <th>Approximate Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bit</td>
+                        <td>A single binary digit, 0 or 1</td>
+                    </tr>
+                    <tr>
+                        <td>Byte</td>
+                        <td>8 bits</td>
+                    </tr>
+                    <tr>
+                        <td>Kilobyte (KB)</td>
+                        <td>About 1,000 bytes</td>
+                    </tr>
+                    <tr>
+                        <td>Megabyte (MB)</td>
+                        <td>About 1 million bytes</td>
+                    </tr>
+                    <tr>
+                        <td>Gigabyte (GB)</td>
+                        <td>About 1 billion bytes</td>
+                    </tr>
+                    <tr>
+                        <td>Terabyte (TB)</td>
+                        <td>About 1 trillion bytes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-files-paths">📁 Files and Paths</h2>
+
+            <p>A <strong>computer file</strong> is a collection of
+                information stored together on a nonvolatile device. Most
+                users organize their files into <strong>directories</strong>,
+                also known as <strong>folders</strong>; the two terms are
+                used synonymously.</p>
+
+            <p>A file's <strong>path</strong> is the combination of the disk
+                drive plus the complete hierarchy of directories in which
+                that file resides, describing exactly where to find it. The
+                <strong>root directory</strong> is the top-level directory
+                of a drive, the starting point every other directory on that
+                drive branches out from.</p>
+
+            <h3>Text Files vs. Binary Files</h3>
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Text File</h4>
+                    <p>Stores data encoded as readable text, using a
+                        character set such as Unicode, so the raw contents
+                        can be opened and read directly.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Binary File</h4>
+                    <p>Stores unencoded data items in a format meant for a
+                        specific program to interpret, such as the formats
+                        used for music or image files, rather than for
+                        direct human reading.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                Despite their differences, text and binary files share an
+                important characteristic: both ultimately store their data
+                as a sequence of bytes on a nonvolatile device, and both
+                must be opened before a program can use them and closed
+                again afterward.
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-file-classes">🗂️ File and Directory Classes</h2>
+
+            <p>The <code>File</code> and <code>Directory</code> classes,
+                both part of the <code>System.IO</code> namespace, provide
+                methods for accessing information about files and folders.
+                The <code>File</code> class contains methods that let you
+                access information about individual files, while the
+                <code>Directory</code> class provides similar information
+                about directories, or folders.</p>
+
+            <div class="warning-box">
+                The <code>File</code> class lives in the
+                <code>System.IO</code> namespace, not a namespace named
+                <code>System.IOFile</code>; there is no such namespace in
+                C#. Most of the File class's methods are static, so you
+                call them directly through the class name itself, such as
+                <code>File.Exists("data.txt")</code>, without needing to
+                instantiate a File object first.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-hierarchy">🧱 The Data Hierarchy</h2>
+
+            <p>Data used by business applications is commonly organized into
+                a <strong>data hierarchy</strong>, where each level combines
+                to build the next.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Character</strong></td>
+                        <td>Any single letter, number, or special symbol,
+                            such as punctuation, that makes up data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Field</strong></td>
+                        <td>A meaningful group of characters, such as a name
+                            or a price</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Record</strong></td>
+                        <td>A collection of fields containing data about one
+                            entity, such as all the fields describing a
+                            single customer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>File</strong></td>
+                        <td>A collection of records</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                Characters combine to form fields, fields combine to form
+                records, and records combine to form files, each level
+                building directly on the one below it. A single value like
+                a customer's phone number is only a field on its own; it
+                becomes part of a record only once it is grouped together
+                with the other fields describing that same customer.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-access-types">🔀 Sequential vs. Random Access Files</h2>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Sequential Access File</h4>
+                    <p>Records are read in the order of their position in
+                        the file, often ordered by a <strong>key field</strong>,
+                        the field that uniquely identifies each record.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Random Access File</h4>
+                    <p>Records do not need to be read in sequence; any
+                        record can be accessed directly, in any order,
+                        regardless of its position in the file.</p>
+                </div>
+            </div>
+
+            <h3>Opening and Closing Files</h3>
+            <p>A C# application opens a file by creating an instance of an
+                appropriate file-processing class, such as
+                <code>FileStream</code>, <code>StreamReader</code>, or
+                <code>StreamWriter</code>, associated with that file's path.
+                Once an application is finished using a file, it should
+                <strong>close</strong> the file, releasing the system
+                resources tied up in keeping it open, either by explicitly
+                calling <code>Close()</code> or by using a
+                <code>using</code> block that closes the file automatically.
+            </p>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-streams">🌊 Streams</h2>
+
+            <p>A <strong>stream</strong> is a pipeline, or channel, for
+                input and output. When you perform an input operation, you
+                can picture bytes flowing into your program from an input
+                device through a stream object; the reverse happens during
+                output, with bytes flowing out of the program through a
+                stream toward an output device.</p>
+
+            <h3>Standard Console Streams</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stream</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Console.In</code></td>
+                        <td>The standard input stream, typically the
+                            keyboard</td>
+                    </tr>
+                    <tr>
+                        <td><code>Console.Out</code></td>
+                        <td>The standard output stream, typically the
+                            console window</td>
+                    </tr>
+                    <tr>
+                        <td><code>Console.Error</code></td>
+                        <td>The standard error stream, used for error
+                            messages</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>File-Processing Classes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>FileStream</code></td>
+                        <td>Processes files as raw bytes</td>
+                    </tr>
+                    <tr>
+                        <td><code>StreamReader</code></td>
+                        <td>Processes text input from a file</td>
+                    </tr>
+                    <tr>
+                        <td><code>StreamWriter</code></td>
+                        <td>Processes text output to a file</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>FileMode and FileStream Properties</h3>
+            <p>When constructing a <code>FileStream</code>, a
+                <code>FileMode</code> value specifies how the file should be
+                opened.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>FileMode</th>
+                        <th>Behavior</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>FileMode.Create</code></td>
+                        <td>Opens an existing file and empties it,
+                            resulting in a file that is zero bytes in size;
+                            creates a new file if one does not already exist</td>
+                    </tr>
+                    <tr>
+                        <td><code>FileMode.Open</code></td>
+                        <td>Opens an existing file; if the file does not
+                            exist, this throws an exception rather than
+                            creating one</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>A <code>FileStream</code>'s <code>CanRead</code> property
+                indicates whether that FileStream supports reading, letting
+                code check a stream's capabilities before attempting an
+                operation on it.</p>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-reading-writing">✍️ Reading and Writing Text Files</h2>
+
+            <div class="syntax-box">
+                <h4>Example: Writing Text to a File</h4>
+                <pre><code><span class="type">FileStream</span> <span class="var">journalFile</span> = <span class="keyword">new</span> <span class="type">FileStream</span>(<span class="string">"journal.txt"</span>, <span class="type">FileMode</span>.<span class="var">Create</span>, <span class="type">FileAccess</span>.<span class="var">Write</span>);
+<span class="type">StreamWriter</span> <span class="var">logWriter</span> = <span class="keyword">new</span> <span class="type">StreamWriter</span>(<span class="var">journalFile</span>);
+
+<span class="var">logWriter</span>.<span class="func">WriteLine</span>(<span class="string">"Finished the C# guide series today."</span>);
+<span class="var">logWriter</span>.<span class="func">Close</span>();</code></pre>
+            </div>
+
+            <p>Wrapping the <code>FileStream</code> in a
+                <code>StreamWriter</code>, as <code>logWriter</code> does
+                here, is exactly what makes methods like
+                <code>WriteLine()</code> available for sending text to the
+                underlying file.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Reading Text from a File</h4>
+                <pre><code><span class="type">StreamReader</span> <span class="var">logReader</span> = <span class="keyword">new</span> <span class="type">StreamReader</span>(<span class="string">"journal.txt"</span>);
+<span class="type">string</span> <span class="var">textLineIn</span> = <span class="var">logReader</span>.<span class="func">ReadLine</span>();
+
+<span class="keyword">while</span> (<span class="var">textLineIn</span> != <span class="keyword">null</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">textLineIn</span>);
+    <span class="var">textLineIn</span> = <span class="var">logReader</span>.<span class="func">ReadLine</span>();
+}
+<span class="var">logReader</span>.<span class="func">Close</span>();</code></pre>
+            </div>
+
+            <div class="tip-box">
+                The first call to <code>ReadLine()</code>, made before the
+                while loop even begins, is known as a <strong>priming
+                    read</strong>: a read performed ahead of time so the
+                loop's condition has a real value to test the very first
+                time it is checked. <code>ReadLine()</code> returns
+                <code>null</code> once it reaches the end of the file, which
+                is exactly the condition <code>while (textLineIn != null)</code>
+                relies on to stop the loop after every line has been
+                processed, but not before.
+            </div>
+
+            <h3>Tokens and Delimiters</h3>
+            <p>A <strong>delimiter</strong> is a character used to mark the
+                boundary between data items in a text file. A
+                <strong>token</strong> is a character or group of
+                characters that has some meaning, such as one complete field
+                extracted from a line of text; more broadly, a token can
+                refer to any meaningful block of text within a string. A
+                <strong>field delimiter</strong> separates individual fields
+                within a record, while a <strong>record delimiter</strong>
+                (often just a new line) separates one full record from the
+                next.</p>
+
+            <p>A <strong>CSV file</strong> ("comma-separated values") is a
+                common example, using a comma as its field delimiter.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Splitting a Delimited Line into Tokens</h4>
+                <pre><code><span class="type">string</span> <span class="var">recordLine</span> = <span class="string">"E204,Priya Shah,Warehouse,22.50"</span>;
+<span class="type">string</span>[] <span class="var">fields</span> = <span class="var">recordLine</span>.<span class="func">Split</span>(<span class="string">','</span>);
+
+<span class="comment">// fields[0] is "E204", fields[1] is "Priya Shah", and so on</span></code></pre>
+            </div>
+
+            <p>The <code>Split()</code> method, a member of the
+                <code>string</code> class, takes a character delimiter
+                parameter and separates a string into an array of
+                substrings, breaking the original string apart at every
+                occurrence of that delimiter.</p>
+
+            <div class="warning-box">
+                A CSV file uses a comma as its field delimiter, not a
+                semicolon. While some regional spreadsheet formats do use a
+                semicolon-delimited variant, the standard, defining
+                characteristic of a CSV file is the comma.
+            </div>
+
+            <h3>Storing Object Data in a Sequential File</h3>
+            <p>To store data from an object in a sequential file, you must
+                convert that object's field values into delimited text, such
+                as a comma-separated line, and write that resulting string
+                out to the file; a sequential text file has no way to store
+                an object directly as an object, only as the text
+                representing its data.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-searching">🔎 Searching Files</h2>
+
+            <p>While a file is open, C# tracks the byte number of the next
+                byte to be read using a <strong>file position pointer</strong>.
+                As a program reads through a file, this pointer automatically
+                advances.</p>
+
+            <p>The <code>Seek()</code> method can be used to reposition the
+                file position pointer while reading a file, in combination
+                with the <code>SeekOrigin</code> enumeration, which
+                specifies whether the new position is measured from the
+                beginning of the file, the current position, or the end of
+                the file. Repositioning the pointer this way lets a program
+                process the same file's data more than once without closing
+                and reopening it.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Searching a Sequential File</h4>
+                <pre><code><span class="type">StreamReader</span> <span class="var">payrollReader</span> = <span class="keyword">new</span> <span class="type">StreamReader</span>(<span class="string">"payroll.txt"</span>);
+<span class="type">double</span> <span class="var">salaryThreshold</span> = <span class="num">20.00</span>;
+<span class="type">string</span> <span class="var">recordLine</span> = <span class="var">payrollReader</span>.<span class="func">ReadLine</span>();
+
+<span class="keyword">while</span> (<span class="var">recordLine</span> != <span class="keyword">null</span>)
+{
+    <span class="type">string</span>[] <span class="var">fields</span> = <span class="var">recordLine</span>.<span class="func">Split</span>(<span class="string">','</span>);
+    <span class="type">double</span> <span class="var">hourlyRate</span> = <span class="type">double</span>.<span class="func">Parse</span>(<span class="var">fields</span>[<span class="num">3</span>]);
+
+    <span class="keyword">if</span> (<span class="var">hourlyRate</span> &gt; <span class="var">salaryThreshold</span>)
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">recordLine</span>);
+    }
+
+    <span class="var">recordLine</span> = <span class="var">payrollReader</span>.<span class="func">ReadLine</span>();
+}
+<span class="var">payrollReader</span>.<span class="func">Close</span>();</code></pre>
+            </div>
+
+            <p>To search a sequential file for records where a numeric
+                field is greater than a user-supplied value, this same
+                pattern applies generally: a loop reads each record in turn,
+                splits it into its individual fields, and tests the field of
+                interest with an if statement, continuing until the entire
+                file has been read.</p>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-serialization">📦 Serialization and Deserialization</h2>
+
+            <p><strong>Serialization</strong> is the process of converting
+                an object into a stream of bytes, most often so it can be
+                written to a file securely and efficiently as a single unit,
+                rather than manually breaking it apart into individual
+                delimited fields. <strong>Deserialization</strong> is the
+                reverse process: converting a stream of bytes read back from
+                a file into a fully reconstructed object.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Serializable Class</h4>
+                <pre><code>[<span class="type">Serializable</span>]
+<span class="keyword">class</span> <span class="type">Contact</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span>;
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Email</span>;
+}</code></pre>
+            </div>
+
+            <p>The <code>[Serializable]</code> attribute marks a class, and
+                by extension its instance variables, as eligible to be
+                converted into a stream of bytes. Performing the actual
+                conversion typically relies on a formatter class from a
+                namespace such as
+                <code>System.Runtime.Serialization.Formatters.Binary</code>,
+                which handles translating a marked object's data into bytes
+                and back again.</p>
+
+            <div class="tip-box">
+                To convert a C# object into a stream of bytes, you
+                serialize it: mark its class with the
+                <code>[Serializable]</code> attribute, then use a
+                serialization formatter to write that object out to a
+                stream, rather than manually converting each field into
+                delimited text yourself.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 14 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Volatile storage (RAM)</td>
+                            <td>Temporary; lost when the program ends or
+                                power is lost</td>
+                        </tr>
+                        <tr>
+                            <td>Nonvolatile storage</td>
+                            <td>Permanent/persistent; disks, SSDs, and
+                                similar devices</td>
+                        </tr>
+                        <tr>
+                            <td>Saving source code to disk</td>
+                            <td>Uses permanent storage, not temporary storage</td>
+                        </tr>
+                        <tr>
+                            <td>Byte, KB, MB, GB, TB</td>
+                            <td>8 bits; ~1 thousand, million, billion,
+                                trillion bytes</td>
+                        </tr>
+                        <tr>
+                            <td>Directory = folder</td>
+                            <td>Synonymous terms for organizing files</td>
+                        </tr>
+                        <tr>
+                            <td>Path</td>
+                            <td>Drive plus the full directory hierarchy to a
+                                file</td>
+                        </tr>
+                        <tr>
+                            <td>Text file vs. binary file</td>
+                            <td>Readable encoded text vs. unencoded data;
+                                both are byte sequences</td>
+                        </tr>
+                        <tr>
+                            <td>File and Directory classes</td>
+                            <td>In System.IO; mostly static methods</td>
+                        </tr>
+                        <tr>
+                            <td>Data hierarchy</td>
+                            <td>Characters build fields, fields build
+                                records, records build files</td>
+                        </tr>
+                        <tr>
+                            <td>Sequential access file</td>
+                            <td>Records read in order, often by a key field</td>
+                        </tr>
+                        <tr>
+                            <td>Random access file</td>
+                            <td>Records accessed in any order</td>
+                        </tr>
+                        <tr>
+                            <td>Opening / closing a file</td>
+                            <td>Instantiate a file-processing class /
+                                release it when done</td>
+                        </tr>
+                        <tr>
+                            <td>Stream</td>
+                            <td>A pipeline for input and output</td>
+                        </tr>
+                        <tr>
+                            <td>Console.In / Out / Error</td>
+                            <td>Standard input, output, and error streams</td>
+                        </tr>
+                        <tr>
+                            <td>FileStream / StreamReader / StreamWriter</td>
+                            <td>Bytes / text input / text output</td>
+                        </tr>
+                        <tr>
+                            <td>FileMode.Create / .Open</td>
+                            <td>Empties or creates the file / requires the
+                                file to already exist</td>
+                        </tr>
+                        <tr>
+                            <td>CanRead</td>
+                            <td>FileStream property showing read support</td>
+                        </tr>
+                        <tr>
+                            <td>Priming read</td>
+                            <td>An initial read before a loop, so its
+                                condition has a value to test</td>
+                        </tr>
+                        <tr>
+                            <td>Delimiter / token</td>
+                            <td>Boundary character / a meaningful piece of
+                                text</td>
+                        </tr>
+                        <tr>
+                            <td>CSV file</td>
+                            <td>Comma-separated values, not semicolons</td>
+                        </tr>
+                        <tr>
+                            <td>Split()</td>
+                            <td>String method that breaks text apart at a
+                                delimiter</td>
+                        </tr>
+                        <tr>
+                            <td>File position pointer</td>
+                            <td>Tracks the next byte to be read</td>
+                        </tr>
+                        <tr>
+                            <td>Seek() / SeekOrigin</td>
+                            <td>Repositions the pointer to reprocess file
+                                data</td>
+                        </tr>
+                        <tr>
+                            <td>Magic number</td>
+                            <td>An unexplained, hardcoded literal number in
+                                code</td>
+                        </tr>
+                        <tr>
+                            <td>Serialization</td>
+                            <td>Converting an object into a stream of bytes</td>
+                        </tr>
+                        <tr>
+                            <td>Deserialization</td>
+                            <td>Converting a stream of bytes back into an
+                                object</td>
+                        </tr>
+                        <tr>
+                            <td>[Serializable]</td>
+                            <td>Attribute marking a class as eligible for
+                                serialization</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 14: Microsoft Visual C# - Files
+                and Streams &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

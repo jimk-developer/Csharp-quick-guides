@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>C# Quick Guides</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --secondary: #059669;
+            --secondary-dark: #065F46;
+            --tertiary: #D97706;
+            --tertiary-dark: #92400E;
+            --quaternary: #E11D48;
+            --quaternary-dark: #9F1239;
+            --quinary: #2563EB;
+            --quinary-dark: #1E40AF;
+            --senary: #0D9488;
+            --senary-dark: #115E59;
+            --septenary: #C026D3;
+            --septenary-dark: #86198F;
+            --octonary: #65A30D;
+            --octonary-dark: #3F6212;
+            --nonary: #475569;
+            --nonary-dark: #1E293B;
+            --decenary: #4F46E5;
+            --decenary-dark: #3730A3;
+            --undenary: #0EA5E9;
+            --undenary-dark: #0369A1;
+            --duodenary: #C2410C;
+            --duodenary-dark: #7C2D12;
+            --tredenary: #06B6D4;
+            --tredenary-dark: #0E7490;
+            --quattuordenary: #CA8A04;
+            --quattuordenary-dark: #854D0E;
+            --accent: #00D8FF;
+            --bg-dark: #1E1B2E;
+            --text-dark: #252525;
+            --text-light: #FAFAF9;
+            --border: #E1E1E1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #1E1B2E 0%, #2D2640 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            border-radius: 15px 15px 0 0;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        main {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 35px 0 18px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--border);
+        }
+
+        .section-label:first-child {
+            margin-top: 0;
+        }
+
+        .section-label h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+        }
+
+        .section-label .label-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .label-badge.csharp {
+            background: #F3E8FF;
+            color: var(--primary-dark);
+        }
+
+        /* Guide Cards Grid */
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .guide-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: #F8F9FA;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        /* C# Guide Cards */
+        .guide-card.csharp:hover {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
+            transform: translateY(-3px);
+        }
+
+        /* C# Guide Cards - alternate accent for variety */
+        .guide-card.csharp2:hover {
+            border-color: var(--secondary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp3:hover {
+            border-color: var(--tertiary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp4:hover {
+            border-color: var(--quaternary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(225, 29, 72, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp5:hover {
+            border-color: var(--quinary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp6:hover {
+            border-color: var(--senary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp7:hover {
+            border-color: var(--septenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(192, 38, 211, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp8:hover {
+            border-color: var(--octonary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(101, 163, 13, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp9:hover {
+            border-color: var(--nonary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(71, 85, 105, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp10:hover {
+            border-color: var(--decenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp11:hover {
+            border-color: var(--undenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp12:hover {
+            border-color: var(--duodenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(194, 65, 12, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp13:hover {
+            border-color: var(--tredenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card.csharp14:hover {
+            border-color: var(--quattuordenary);
+            background: white;
+            box-shadow: 0 8px 25px rgba(202, 138, 4, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .guide-card .icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .guide-card .content h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .guide-card.csharp .content h3 {
+            color: var(--primary-dark);
+        }
+
+        .guide-card.csharp2 .content h3 {
+            color: var(--secondary-dark);
+        }
+
+        .guide-card.csharp3 .content h3 {
+            color: var(--tertiary-dark);
+        }
+
+        .guide-card.csharp4 .content h3 {
+            color: var(--quaternary-dark);
+        }
+
+        .guide-card.csharp5 .content h3 {
+            color: var(--quinary-dark);
+        }
+
+        .guide-card.csharp6 .content h3 {
+            color: var(--senary-dark);
+        }
+
+        .guide-card.csharp7 .content h3 {
+            color: var(--septenary-dark);
+        }
+
+        .guide-card.csharp8 .content h3 {
+            color: var(--octonary-dark);
+        }
+
+        .guide-card.csharp9 .content h3 {
+            color: var(--nonary-dark);
+        }
+
+        .guide-card.csharp10 .content h3 {
+            color: var(--decenary-dark);
+        }
+
+        .guide-card.csharp11 .content h3 {
+            color: var(--undenary-dark);
+        }
+
+        .guide-card.csharp12 .content h3 {
+            color: var(--duodenary-dark);
+        }
+
+        .guide-card.csharp13 .content h3 {
+            color: var(--tredenary-dark);
+        }
+
+        .guide-card.csharp14 .content h3 {
+            color: var(--quattuordenary-dark);
+        }
+
+        .guide-card .content p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Coming Soon Cards */
+        .guide-card.coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .guide-card.coming-soon h3 {
+            color: #888;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid var(--border);
+        }
+
+        .resources-section h2 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .resource-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .resource-item:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-item .icon {
+            font-size: 1.5rem;
+        }
+
+        .resource-item .text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .resource-item .text p {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .guides-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C# Quick Guides</h1>
+            <p>Quick Reference for C# and Object-Oriented Programming Fundamentals</p>
+        </header>
+
+        <main>
+
+            <!-- ===== C# SECTION ===== -->
+            <div class="section-label">
+                <h2>C#</h2>
+                <span class="label-badge csharp">Object-Oriented Programming</span>
+            </div>
+
+            <div class="guides-grid">
+                <a href="cs-guide1-intro-to-oop.html" target="_blank" class="guide-card csharp">
+                    <span class="icon">🔷</span>
+                    <div class="content">
+                        <h3>Guide 1: Microsoft Visual C# - An Introduction to Object-Oriented Programming</h3>
+                        <p>The programming process, procedural vs. object-oriented programming, classes and objects, encapsulation, inheritance, polymorphism, identifiers, comments, namespaces, and compiling C# programs</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide2-using-data.html" target="_blank" class="guide-card csharp2">
+                    <span class="icon">🔢</span>
+                    <div class="content">
+                        <h3>Guide 2: Microsoft Visual C# - Using Data</h3>
+                        <p>Variables and constants, intrinsic data types, console output and formatting, arithmetic and comparison operators, type conversion, characters and strings, enumerations, and console input</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide3-gui-vs-ide.html" target="_blank" class="guide-card csharp3">
+                    <span class="icon">🪟</span>
+                    <div class="content">
+                        <h3>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual Studio IDE</h3>
+                        <p>The Visual Studio IDE, forms and controls, properties, fonts, events and methods, focus and tab order, formatting GUI output, design time vs. runtime, refactoring, and console vs. GUI applications</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide4-making-decisions.html" target="_blank" class="guide-card csharp4">
+                    <span class="icon">🔀</span>
+                    <div class="content">
+                        <h3>Guide 4: Microsoft Visual C# - Making Decisions</h3>
+                        <p>Planning program logic, single- and dual-alternative decisions, compound AND/OR expressions and short-circuit evaluation, logical vs. conditional operators, switch structures, the ternary operator, negation, and decision-making best practices</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide5-looping.html" target="_blank" class="guide-card csharp5">
+                    <span class="icon">🔁</span>
+                    <div class="content">
+                        <h3>Guide 5: Microsoft Visual C# - Looping</h3>
+                        <p>Loop fundamentals, while loops, for loops, do loops, pretest vs. posttest loops, nested loops, accumulating totals, scope, loop optimization, and loops in GUI applications</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide6-using-arrays.html" target="_blank" class="guide-card csharp6">
+                    <span class="icon">📚</span>
+                    <div class="content">
+                        <h3>Guide 6: Microsoft Visual C# - Using Arrays</h3>
+                        <p>Declaring and initializing arrays, accessing elements, the foreach loop, searching arrays, parallel arrays and range matches, built-in array methods, multidimensional and jagged arrays, and arrays in GUI applications</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide7-using-methods.html" target="_blank" class="guide-card csharp7">
+                    <span class="icon">🧩</span>
+                    <div class="content">
+                        <h3>Guide 7: Microsoft Visual C# - Using Methods</h3>
+                        <p>Method fundamentals, method structure, accessibility and static modifiers, scope, formal parameters and arguments, return values, passing arrays by value and by reference, Main() method variations, and methods in GUI applications</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide8-advanced-methods.html" target="_blank" class="guide-card csharp8">
+                    <span class="icon">🔧</span>
+                    <div class="content">
+                        <h3>Guide 8: Microsoft Visual C# - Advanced Method Concepts</h3>
+                        <p>Value vs. reference parameters, mandatory and optional parameters, ref and out parameters, parameter arrays (params), returning references, method overloading, overload resolution and betterness rules, ambiguous methods, and named and optional arguments</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide9-classes-and-objects.html" target="_blank" class="guide-card csharp9">
+                    <span class="icon">🧱</span>
+                    <div class="content">
+                        <h3>Guide 9: Microsoft Visual C# - Using Classes and Objects</h3>
+                        <p>Class fundamentals, access modifiers, composition, instantiation and reference types, properties, the this reference, constructors and constructor initializers, object initializers, operator overloading, arrays of objects and IComparable, interfaces, and destructors</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide10-introduction-to-inheritance.html" target="_blank" class="guide-card csharp10">
+                    <span class="icon">🌳</span>
+                    <div class="content">
+                        <h3>Guide 10: Microsoft Visual C# - Introduction to Inheritance</h3>
+                        <p>Inheritance basics, protected access, polymorphism and overriding, implicit reference conversions, the Object class, base class constructors, abstract and sealed classes, interfaces and multiple inheritance, extension methods, and GUI inheritance</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide11-exception-handling.html" target="_blank" class="guide-card csharp11">
+                    <span class="icon">⚠️</span>
+                    <div class="content">
+                        <h3>Guide 11: Microsoft Visual C# - Exception Handling</h3>
+                        <p>Exception fundamentals and the exception hierarchy, object-oriented error handling, common built-in exception types, try/catch structure and multiple catch blocks, Exception class members, TryParse() methods, the finally block, the call stack and propagation, and custom exceptions</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide12-using-controls.html" target="_blank" class="guide-card csharp12">
+                    <span class="icon">🧰</span>
+                    <div class="content">
+                        <h3>Guide 12: Microsoft Visual C# - Using Controls</h3>
+                        <p>Control fundamentals and IDE-generated code, fonts, color and accessibility, CheckBox and RadioButton selection controls, grouping with GroupBox and Panel, PictureBox graphics, list controls, date/time controls, multiple forms and navigation, form layout, and menus</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide13-handling-events.html" target="_blank" class="guide-card csharp13">
+                    <span class="icon">⚡</span>
+                    <div class="content">
+                        <h3>Guide 13: Microsoft Visual C# - Handling Events</h3>
+                        <p>Event-driven architecture, delegates and composed delegates, custom and built-in event handlers, control component events, mouse events, keyboard events, and managing focus and shared handlers across multiple controls</p>
+                    </div>
+                </a>
+
+                <a href="cs-guide14-files-and-streams.html" target="_blank" class="guide-card csharp14">
+                    <span class="icon">💾</span>
+                    <div class="content">
+                        <h3>Guide 14: Microsoft Visual C# - Files and Streams</h3>
+                        <p>Storage fundamentals, files and paths, the File and Directory classes, the data hierarchy, sequential vs. random access files, streams and file-processing classes, reading and writing text files with delimiters and tokens, searching files with the file position pointer and Seek(), and serialization</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Resources Section -->
+            <section class="resources-section">
+                <h2>🔗 Additional Resources</h2>
+                <div class="resource-links">
+                    <a href="https://learn.microsoft.com/en-us/dotnet/csharp/" target="_blank" class="resource-item">
+                        <span class="icon">📘</span>
+                        <div class="text">
+                            <h4>C# Documentation</h4>
+                            <p>Official Microsoft C# guide and reference</p>
+                        </div>
+                    </a>
+                    <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/" target="_blank" class="resource-item">
+                        <span class="icon">📋</span>
+                        <div class="text">
+                            <h4>C# Language Reference</h4>
+                            <p>Keywords, types, and syntax reference</p>
+                        </div>
+                    </a>
+                    <a href="https://visualstudio.microsoft.com/" target="_blank" class="resource-item">
+                        <span class="icon">🛠️</span>
+                        <div class="text">
+                            <h4>Visual Studio</h4>
+                            <p>Download the Visual Studio IDE</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Learning Resource</p>
+        </footer>
+    </div>
+</body>
+</html>

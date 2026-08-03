@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 9: Microsoft Visual C# - Using Classes and Objects</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #475569;
+            --primary-dark: #1E293B;
+            --primary-light: #CBD5E1;
+            --accent: #D97706;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(71, 85, 105, 0.25);
+            color: #CBD5E1;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(71, 85, 105, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(71, 85, 105, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #CBD5E1;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(71, 85, 105, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #CBD5E1;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #334155;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 9: Microsoft Visual C# - Using Classes and Objects</h1>
+        <p>Class Fundamentals, Access Modifiers, Composition, Instantiation,
+            Properties, the this Reference, Constructors, Object
+            Initializers, Operator Overloading, Arrays of Objects,
+            Interfaces, and Destructors</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Class Fundamentals</a>
+            <a href="#section-access" class="nav-pill">Access Modifiers</a>
+            <a href="#section-composition" class="nav-pill">Composition</a>
+            <a href="#section-instantiation" class="nav-pill">Instantiation</a>
+            <a href="#section-properties" class="nav-pill">Properties</a>
+            <a href="#section-this" class="nav-pill">The this Reference</a>
+            <a href="#section-constructors" class="nav-pill">Constructors</a>
+            <a href="#section-initializers" class="nav-pill">Object Initializers</a>
+            <a href="#section-operators" class="nav-pill">Operator Overloading</a>
+            <a href="#section-arrays" class="nav-pill">Arrays of Objects</a>
+            <a href="#section-interfaces" class="nav-pill">Interfaces</a>
+            <a href="#section-destructors" class="nav-pill">Destructors</a>
+            <a href="#section-gui" class="nav-pill">GUI Objects</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">09</div>
+                <div>
+                    <h2>Building Your Own Types</h2>
+                    <p>Everything built so far in this series has relied on
+                        data types C# already provides. Writing your own
+                        classes lets you design custom types that model
+                        exactly the kind of data and behavior your program
+                        needs. This guide covers how classes are structured
+                        and instantiated, how properties control access to
+                        an object's data, how constructors initialize new
+                        objects, how operators can be taught to work with
+                        custom types, how arrays of objects are sorted and
+                        searched, and how classes are cleaned up when they
+                        are no longer needed.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">🧱 Class Fundamentals</h2>
+
+            <p>A <strong>class</strong> is a blueprint or template that
+                describes what objects created from it will look like and
+                how they will behave. An <strong>application class</strong>,
+                the kind that contains <code>Main()</code>, differs from
+                every other class in a program specifically because it holds
+                that entry point method; any other class exists purely to
+                describe objects that the application creates and uses.</p>
+
+            <h3>Instance Variables and Instance Methods</h3>
+            <p>The data components of a class that can differ from one
+                object to the next are called <strong>instance variables</strong>,
+                more commonly referred to as <strong>fields</strong>, a term
+                used specifically to distinguish them from local variables
+                and other kinds of variables in a program. Each object
+                stores its own separate copy of every instance variable, so
+                changing one object's field has no effect on any other
+                object created from the same class.</p>
+
+            <p>Every object of a particular class shares the exact same
+                blocks of statements, which can be executed by calling the
+                object's <strong>instance methods</strong>. The values held
+                by an object's fields at any given moment make up that
+                object's <strong>state</strong>.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Simple Class</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Vehicle</span>
+{
+    <span class="comment">// Instance variables (fields)</span>
+    <span class="keyword">private</span> <span class="type">string</span> <span class="var">make</span>;
+    <span class="keyword">private</span> <span class="type">int</span> <span class="var">topSpeed</span>;
+
+    <span class="comment">// An instance method</span>
+    <span class="keyword">public</span> <span class="type">void</span> <span class="func">Describe</span>()
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0} has a top speed of {1} mph."</span>, <span class="var">make</span>, <span class="var">topSpeed</span>);
+    }
+}</code></pre>
+            </div>
+
+            <h3>Class Clients</h3>
+            <p>A <strong>class client</strong>, also called a
+                <strong>class user</strong>, is any program that
+                instantiates objects of another, prewritten class rather
+                than defining that class itself. A single well-written class
+                can serve as many different class clients across many
+                different programs, each one creating and using its own
+                objects from that same class definition.</p>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-access">🔐 Class Creation and Access Modifiers</h2>
+
+            <h3>The Class Header</h3>
+            <p>A <strong>class header</strong> is the part of a class
+                definition that contains an optional access modifier, the
+                keyword <code>class</code>, and an identifier naming the
+                class. Everything that follows the header, enclosed in curly
+                braces, forms the <strong>body</strong> of the class: its
+                fields, properties, constructors, and methods.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class Access Modifier</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>public</code></td>
+                        <td>Access to the class is not limited at all</td>
+                    </tr>
+                    <tr>
+                        <td><code>protected</code></td>
+                        <td>Access is limited to the class itself and to any
+                            classes derived from it</td>
+                    </tr>
+                    <tr>
+                        <td><code>internal</code></td>
+                        <td>Access is limited to the <strong>assembly</strong>,
+                            a group of code modules compiled together, that
+                            the class belongs to</td>
+                    </tr>
+                    <tr>
+                        <td><code>private</code></td>
+                        <td>Access is limited to another class the class
+                            belongs to, most often used for classes nested
+                            inside another class</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Default Field Access and Information Hiding</h3>
+            <p>If you do not explicitly include an access specifier for a
+                field in a C# class, that field defaults to
+                <strong>private</strong> access, exactly as with a method.
+                Deliberately declaring fields as private and exposing
+                controlled access to them through public methods, or more
+                commonly through public properties, is a hallmark of
+                <strong>information hiding</strong>: a feature found in all
+                object-oriented languages that combines private data with
+                public accessors to protect an object's internal state from
+                being changed in unexpected ways.</p>
+
+            <div class="tip-box">
+                Combining private fields with public accessor methods or
+                properties achieves information hiding by giving outside
+                code a controlled, well-defined way to interact with an
+                object's data, without allowing that outside code to reach
+                in and modify the raw fields directly.
+            </div>
+
+            <p>C#'s predefined types, such as <code>int</code>,
+                <code>double</code>, and <code>char</code>, are examples of
+                the language's built-in <strong>intrinsic types</strong>;
+                classes you write yourself become new types you can use
+                right alongside those built-in ones.</p>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-composition">🧩 Composition</h2>
+
+            <p><strong>Composition</strong> describes a <strong>has-a
+                    relationship</strong>, where an object of one class is
+                used as a field within an object of another class. Rather
+                than inheriting behavior, a composed object simply becomes
+                part of the containing object's data.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Composition (a Has-a Relationship)</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Engine</span>
+{
+    <span class="keyword">public</span> <span class="type">int</span> <span class="var">Horsepower</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+}
+
+<span class="keyword">class</span> <span class="type">Car</span>
+{
+    <span class="comment">// A Car has-a Engine: composition</span>
+    <span class="keyword">private</span> <span class="type">Engine</span> <span class="var">engine</span>;
+
+    <span class="keyword">public</span> <span class="type">Car</span>(<span class="type">int</span> <span class="var">horsepower</span>)
+    {
+        <span class="var">engine</span> = <span class="keyword">new</span> <span class="type">Engine</span>();
+        <span class="var">engine</span>.<span class="var">Horsepower</span> = <span class="var">horsepower</span>;
+    }
+}</code></pre>
+            </div>
+
+            <p>Here, a <code>Car</code> object contains an <code>Engine</code>
+                object as one of its fields; a car "has an" engine, which is
+                exactly the relationship composition is used to model.</p>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-instantiation">✨ Instantiation and Objects</h2>
+
+            <p>To <strong>instantiate</strong> means to create an object: a
+                concrete instance of a class, brought into existence by
+                calling one of that class's constructors with the
+                <code>new</code> operator.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Instantiating an Object</h4>
+                <pre><code><span class="type">Vehicle</span> <span class="var">sedan</span> = <span class="keyword">new</span> <span class="type">Vehicle</span>();</code></pre>
+            </div>
+
+            <div class="warning-box">
+                The <code>new</code> keyword is required to instantiate an
+                object. Writing <code>Vehicle sedan = Vehicle();</code>,
+                without <code>new</code>, is a compiler error; a
+                <strong>constructor</strong> is the method that creates the
+                instance, and it must be explicitly invoked with
+                <code>new</code>.
+            </div>
+
+            <h3>Reference Types vs. Value Types</h3>
+            <p>C#'s data types fall into two broad categories.</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Value Type</h4>
+                    <p>Holds an actual data value directly, such as an
+                        <code>int</code> or a <code>bool</code>. Copying a
+                        value type variable copies the value itself.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Reference Type</h4>
+                    <p>Holds the memory address, or reference, of where the
+                        actual object data is stored, rather than the data
+                        itself. Every class you write creates a reference
+                        type.</p>
+                </div>
+            </div>
+
+            <p>Because an object's identifier references a specific memory
+                location rather than holding the object's data directly, you
+                can call any class variable a reference type. This is also
+                why passing an object to a method gives that method access
+                to the actual object, not an independent copy of it, the same
+                behavior seen when passing an entire array to a method.</p>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-properties">🏷️ Properties</h2>
+
+            <p>A <strong>property</strong> is the class member that provides
+                controlled access to a field. A property is written with a
+                <strong>get accessor</strong> (or <strong>getter</strong>),
+                used to retrieve a field's value, and a <strong>set
+                    accessor</strong> (or <strong>setter</strong>), used to
+                assign a new value to that field using the property's name.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: A Property with Get and Set Accessors</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Product</span>
+{
+    <span class="keyword">private</span> <span class="type">decimal</span> <span class="var">price</span>;
+
+    <span class="keyword">public</span> <span class="type">decimal</span> <span class="var">Price</span>
+    {
+        <span class="keyword">get</span> { <span class="keyword">return</span> <span class="var">price</span>; }
+        <span class="keyword">set</span> { <span class="var">price</span> = <span class="var">value</span>; }
+    }
+}</code></pre>
+            </div>
+
+            <p>Inside a set accessor, the identifier <code>value</code>
+                automatically holds whatever data was assigned to the
+                property. <code>value</code> acts like a keyword in this one
+                specific circumstance, which makes it a <strong>contextual
+                    keyword</strong> rather than a full reserved keyword.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Using a Property</h4>
+                <pre><code><span class="type">Product</span> <span class="var">widget</span> = <span class="keyword">new</span> <span class="type">Product</span>();
+<span class="var">widget</span>.<span class="var">Price</span> = <span class="num">19.99</span><span class="type">m</span>;
+<span class="comment">// Executes the set accessor, assigning 19.99 to the price field</span>
+
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">widget</span>.<span class="var">Price</span>);
+<span class="comment">// Executes the get accessor, retrieving the price field's value</span></code></pre>
+            </div>
+
+            <h3>Read-Only Properties</h3>
+            <p>A property written with only a get accessor, and no set
+                accessor at all, is a <strong>read-only property</strong>.
+                Its value can be retrieved from outside the class, but it
+                cannot be assigned a new value from outside the class; a
+                read-only property's value can typically only be set inside
+                the class itself, such as within a constructor.</p>
+
+            <h3>Auto-Implemented Properties</h3>
+            <p>An <strong>auto-implemented property</strong>, also called an
+                <strong>automatic property</strong>, is a concise way to
+                write a property when its get and set accessors need no
+                logic beyond simply storing and retrieving a value. The
+                compiler automatically generates a hidden
+                <strong>backing field</strong> to store the data, so you
+                never declare that field yourself.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Auto-Implemented Property</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Product</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Sku</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+}</code></pre>
+            </div>
+
+            <p>Auto-implemented properties are most appropriate when a
+                property does not need any validation or additional logic in
+                either accessor; as soon as a property needs to check or
+                transform a value before storing it, a fully written property
+                with an explicit backing field becomes necessary instead.</p>
+
+            <div class="tip-box">
+                A property, whether fully written or auto-implemented,
+                always provides access to a field: either a field you
+                declared yourself, or the compiler-generated backing field
+                behind an auto-implemented property.
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-this">👉 The this Reference</h2>
+
+            <p>The <strong>this reference</strong> is implicitly and
+                invisibly passed to every instance method and every property
+                accessor. It refers to the <strong>invoking object</strong>:
+                whichever specific object the method or accessor was called
+                on. Because it is passed automatically rather than appearing
+                in the parameter list, <code>this</code> is described as an
+                <strong>implicit parameter</strong>.</p>
+
+            <div class="warning-box">
+                Only nonstatic methods receive a this reference. A static
+                method is not tied to any particular object, so there is no
+                invoking object for <code>this</code> to refer to inside it.
+            </div>
+
+            <p>Most of the time, code inside a class can refer to its own
+                fields without writing <code>this</code> explicitly, since
+                C# already knows which object's fields are meant. An
+                explicit <code>this</code> becomes necessary specifically
+                when a method's parameter name is identical to one of the
+                class's field names, which would otherwise make the field
+                inaccessible inside that method.</p>
+
+            <div class="syntax-box">
+                <h4>Example: When an Explicit this Is Required</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Ticket</span>
+{
+    <span class="keyword">private</span> <span class="type">int</span> <span class="var">seatNumber</span>;
+
+    <span class="keyword">public</span> <span class="type">void</span> <span class="func">SetSeatNumber</span>(<span class="type">int</span> <span class="var">seatNumber</span>)
+    {
+        <span class="comment">// Without "this.", seatNumber = seatNumber; would
+        // just assign the parameter to itself and do nothing useful</span>
+        <span class="keyword">this</span>.<span class="var">seatNumber</span> = <span class="var">seatNumber</span>;
+    }
+}</code></pre>
+            </div>
+
+            <p>Here, the parameter <code>seatNumber</code> has the same name
+                as the field <code>seatNumber</code>. Writing
+                <code>this.seatNumber</code> explicitly tells the compiler
+                you mean the field that belongs to the invoking object,
+                distinguishing it from the parameter of the same name.</p>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-constructors">🏗️ Constructors</h2>
+
+            <p>A <strong>constructor</strong> is a special method that
+                creates, or instantiates, an object of a class and typically
+                initializes its fields. A constructor always shares its
+                class's name and never declares a return type, not even
+                <code>void</code>.</p>
+
+            <h3>Default Constructors</h3>
+            <p>If you do not write any constructor for a class at all, C#
+                automatically writes a <strong>default constructor</strong>
+                for you: a parameterless constructor that takes no
+                arguments and sets every field to its default value, such as
+                0 for numeric fields, <code>false</code> for
+                <code>bool</code> fields, and <code>null</code> for
+                reference-type fields.</p>
+
+            <div class="warning-box">
+                As soon as you write even one constructor of your own, C#
+                stops automatically supplying that default constructor. If
+                you write a constructor that requires an argument and you
+                also want the class to support being created with no
+                arguments, you must explicitly write your own parameterless
+                constructor as well; it will no longer be generated for you
+                automatically.
+            </div>
+
+            <p>Writing an explicit default constructor yourself is most
+                useful when you want newly created objects to start out with
+                specific, meaningful values rather than the generic system
+                defaults of 0, <code>false</code>, or <code>null</code>.</p>
+
+            <h3>Overloading Constructors</h3>
+            <p>Just like ordinary methods, constructors can be
+                <strong>overloaded</strong>: a class can define multiple
+                constructors as long as each one has a different parameter
+                list, so the compiler can always tell them apart without
+                ambiguity.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Overloaded Constructors</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Employee</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="type">decimal</span> <span class="var">HourlyRate</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="type">Employee</span>()
+    {
+        <span class="var">Name</span> = <span class="string">"Unassigned"</span>;
+        <span class="var">HourlyRate</span> = <span class="num">15.00</span><span class="type">m</span>;
+    }
+
+    <span class="keyword">public</span> <span class="type">Employee</span>(<span class="type">string</span> <span class="var">name</span>, <span class="type">decimal</span> <span class="var">hourlyRate</span>)
+    {
+        <span class="var">Name</span> = <span class="var">name</span>;
+        <span class="var">HourlyRate</span> = <span class="var">hourlyRate</span>;
+    }
+}</code></pre>
+            </div>
+
+            <h3>Constructor Initializers</h3>
+            <p>Rather than repeating the same initialization code across
+                several overloaded constructors, a <strong>constructor
+                    initializer</strong> can be used to indicate that another
+                instance of the class's constructor should execute first,
+                before any statements in the current constructor's own body.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: A Constructor Initializer</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Employee</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="type">decimal</span> <span class="var">HourlyRate</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="type">Employee</span>(<span class="type">string</span> <span class="var">name</span>, <span class="type">decimal</span> <span class="var">hourlyRate</span>)
+    {
+        <span class="var">Name</span> = <span class="var">name</span>;
+        <span class="var">HourlyRate</span> = <span class="var">hourlyRate</span>;
+    }
+
+    <span class="comment">// This parameterless constructor calls the constructor above first</span>
+    <span class="keyword">public</span> <span class="type">Employee</span>() : <span class="keyword">this</span>(<span class="string">"Unassigned"</span>, <span class="num">15.00</span><span class="type">m</span>)
+    {
+    }
+}</code></pre>
+            </div>
+
+            <p>The <code>: this(...)</code> syntax after the parameterless
+                constructor's parameter list is the constructor initializer;
+                it runs the two-parameter constructor first, using the
+                supplied default values, before the parameterless
+                constructor's own (empty) body executes.</p>
+
+            <h3>The readonly Modifier</h3>
+            <p>The <code>readonly</code> modifier marks a field that can be
+                assigned a value either when it is declared or inside a
+                constructor, but never changed after that. Unlike
+                <code>const</code>, whose value must be known and fixed at
+                compile time, <code>readonly</code> allows a value to be
+                determined at runtime, such as when an object is actually
+                created, while still guaranteeing it cannot be modified
+                afterward.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A readonly Field Assigned in a Constructor</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Order</span>
+{
+    <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="type">DateTime</span> <span class="var">PlacedOn</span>;
+
+    <span class="keyword">public</span> <span class="type">Order</span>()
+    {
+        <span class="var">PlacedOn</span> = <span class="type">DateTime</span>.<span class="var">Now</span>;
+        <span class="comment">// PlacedOn is fixed the moment this object is created,
+        // and cannot be reassigned by any code afterward</span>
+    }
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                Use <code>readonly</code> in a situation like this, where
+                the correct value is not known until an object is actually
+                created at runtime, such as an order's placement timestamp
+                or a uniquely generated identifier. Use <code>const</code>
+                instead whenever the value is already known and fixed before
+                the program even runs.
+            </div>
+
+            <p>Also worth noting: a named constant declared within a class is
+                always implicitly <strong>static</strong>, even though no
+                explicit <code>static</code> keyword can be written on it;
+                it belongs to the class itself rather than to any individual
+                object.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-initializers">🎁 Object Initializers</h2>
+
+            <p>An <strong>object initializer</strong> assigns starting
+                values to an object's accessible properties or fields at the
+                moment it is instantiated, without needing a specifically
+                parameterized constructor written for that purpose.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Object Initializer</h4>
+                <pre><code><span class="type">Product</span> <span class="var">giftBasket</span> = <span class="keyword">new</span> <span class="type">Product</span>
+{
+    <span class="var">Sku</span> = <span class="string">"GB-204"</span>,
+    <span class="var">Price</span> = <span class="num">42.00</span><span class="type">m</span>
+};</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Object initializers can only set members that are already
+                accessible from the calling code, such as public properties
+                or public fields. A private field cannot be assigned this
+                way from outside the class, regardless of how the object is
+                instantiated.
+            </div>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-operators">⚙️ Operator Overloading</h2>
+
+            <p>If you want to use an arithmetic or comparison operator, such
+                as <code>+</code> or <code>==</code>, with objects of a
+                class you have written, you must explicitly overload that
+                operator for your class. Both unary operators (which act on
+                a single operand) and binary operators (which act on two
+                operands) can be overloaded this way.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Overloading the + Operator</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Money</span>
+{
+    <span class="keyword">public</span> <span class="type">decimal</span> <span class="var">Amount</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">Money</span> <span class="keyword">operator</span> +(<span class="type">Money</span> <span class="var">first</span>, <span class="type">Money</span> <span class="var">second</span>)
+    {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="type">Money</span> { <span class="var">Amount</span> = <span class="var">first</span>.<span class="var">Amount</span> + <span class="var">second</span>.<span class="var">Amount</span> };
+    }
+}</code></pre>
+            </div>
+
+            <p>With this overload in place, writing
+                <code>combinedTotal = wallet1 + wallet2;</code> becomes
+                legal for two <code>Money</code> objects, calling the
+                overloaded operator method instead of causing a compiler
+                error.</p>
+
+            <h3>Rules for Overloading Operators</h3>
+            <div class="warning-box">
+                At least one of an overloaded operator's operands must be of
+                the class type you are defining the overload for. You
+                cannot overload an operator to change its meaning purely
+                between two built-in types, such as redefining what
+                <code>+</code> does between two <code>int</code> values; the
+                overload must involve your own custom type.
+            </div>
+
+            <h3>Operators That Must Be Overloaded in Pairs</h3>
+            <p>Certain related operators must be overloaded together, as a
+                matching pair, rather than one at a time.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pair</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>==</code> and <code>!=</code></td>
+                        <td>Equality and inequality</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;</code> and <code>&gt;</code></td>
+                        <td>Less than and greater than</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;=</code> and <code>&gt;=</code></td>
+                        <td>Less than or equal to and greater than or equal
+                            to</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Operators That Cannot Be Overloaded</h3>
+            <p>Some operators can never be overloaded in C#, including the
+                plain assignment operator (<code>=</code>) and the
+                conditional logical operators <code>&&</code> and
+                <code>||</code>. These operators always keep their built-in
+                meaning, regardless of what custom types are involved.</p>
+
+            <!-- ===================== SECTION 10 ===================== -->
+            <h2 id="section-arrays">📦 Arrays of Objects</h2>
+
+            <p>An array can hold objects of a custom class exactly as it
+                can hold any built-in type. Because objects are reference
+                types, an array of objects holds the memory addresses, or
+                references, of those objects, not the actual object data
+                itself.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Array of Objects</h4>
+                <pre><code><span class="type">Employee</span>[] <span class="var">staff</span> = <span class="keyword">new</span> <span class="type">Employee</span>[<span class="num">3</span>];
+<span class="var">staff</span>[<span class="num">0</span>] = <span class="keyword">new</span> <span class="type">Employee</span>(<span class="string">"Priya"</span>, <span class="num">22.50</span><span class="type">m</span>);
+<span class="var">staff</span>[<span class="num">1</span>] = <span class="keyword">new</span> <span class="type">Employee</span>(<span class="string">"Devon"</span>, <span class="num">19.75</span><span class="type">m</span>);
+<span class="var">staff</span>[<span class="num">2</span>] = <span class="keyword">new</span> <span class="type">Employee</span>();</code></pre>
+            </div>
+
+            <h3>Sorting and Searching Object Arrays</h3>
+            <p>To use <code>Array.Sort()</code> or
+                <code>Array.BinarySearch()</code> on an array of custom
+                objects, the class must implement the
+                <code>IComparable</code> interface, which requires writing a
+                <code>CompareTo()</code> method: the method that provides
+                the details of how two objects of that class compare to each
+                other, returning an integer that indicates their relative
+                order.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Implementing IComparable</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Employee</span> : <span class="type">IComparable</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="var">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="func">CompareTo</span>(<span class="type">object</span> <span class="var">other</span>)
+    {
+        <span class="type">Employee</span> <span class="var">otherEmployee</span> = (<span class="type">Employee</span>)<span class="var">other</span>;
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="var">Name</span>.<span class="func">CompareTo</span>(<span class="var">otherEmployee</span>.<span class="var">Name</span>);
+    }
+}</code></pre>
+            </div>
+
+            <p>With <code>CompareTo()</code> implemented this way,
+                <code>Array.Sort(staff)</code> arranges the
+                <code>Employee</code> objects by name, and
+                <code>Array.BinarySearch()</code> can locate a specific
+                employee within an already-sorted array of them, using
+                exactly the same techniques covered for arrays of built-in
+                types.</p>
+
+            <!-- ===================== SECTION 11 ===================== -->
+            <h2 id="section-interfaces">🔌 Interfaces and Abstract Methods</h2>
+
+            <p>An <strong>interface</strong> consists of
+                <strong>abstract methods</strong>, methods declared with no
+                body at all, and possibly other members, that any class can
+                use as long as that class agrees to
+                <strong>override</strong> every abstract method the
+                interface defines with its own working implementation. When
+                a method overrides another, it replaces the inherited or
+                interface-required definition with new, concrete behavior
+                specific to that class.</p>
+
+            <div class="tip-box">
+                A name that appears to be a built-in C# class but begins
+                with a capital <code>I</code>, such as
+                <code>IComparable</code>, is almost always an interface
+                rather than a class; this capital-I naming convention is a
+                strong signal throughout the C# standard library.
+            </div>
+
+            <!-- ===================== SECTION 12 ===================== -->
+            <h2 id="section-destructors">🗑️ Destructors</h2>
+
+            <p>A <strong>destructor</strong> contains the actions you want
+                performed when an instance of a class is destroyed, which
+                most often happens when that instance goes out of scope and
+                becomes eligible for cleanup. A destructor is written using
+                a tilde (<code>~</code>) immediately followed by the class
+                name.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Destructor</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Connection</span>
+{
+    <span class="var">~Connection</span>()
+    {
+        <span class="comment">// Cleanup actions performed when this object is destroyed</span>
+    }
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                A class can have, at most, one destructor, and a destructor
+                never accepts parameters or an access modifier. Exactly when
+                a destructor executes is controlled by garbage collection
+                rather than by your own code, so you cannot rely on a
+                destructor running at a precise, predictable moment.
+            </div>
+
+            <!-- ===================== SECTION 13 ===================== -->
+            <h2 id="section-gui">🖱️ GUI Application Objects</h2>
+
+            <p>Every GUI object you work with in Visual Studio, such as a
+                Button or a Form, behaves exactly like the custom objects
+                described throughout this guide: it encapsulates both
+                properties and methods of its own. A Button object, for
+                example, does not just sit on a form passively; it exposes
+                properties like <code>Text</code> and methods that respond
+                to user interaction.</p>
+
+            <div class="syntax-box">
+                <h4>Example: IDE-Generated Property Assignment</h4>
+                <pre><code><span class="keyword">this</span>.<span class="var">startButton</span>.<span class="var">Text</span> = <span class="string">"Start"</span>;</code></pre>
+            </div>
+
+            <p>A line like this one, commonly found in Visual Studio's
+                auto-generated designer code, sets a property, in this case
+                <code>Text</code>, on a Button object named
+                <code>startButton</code>, using exactly the same property
+                syntax covered earlier in this guide.</p>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 9 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Instance variable (field)</td>
+                            <td>Data that can differ from one object to the
+                                next</td>
+                        </tr>
+                        <tr>
+                            <td>Class client / class user</td>
+                            <td>A program that instantiates objects of a
+                                prewritten class</td>
+                        </tr>
+                        <tr>
+                            <td>Class access modifiers</td>
+                            <td>public (unlimited), protected (class +
+                                derived), internal (assembly), private
+                                (containing class)</td>
+                        </tr>
+                        <tr>
+                            <td>Default field access</td>
+                            <td>Private, if no modifier is written</td>
+                        </tr>
+                        <tr>
+                            <td>Information hiding</td>
+                            <td>Private fields plus public accessors</td>
+                        </tr>
+                        <tr>
+                            <td>Composition</td>
+                            <td>A has-a relationship; an object used as a
+                                field in another object</td>
+                        </tr>
+                        <tr>
+                            <td>Instantiate</td>
+                            <td>Create an object from a class using new and
+                                a constructor</td>
+                        </tr>
+                        <tr>
+                            <td>Reference type</td>
+                            <td>Holds a memory address; every class is a
+                                reference type</td>
+                        </tr>
+                        <tr>
+                            <td>Value type</td>
+                            <td>Holds the actual data value directly</td>
+                        </tr>
+                        <tr>
+                            <td>Property</td>
+                            <td>Class member providing controlled access to
+                                a field</td>
+                        </tr>
+                        <tr>
+                            <td>Read-only property</td>
+                            <td>Get accessor only; cannot be assigned from
+                                outside the class</td>
+                        </tr>
+                        <tr>
+                            <td>Auto-implemented property</td>
+                            <td>Compiler generates the backing field and
+                                accessors automatically</td>
+                        </tr>
+                        <tr>
+                            <td>value in a setter</td>
+                            <td>Contextual keyword holding the assigned data</td>
+                        </tr>
+                        <tr>
+                            <td>this reference</td>
+                            <td>Implicit parameter identifying the invoking
+                                object; nonstatic only</td>
+                        </tr>
+                        <tr>
+                            <td>Constructor</td>
+                            <td>Special method that creates and initializes
+                                an object; shares the class name</td>
+                        </tr>
+                        <tr>
+                            <td>Default constructor</td>
+                            <td>Auto-generated only if you write no
+                                constructor yourself</td>
+                        </tr>
+                        <tr>
+                            <td>Overloaded constructors</td>
+                            <td>Multiple constructors distinguished by
+                                different parameter lists</td>
+                        </tr>
+                        <tr>
+                            <td>Constructor initializer</td>
+                            <td>: this(...) runs another constructor first</td>
+                        </tr>
+                        <tr>
+                            <td>readonly vs. const</td>
+                            <td>readonly can be set at runtime (in a
+                                constructor); const is fixed at compile time</td>
+                        </tr>
+                        <tr>
+                            <td>Named constants in a class</td>
+                            <td>Always implicitly static</td>
+                        </tr>
+                        <tr>
+                            <td>Object initializer</td>
+                            <td>Sets accessible properties/fields at
+                                instantiation without a matching constructor</td>
+                        </tr>
+                        <tr>
+                            <td>Operator overloading</td>
+                            <td>At least one operand must be your custom
+                                type</td>
+                        </tr>
+                        <tr>
+                            <td>Paired operators</td>
+                            <td>==/!=, &lt;/&gt;, &lt;=/&gt;= must be
+                                overloaded together</td>
+                        </tr>
+                        <tr>
+                            <td>Non-overloadable operators</td>
+                            <td>=, &amp;&amp;, and || can never be overloaded</td>
+                        </tr>
+                        <tr>
+                            <td>Array of objects</td>
+                            <td>Holds object references, not actual object
+                                data</td>
+                        </tr>
+                        <tr>
+                            <td>IComparable / CompareTo()</td>
+                            <td>Required for Sort() and BinarySearch() on
+                                object arrays</td>
+                        </tr>
+                        <tr>
+                            <td>Interface</td>
+                            <td>Abstract methods a class must override to
+                                use</td>
+                        </tr>
+                        <tr>
+                            <td>Interface naming</td>
+                            <td>Conventionally begins with a capital I</td>
+                        </tr>
+                        <tr>
+                            <td>Destructor</td>
+                            <td>~ClassName(); one per class; no parameters or
+                                modifiers</td>
+                        </tr>
+                        <tr>
+                            <td>GUI objects</td>
+                            <td>Encapsulate properties and methods just like
+                                custom classes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 9: Microsoft Visual C# - Using
+                Classes and Objects &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

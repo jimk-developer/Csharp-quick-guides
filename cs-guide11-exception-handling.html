@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 11: Microsoft Visual C# - Exception Handling</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0369A1;
+            --primary-light: #BAE6FD;
+            --accent: #D97706;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #BAE6FD 0%, #7DD3FC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(14, 165, 233, 0.25);
+            color: #BAE6FD;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(14, 165, 233, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(14, 165, 233, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #BAE6FD;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #F0F9FF 0%, #BAE6FD 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #F0F9FF 0%, #BAE6FD 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #BAE6FD;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #F0F9FF 0%, #BAE6FD 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #0369A1;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 11: Microsoft Visual C# - Exception Handling</h1>
+        <p>Exception Fundamentals, Object-Oriented Error Handling, Common
+            Exception Types, try/catch Structure, Exception Class Members,
+            TryParse() Methods, the finally Block, the Call Stack and
+            Propagation, and Custom Exceptions</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Exception Fundamentals</a>
+            <a href="#section-oo-handling" class="nav-pill">OO Error Handling</a>
+            <a href="#section-common-types" class="nav-pill">Common Exception Types</a>
+            <a href="#section-try-catch" class="nav-pill">try/catch Structure</a>
+            <a href="#section-exception-members" class="nav-pill">Exception Members</a>
+            <a href="#section-tryparse" class="nav-pill">TryParse() Methods</a>
+            <a href="#section-finally" class="nav-pill">The finally Block</a>
+            <a href="#section-callstack" class="nav-pill">Call Stack &amp; Propagation</a>
+            <a href="#section-custom" class="nav-pill">Custom Exceptions</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">11</div>
+                <div>
+                    <h2>Handling What Goes Wrong</h2>
+                    <p>Even a carefully written program can encounter
+                        situations it cannot complete normally: a file that
+                        does not exist, a calculation that divides by zero,
+                        input that cannot be converted to the expected type.
+                        C#'s exception handling system gives you a
+                        structured, object-oriented way to detect these
+                        problems, respond to them, and clean up afterward,
+                        rather than letting them crash a program
+                        unpredictably. This guide covers what exceptions
+                        are, how try/catch/finally blocks work together, the
+                        Exception class's own useful members, how exceptions
+                        travel through a program's call stack, and how to
+                        build your own custom exception types.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">⚠️ Exception Fundamentals</h2>
+
+            <p>An <strong>exception</strong> is an error condition or
+                unexpected behavior encountered by an executing program.
+                Exceptions occur at <strong>runtime</strong>, while the
+                program is actually running; errors caught while compiling a
+                program, such as syntax mistakes, are not considered
+                exceptions at all, since the program never even reaches the
+                point of execution.</p>
+
+            <h3>The Exception Hierarchy</h3>
+            <p>In C#, all exceptions are objects that belong to, or derive
+                from, the <code>Exception</code> class. Like every other
+                class in C#, <code>Exception</code> itself ultimately
+                descends from the single built-in root class,
+                <code>System.Object</code>. C# defines more than 100 distinct
+                <code>Exception</code> subclasses to represent many specific
+                kinds of problems.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Branch of the Hierarchy</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>SystemException</code></td>
+                        <td>Covers exceptions predefined by the Common
+                            Language Runtime (CLR) itself, such as errors
+                            related to arithmetic, arrays, or type
+                            conversion</td>
+                    </tr>
+                    <tr>
+                        <td><code>ApplicationException</code></td>
+                        <td>Historically intended for user-defined
+                            exceptions; current Microsoft guidance
+                            recommends deriving custom exceptions directly
+                            from <code>Exception</code> instead, covered
+                            later in this guide</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                You can deliberately trigger a SystemException just by
+                writing code that contains an obvious runtime error, such as
+                dividing an integer by zero; C# does not require any special
+                setup to produce a genuine exception for testing or
+                demonstration purposes.
+            </div>
+
+            <h3>Robustness, Fault Tolerance, and Mission-Critical Systems</h3>
+            <p><strong>Robustness</strong> is the degree to which a system
+                is resilient to stress and able to maintain correct
+                functioning even when something unexpected happens.
+                Applications specifically designed to keep operating,
+                possibly at a reduced level, even when some part of the
+                system fails are described as <strong>fault-tolerant</strong>.
+                Building fault-tolerant, robust applications matters most
+                for <strong>mission-critical</strong> processes: tasks whose
+                failure would have serious consequences, where the software
+                simply cannot be allowed to crash outright.</p>
+
+            <div class="tip-box">
+                According to the creators of C#, an event is considered
+                infrequent for a program when it happens in less than
+                roughly 1% of that program's executions. This distinction
+                matters because exceptions carry more processing overhead
+                than an ordinary conditional check, so they are best
+                reserved for genuinely infrequent, unexpected situations
+                rather than routine, everyday conditions.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-oo-handling">🧭 Object-Oriented Error Handling</h2>
+
+            <p>There are two general approaches to dealing with a possible
+                error condition in a program.</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Traditional Validation</h4>
+                    <p>Using an ordinary <code>if</code> statement to check
+                        for a problem condition before it can occur, such as
+                        confirming a divisor is not zero before performing a
+                        division.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Object-Oriented Exception Handling</h4>
+                    <p>Using the <code>try</code>, <code>throw</code>, and
+                        <code>catch</code> keywords to attempt an operation,
+                        signal that something went wrong, and respond to
+                        that problem separately from the normal flow of the
+                        code.</p>
+                </div>
+            </div>
+
+            <p>Managing a potential error with a conditional statement,
+                rather than an exception, is most efficient when the error
+                condition is common enough, or cheap enough to check for in
+                advance, that paying the overhead of a full exception is not
+                worthwhile; a simple, everyday check like confirming a
+                divisor is nonzero fits this description well.</p>
+
+            <p>In object-oriented exception handling, when you anticipate
+                that a procedure might run into a problem that prevents it
+                from completing correctly, you <strong>try</strong> that
+                procedure: you place its statements inside a
+                <code>try</code> block. When a method actually detects an
+                error condition while running, it <strong>throws</strong> an
+                exception, signaling that something has gone wrong.</p>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-common-types">📋 Common Exception Types</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exception Type</th>
+                        <th>Thrown When</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>DivideByZeroException</code></td>
+                        <td>An integer value is divided by zero</td>
+                    </tr>
+                    <tr>
+                        <td><code>IndexOutOfRangeException</code></td>
+                        <td>An array subscript falls outside the array's
+                            valid bounds</td>
+                    </tr>
+                    <tr>
+                        <td><code>ArrayTypeMismatchException</code></td>
+                        <td>An attempt is made to store an element of the
+                            wrong type into an array</td>
+                    </tr>
+                    <tr>
+                        <td><code>ArgumentException</code></td>
+                        <td>An argument passed to a method is not valid for
+                            that method</td>
+                    </tr>
+                    <tr>
+                        <td><code>IOException</code></td>
+                        <td>A problem occurs opening, reading from, or
+                            writing to a file</td>
+                    </tr>
+                    <tr>
+                        <td><code>OperationCanceledException</code></td>
+                        <td>An ongoing operation is aborted by the user</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                Dividing an integer by zero throws a
+                <code>DivideByZeroException</code>, but dividing a
+                floating-point value, such as a <code>double</code>, by zero
+                does not throw any exception at all. Floating-point division
+                by zero is well-defined in C# and simply produces a special
+                result such as <code>Infinity</code>, <code>-Infinity</code>,
+                or <code>NaN</code> (not a number), depending on the values
+                involved.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-try-catch">🧱 The try/catch Structure</h2>
+
+            <p>A block of code where something could reasonably go wrong
+                should be placed inside a <strong>try block</strong>. A
+                try block is legally allowed to contain any number of
+                statements, including statements you are confident will
+                never actually throw an exception; C# does not require every
+                individual risky statement to have its own separate try
+                block, one try block can safely surround several statements
+                together.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: A Basic try/catch</h4>
+                <pre><code><span class="keyword">try</span>
+{
+    <span class="type">Console</span>.<span class="func">Write</span>(<span class="string">"Enter a divisor: "</span>);
+    <span class="type">int</span> <span class="var">divisor</span> = <span class="type">int</span>.<span class="func">Parse</span>(<span class="type">Console</span>.<span class="func">ReadLine</span>());
+    <span class="type">int</span> <span class="var">result</span> = <span class="num">100</span> / <span class="var">divisor</span>;
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Result: {0}"</span>, <span class="var">result</span>);
+}
+<span class="keyword">catch</span> (<span class="type">DivideByZeroException</span> <span class="var">ex</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You cannot divide by zero."</span>);
+}</code></pre>
+            </div>
+
+            <h3>How Many Types a catch Block Can Catch</h3>
+            <p>A single <code>catch</code> block catches exactly one
+                exception type, though that one type can be a general class,
+                such as <code>Exception</code> itself, which then matches
+                every one of its many derived exception types at once.</p>
+
+            <h3>Multiple catch Blocks</h3>
+            <p>A try block can be followed by several <code>catch</code>
+                blocks in sequence, each one written to handle a different
+                specific exception type. When an exception is thrown, C#
+                evaluates the catch blocks in the order they are written,
+                from top to bottom, and executes the first one whose
+                exception type matches; every remaining catch block after
+                that match is bypassed entirely for that particular
+                exception.</p>
+
+            <div class="warning-box">
+                Because catch blocks are evaluated in order and stop at the
+                first match, placing a more general exception type's catch
+                block before a more specific one's makes that later, more
+                specific catch block <strong>unreachable</strong>, also
+                called <strong>dead code</strong>: statements that can never
+                execute under any circumstances, given the program's own
+                logic. Always list more specific exception types before
+                more general ones.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Syntax: Catching Any Type of Exception</h4>
+                <pre><code><span class="keyword">catch</span> (<span class="type">Exception</span> <span class="var">ex</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"An unexpected error occurred: {0}"</span>, <span class="var">ex</span>.<span class="var">Message</span>);
+}</code></pre>
+            </div>
+
+            <p>Writing <code>catch (Exception ex)</code> is how you begin a
+                catch block that will receive any type of exception thrown,
+                since every exception type is, directly or indirectly,
+                derived from the <code>Exception</code> class.</p>
+
+            <div class="warning-box">
+                Experienced professional programmers generally recommend
+                against relying solely on the general <code>Exception</code>
+                class in a catch block for real projects. Catching specific
+                exception types whenever possible produces clearer, more
+                intentional error handling and avoids accidentally
+                swallowing problems the code was never designed to recover
+                from.
+            </div>
+
+            <p>If a try block runs to completion with no error at all, every
+                catch block that follows it is bypassed completely; none of
+                them execute unless an exception was actually thrown inside
+                the try block.</p>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-exception-members">🏷️ Exception Class Members</h2>
+
+            <p>The <code>Exception</code> class provides several useful
+                members for describing what went wrong.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Message</code></td>
+                        <td>Read-only property containing a descriptive
+                            explanation of the exception</td>
+                    </tr>
+                    <tr>
+                        <td><code>ToString()</code></td>
+                        <td>Overridden by the Exception class to provide a
+                            detailed error message, built in part using
+                            <code>GetType()</code> to include the specific
+                            exception class's name</td>
+                    </tr>
+                    <tr>
+                        <td><code>StackTrace</code></td>
+                        <td>Read-only property listing the sequence of
+                            method calls, the call stack, that led to the
+                            exception</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: Using Message and ToString()</h4>
+                <pre><code><span class="keyword">catch</span> (<span class="type">Exception</span> <span class="var">ex</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">ex</span>.<span class="var">Message</span>);
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">ex</span>.<span class="func">ToString</span>());
+}</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-tryparse">🔄 TryParse() Methods</h2>
+
+            <p>C#'s built-in <code>TryParse()</code> methods, such as
+                <code>int.TryParse()</code> or <code>double.TryParse()</code>,
+                are the category of methods used to convert string data to
+                another data type, such as <code>int</code>,
+                <code>double</code>, or <code>bool</code>, without any risk
+                of generating an exception. Each of C#'s built-in
+                <code>TryParse()</code> methods returns a <code>bool</code>
+                indicating whether the conversion succeeded, and delivers
+                the converted value through an <code>out</code> parameter,
+                rather than throwing an exception when the conversion
+                fails.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Avoiding an Exception with TryParse()</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">Write</span>(<span class="string">"Enter a whole number: "</span>);
+<span class="type">string</span> <span class="var">input</span> = <span class="type">Console</span>.<span class="func">ReadLine</span>();
+
+<span class="keyword">if</span> (<span class="type">int</span>.<span class="func">TryParse</span>(<span class="var">input</span>, <span class="keyword">out</span> <span class="type">int</span> <span class="var">quantity</span>))
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You entered {0}."</span>, <span class="var">quantity</span>);
+}
+<span class="keyword">else</span>
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"That wasn't a valid whole number."</span>);
+}</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-finally">🧹 The finally Block</h2>
+
+            <p>A <strong>finally block</strong> is used for clean-up tasks
+                that must occur no matter what happens in the try block
+                above it. A finally block executes in every possible case:
+                whether the try block completes normally with no problems,
+                whether it ends abnormally with an exception that a catch
+                block successfully caught, or even when an exception occurs
+                that no catch block catches at all.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: try/catch/finally</h4>
+                <pre><code><span class="type">StreamReader</span> <span class="var">reader</span> = <span class="keyword">null</span>;
+<span class="keyword">try</span>
+{
+    <span class="var">reader</span> = <span class="keyword">new</span> <span class="type">StreamReader</span>(<span class="string">"inventory.txt"</span>);
+    <span class="comment">// ...read and process the file...</span>
+}
+<span class="keyword">catch</span> (<span class="type">IOException</span> <span class="var">ex</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Could not read the file: {0}"</span>, <span class="var">ex</span>.<span class="var">Message</span>);
+}
+<span class="keyword">finally</span>
+{
+    <span class="keyword">if</span> (<span class="var">reader</span> != <span class="keyword">null</span>)
+    {
+        <span class="var">reader</span>.<span class="func">Close</span>();
+    }
+}</code></pre>
+            </div>
+
+            <p>A finally block like this one is exactly the kind of code
+                block you use to ensure that input- and output-related
+                files are properly closed, regardless of whether reading the
+                file succeeded or failed.</p>
+
+            <div class="tip-box">
+                A try block followed directly by a finally block, with no
+                catch block at all, is most appropriate when you want
+                guaranteed clean-up to run but you are intentionally not
+                handling the exception at this level; the exception is still
+                allowed to propagate up to the calling method after the
+                finally block's clean-up statements finish running.
+            </div>
+
+            <p>If a try block includes three catch blocks and a finally
+                block, that finally block still executes after any one of
+                those catch blocks runs, after the try block completes with
+                no error at all, and even if an exception occurs that none
+                of the three catch blocks are written to catch.</p>
+
+            <h3>Terminating a Program</h3>
+            <p>The <code>Environment.Exit()</code> method, part of the
+                <code>System</code> namespace, can be used to terminate an
+                application immediately from anywhere in the code,
+                regardless of where the call occurs.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-callstack">🧵 The Call Stack and Propagation</h2>
+
+            <p>The <strong>call stack</strong> is the memory location where
+                the system stores the list of active method calls, tracking
+                exactly which methods called which other methods and where
+                execution should return to once each one finishes.</p>
+
+            <h3>Propagating an Exception</h3>
+            <p>When a method does not handle an exception it encounters,
+                such as by having no matching catch block for it, that
+                exception automatically moves up to whichever method called
+                it, continuing upward through the call stack until some
+                method along the chain catches it, or until it reaches the
+                very top of the program uncaught and the program terminates.
+                This process is called <strong>propagating</strong> the
+                exception.</p>
+
+            <div class="tip-box">
+                A method that does not handle a thrown exception simply lets
+                that exception propagate to its own calling method
+                automatically; nothing special needs to be written to make
+                this happen; it is simply what occurs whenever a method has
+                no catch block that matches the exception being thrown.
+            </div>
+
+            <h3>Reading a Stack Trace</h3>
+            <p>The <code>StackTrace</code> property is most useful exactly
+                when you need to trace the precise sequence of method calls
+                that led up to an exception, in order to pinpoint where in
+                the program the underlying problem actually originated.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Sample Stack Trace</h4>
+                <pre><code><span class="comment">at PaymentGateway.ChargeCard(Double amount)
+at OrderProcessor.CompleteCheckout(Double total)
+at CheckoutApp.Main()</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                Read a stack trace from the top down: the very first line
+                shows where the exception was actually thrown, not the
+                bottommost line. In the example above, the true source of
+                the problem is inside <code>PaymentGateway.ChargeCard()</code>,
+                not <code>CheckoutApp.Main()</code>; <code>Main()</code>
+                merely sits at the far end of the chain of calls that
+                eventually led there.
+            </div>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-custom">🛠️ Custom Exceptions and Rethrowing</h2>
+
+            <h3>Creating a Custom Exception</h3>
+            <p>According to Microsoft's current guidance, you should extend
+                the <code>Exception</code> class directly to create your own
+                custom exception type, rather than extending
+                <code>ApplicationException</code>, which older references
+                sometimes recommended instead.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Custom Exception Class</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">InsufficientStockException</span> : <span class="type">Exception</span>
+{
+    <span class="keyword">public</span> <span class="type">InsufficientStockException</span>() : <span class="keyword">base</span>()
+    {
+    }
+
+    <span class="keyword">public</span> <span class="type">InsufficientStockException</span>(<span class="type">string</span> <span class="var">message</span>) : <span class="keyword">base</span>(<span class="var">message</span>)
+    {
+    }
+
+    <span class="keyword">public</span> <span class="type">InsufficientStockException</span>(<span class="type">string</span> <span class="var">message</span>, <span class="type">Exception</span> <span class="var">innerException</span>) : <span class="keyword">base</span>(<span class="var">message</span>, <span class="var">innerException</span>)
+    {
+    }
+}</code></pre>
+            </div>
+
+            <p>These three constructors, a parameterless constructor, one
+                accepting a descriptive message, and one accepting both a
+                message and an inner exception, are the three recommended
+                constructors to write when defining a custom exception
+                class, matching the constructor pattern the base
+                <code>Exception</code> class itself provides.</p>
+
+            <div class="warning-box">
+                One constraint on throwing objects in C#: you can only throw
+                an object whose type derives from the <code>Exception</code>
+                class. An arbitrary object that has nothing to do with
+                <code>Exception</code> cannot be used with the
+                <code>throw</code> keyword.
+            </div>
+
+            <h3>Rethrowing an Exception</h3>
+            <p>Rather than fully handling an exception itself, a method can
+                pass a caught exception back up to whatever method called
+                it, an action known as <strong>rethrowing</strong> the
+                exception. This is done using the <code>throw</code>
+                keyword by itself, with no expression after it.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Rethrowing an Exception</h4>
+                <pre><code><span class="keyword">catch</span> (<span class="type">Exception</span> <span class="var">ex</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Logging the error before passing it along..."</span>);
+    <span class="keyword">throw</span>;
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                Writing a bare <code>throw;</code> statement, rather than
+                <code>throw ex;</code>, preserves the exception's original
+                stack trace information, which is exactly why
+                <code>throw;</code> by itself is the correct way to rethrow
+                a caught exception.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 11 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Exception</td>
+                            <td>A runtime error condition; not the same as a
+                                compile-time error</td>
+                        </tr>
+                        <tr>
+                            <td>Exception hierarchy</td>
+                            <td>All exceptions derive from Exception, which
+                                derives from Object</td>
+                        </tr>
+                        <tr>
+                            <td>SystemException / ApplicationException</td>
+                            <td>CLR-predefined vs. historically for
+                                user-defined (now: derive from Exception
+                                directly)</td>
+                        </tr>
+                        <tr>
+                            <td>Robustness / fault-tolerant / mission-critical</td>
+                            <td>Resilience under stress / continues
+                                operating despite failure / high-stakes tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Infrequent event</td>
+                            <td>Roughly less than 1% of program executions</td>
+                        </tr>
+                        <tr>
+                            <td>try / throw / catch</td>
+                            <td>Object-oriented alternative to if-statement
+                                validation</td>
+                        </tr>
+                        <tr>
+                            <td>Integer divide by zero</td>
+                            <td>Throws DivideByZeroException</td>
+                        </tr>
+                        <tr>
+                            <td>Floating-point divide by zero</td>
+                            <td>No exception; produces Infinity, -Infinity,
+                                or NaN</td>
+                        </tr>
+                        <tr>
+                            <td>Try block contents</td>
+                            <td>Can hold any number of statements, even ones
+                                that will never throw</td>
+                        </tr>
+                        <tr>
+                            <td>catch block scope</td>
+                            <td>Catches exactly one exception type per block</td>
+                        </tr>
+                        <tr>
+                            <td>Multiple catch blocks</td>
+                            <td>Evaluated top to bottom; first match wins;
+                                rest are bypassed</td>
+                        </tr>
+                        <tr>
+                            <td>Dead code / unreachable block</td>
+                            <td>A catch block that can never execute; put
+                                specific types before general ones</td>
+                        </tr>
+                        <tr>
+                            <td>catch (Exception ex)</td>
+                            <td>Catches any type of exception</td>
+                        </tr>
+                        <tr>
+                            <td>Message</td>
+                            <td>Read-only property with a descriptive error
+                                explanation</td>
+                        </tr>
+                        <tr>
+                            <td>ToString() (Exception)</td>
+                            <td>Overridden to build a detailed message using
+                                GetType()</td>
+                        </tr>
+                        <tr>
+                            <td>TryParse()</td>
+                            <td>Returns bool, uses an out parameter, never
+                                throws on bad input</td>
+                        </tr>
+                        <tr>
+                            <td>finally block</td>
+                            <td>Always executes: success, caught exception,
+                                or uncaught exception</td>
+                        </tr>
+                        <tr>
+                            <td>try/finally with no catch</td>
+                            <td>Guarantees clean-up while still letting the
+                                exception propagate</td>
+                        </tr>
+                        <tr>
+                            <td>Environment.Exit()</td>
+                            <td>Terminates the application; part of the
+                                System namespace</td>
+                        </tr>
+                        <tr>
+                            <td>Call stack</td>
+                            <td>Tracks active method calls and where to
+                                return to</td>
+                        </tr>
+                        <tr>
+                            <td>Propagation</td>
+                            <td>An unhandled exception moves up to the
+                                calling method automatically</td>
+                        </tr>
+                        <tr>
+                            <td>StackTrace property</td>
+                            <td>Lists the method call sequence; read top to
+                                bottom for the true origin</td>
+                        </tr>
+                        <tr>
+                            <td>Custom exceptions</td>
+                            <td>Extend Exception directly, per current
+                                Microsoft guidance</td>
+                        </tr>
+                        <tr>
+                            <td>Three recommended constructors</td>
+                            <td>Parameterless, message-only, message plus
+                                inner exception</td>
+                        </tr>
+                        <tr>
+                            <td>Throwing constraint</td>
+                            <td>Only Exception-derived objects can be thrown</td>
+                        </tr>
+                        <tr>
+                            <td>Rethrowing</td>
+                            <td>Bare throw; preserves the original stack
+                                trace</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 11: Microsoft Visual C# -
+                Exception Handling &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual Studio IDE</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D97706;
+            --primary-dark: #92400E;
+            --primary-light: #FDE68A;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #D97706 0%, #92400E 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #FDE68A 0%, #FCD34D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(217, 119, 6, 0.25);
+            color: #FDE68A;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(217, 119, 6, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(217, 119, 6, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #FDE68A;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #FDE68A;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #B45309;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual Studio IDE</h1>
+        <p>The Visual Studio IDE, Forms and Controls, Properties, Events and
+            Methods, Focus and Tab Order, Formatting Output, Design Time and
+            Runtime, Refactoring, and Console vs. GUI Applications</p>
+        <nav class="nav-pills">
+            <a href="#section-ide" class="nav-pill">The IDE</a>
+            <a href="#section-forms-controls" class="nav-pill">Forms &amp; Controls</a>
+            <a href="#section-properties" class="nav-pill">Properties</a>
+            <a href="#section-fonts" class="nav-pill">Fonts</a>
+            <a href="#section-events" class="nav-pill">Events &amp; Methods</a>
+            <a href="#section-focus" class="nav-pill">Focus &amp; Tab Order</a>
+            <a href="#section-formatting" class="nav-pill">Formatting Output</a>
+            <a href="#section-execution" class="nav-pill">Design Time &amp; Runtime</a>
+            <a href="#section-refactoring" class="nav-pill">Refactoring</a>
+            <a href="#section-console-gui" class="nav-pill">Console vs. GUI</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">03</div>
+                <div>
+                    <h2>Building a Visual Interface</h2>
+                    <p>So much code is needed to build even the simplest
+                        graphical program by hand that it is far more
+                        practical to design the interface visually inside an
+                        IDE. This guide covers how to navigate Visual
+                        Studio's main tools, how to place and configure GUI
+                        controls on a form, how those controls respond to
+                        user actions through events, and how to run, debug,
+                        and refine a GUI application once it is built.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-ide">🧰 The Visual Studio IDE Interface</h2>
+
+            <p>Visual Studio is an Integrated Development Environment: a
+                single application that combines editing, designing,
+                building, and debugging tools in one place. Several windows
+                within the IDE work together whenever you build a GUI
+                application.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">📋</span>
+                    <h4>Menu Bar</h4>
+                    <p>Sits along the top of the main window and holds the
+                        File menu along with submenus for editing, debugging,
+                        and help tasks.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🧱</span>
+                    <h4>Toolbox</h4>
+                    <p>A fly-out tab of pre-built GUI controls, such as
+                        buttons, labels, and text boxes, that you drag onto a
+                        form to build its interface.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🖼️</span>
+                    <h4>Form Designer</h4>
+                    <p>The visual, drag-and-drop surface where you arrange
+                        controls to design what your program's window will
+                        look like.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🗂️</span>
+                    <h4>Solution Explorer</h4>
+                    <p>Displays and manages the files and settings that make
+                        up your project, organized in an expandable tree of
+                        folders and files.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🏷️</span>
+                    <h4>Properties Window</h4>
+                    <p>Lists every configurable characteristic of whatever
+                        form or control is currently selected, and lets you
+                        change those characteristics without writing code.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🐞</span>
+                    <h4>Error List</h4>
+                    <p>Displays the locations and descriptions of errors in
+                        your code, letting you jump directly to the offending
+                        line.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                An expandable icon that appears beside a list or a section of
+                code in the IDE, such as an entry in the Solution Explorer or
+                a collapsible code block, is called a <strong>node</strong>.
+                Clicking a node's arrow expands or condenses everything
+                beneath it.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-forms-controls">🪟 Forms and Controls</h2>
+
+            <h3>What Is a Form?</h3>
+            <p>A <strong>form</strong> is a rectangular GUI object that
+                provides an interface for collecting, displaying, and
+                delivering information to a user. Every Windows Forms
+                project begins with a form; Visual C# names this first form
+                <code>Form1</code> by default.</p>
+
+            <p>You use the C# <code>Form</code> class to build a user
+                interface with buttons, text entry boxes, and similar devices
+                that let users interact with your application. The
+                appearance, size, color, and window-management features of a
+                form can all be modified through the Properties window,
+                without writing a single line of code.</p>
+
+            <h3>What Are Controls?</h3>
+            <p><strong>Controls</strong> are the objects, such as labels,
+                buttons, and text boxes, that a program's environment is
+                built from and that users interact with directly. To add a
+                control to a form, you open the Toolbox and drag the control
+                you want onto the Form Designer. This same drag-and-drop
+                process is used for every standard control, including
+                buttons, labels, and text boxes; none of them require you to
+                hand-write source code just to place them on the form.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">🔘</span>
+                    <h4>Button</h4>
+                    <p>A control the user clicks to trigger an action, such
+                        as submitting a form or running a calculation.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🏷️</span>
+                    <h4>Label</h4>
+                    <p>Displays text, such as a prompt or the result of a
+                        computation, to the user. The user cannot type into
+                        a label.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">⌨️</span>
+                    <h4>TextBox</h4>
+                    <p>Allows a user to input data by typing directly into
+                        the control on a running form.</p>
+                </div>
+            </div>
+
+            <p>Once placed, a control is not locked in position. You can drag
+                a control to relocate it anywhere on the form, and you can
+                resize a control, such as a button, by dragging one of the
+                small square handles that appear along its edges and corners
+                while it is selected.</p>
+
+            <div class="warning-box">
+                Placing a control on a form does not automatically create any
+                behavior for it. Adding a Button, for example, does not
+                require you to also create a <code>Click()</code> method;
+                a button with no method attached will simply do nothing when
+                clicked.
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-properties">🏷️ Control Properties</h2>
+
+            <h3>The Name Property</h3>
+            <p>Every form and control has a <strong>Name</strong> property,
+                which is the identifier your code uses to refer to that
+                object. Visual Studio assigns generic default names such as
+                <code>button1</code> or <code>textBox1</code>, but
+                professional programmers usually replace these defaults with
+                a more descriptive name before writing any event-handling
+                code.</p>
+
+            <div class="tip-box">
+                A common naming convention combines camel casing with the
+                control's type as a suffix, such as <code>submitButton</code>
+                or <code>customerNameTextBox</code>. This makes a control's
+                purpose and type both clear at a glance, wherever its name
+                appears in your code.
+            </div>
+
+            <div class="warning-box">
+                Changing a control's <strong>Name</strong> property changes
+                only the identifier you use to refer to it in code. It has
+                no effect on the control's visual appearance; the
+                <strong>Text</strong> property is what controls what
+                actually displays on screen.
+            </div>
+
+            <h3>The Text Property</h3>
+            <p>The <strong>Text</strong> property holds the string of text
+                that a control or form displays. For a form, the Text
+                property sets the caption shown in the title bar. For a
+                Label, changing the Text property changes the words the user
+                sees. For a Button, the Text property is the wording shown
+                on its face.</p>
+
+            <h3>Exploring the Properties Window</h3>
+            <p>The Properties window lists every configurable property for
+                whatever object is currently selected on the form. A form
+                exposes a large number of properties, far more than any
+                single program is likely to use, covering everything from
+                its size and color to how it behaves when the user resizes
+                or minimizes it.</p>
+
+            <div class="tip-box">
+                When properties are sorted alphabetically in the Properties
+                window, the <strong>(Name)</strong> entry appears at the very
+                top, ahead of every other property, because the surrounding
+                parentheses sort before any letter of the alphabet. It is
+                easy to expect an alphabetical list to begin with a lettered
+                property and be surprised to find <code>(Name)</code> listed
+                first instead.
+            </div>
+
+            <h3>A Few Useful Form Properties</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Text</code></td>
+                        <td>Sets the caption shown in the form's title bar</td>
+                    </tr>
+                    <tr>
+                        <td><code>AcceptButton</code></td>
+                        <td>Specifies which button on the form is clicked
+                            automatically when the user presses Enter</td>
+                    </tr>
+                    <tr>
+                        <td><code>TabIndex</code></td>
+                        <td>Controls the order in which a control receives
+                            focus as the user presses Tab</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-fonts">🔠 Fonts on Controls</h2>
+
+            <p>You can change a control's font, including a Label's, by
+                selecting the control in the Form Designer and then choosing
+                its <strong>Font</strong> property in the Properties window,
+                which opens a dialog for picking a typeface, style, and
+                size.</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Proportional Font</h4>
+                    <p>Each character occupies a different width based on
+                        its shape; an "i" takes less horizontal space than a
+                        "w". Most body text uses a proportional font because
+                        it reads naturally.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Fixed-Pitch (Monospaced) Font</h4>
+                    <p>Every character occupies exactly the same width. Use
+                        a <strong>fixed-pitch</strong>, or
+                        <strong>monospaced</strong>, font whenever you need
+                        values in different controls to visually line up in
+                        columns.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                If several labels display numbers that should appear aligned
+                as if in a column, such as a list of prices, choose a
+                fixed-pitch font. A proportional font will let the digits
+                fall at slightly different horizontal positions depending on
+                their shape, breaking the alignment.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-events">⚡ Events and Methods</h2>
+
+            <h3>What Is an Event?</h3>
+            <p>An <strong>event</strong> is generated whenever a user
+                interacts with a control while a program runs, such as
+                clicking a button. A <strong>click event</strong> is
+                specifically the event generated when the user clicks a
+                control with the mouse.</p>
+
+            <h3>Generating an Event-Handling Method</h3>
+            <p>The simplest way to create a method that runs in response to
+                an event is to double-click the control in the Form
+                Designer. Double-clicking a button, for example, generates an
+                empty <code>Click()</code> method in the code editor and
+                automatically wires that method to the button's click event,
+                ready for you to fill in with your own statements.</p>
+
+            <p>Visual Studio names a generated Click method after the
+                control's <strong>Name</strong> property, followed by an
+                underscore and the word <code>Click</code>. A button named
+                <code>reportButton</code>, for instance, produces a method
+                named <code>reportButton_Click()</code> by default.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Generated Click Method</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">reportButton_Click</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">EventArgs</span> <span class="var">e</span>)
+{
+    <span class="type">MessageBox</span>.<span class="func">Show</span>(<span class="string">"Report generated."</span>);
+}</code></pre>
+            </div>
+
+            <h3>Access Specifiers</h3>
+            <p>The keyword that appears in a method header and dictates
+                which classes are allowed to use that method is called an
+                <strong>access specifier</strong>. Visual Studio generates
+                event-handling methods as <code>private</code> by default,
+                meaning only code within the same class can call them
+                directly; the event system itself is what triggers a private
+                Click method when the user clicks the associated control.</p>
+
+            <h3>Removing Orphaned Methods</h3>
+            <p>An <strong>orphaned method</strong> is an empty
+                event-handling method that Visual Studio generated but that
+                never actually executes, often left behind after a control is
+                deleted or a double-click happened by accident. Simply
+                deleting the method's code from the editor is not enough,
+                because a hidden reference to that method can remain in the
+                designer file.</p>
+
+            <div class="warning-box">
+                To properly remove an orphaned method, clear the event
+                handler from the <strong>Properties window</strong> (in the
+                events list, delete the method name next to the relevant
+                event) rather than deleting only the code. Deleting just the
+                code while a designer reference still points to it causes a
+                build error the next time the project compiles.
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-focus">🎯 Focus and Tab Order</h2>
+
+            <p><strong>Focus</strong> refers to the state of being the
+                active control: the one control on a form that is currently
+                ready to accept keyboard input. Only one control on a form
+                can have focus at any given moment. When a user types into a
+                TextBox, that TextBox is the control with focus, and
+                whatever is typed is stored in that TextBox's
+                <strong>Text</strong> property.</p>
+
+            <p>Pressing the Tab key moves focus from one control to the
+                next. The order in which controls receive focus as the user
+                presses Tab repeatedly is called the
+                <strong>tab order</strong>, and it is determined by each
+                control's <strong>TabIndex</strong> property. Controls with
+                lower TabIndex values receive focus earlier in the sequence.
+            </p>
+
+            <div class="tip-box">
+                Setting TabIndex values deliberately, rather than relying on
+                the order controls happened to be added to the form, ensures
+                a form feels natural to fill out, moving logically from one
+                field to the next.
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-formatting">🖨️ Formatting GUI Output</h2>
+
+            <p>Just as console applications use format strings to control
+                how output looks, GUI applications use the
+                <code>String.Format()</code> method to build a formatted
+                string, most commonly to assign to a control's Text property.
+                <code>String.Format()</code> accepts a format string with
+                placeholders followed by the values that fill them, the same
+                placeholder syntax used with <code>Console.WriteLine()</code>.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Formatting a Money Value for a Label</h4>
+                <pre><code><span class="type">double</span> <span class="var">ticketPrice</span> = <span class="num">12.5</span>;
+<span class="type">int</span> <span class="var">ticketCount</span> = <span class="num">3</span>;
+<span class="type">double</span> <span class="var">orderTotal</span> = <span class="var">ticketPrice</span> * <span class="var">ticketCount</span>;
+
+<span class="var">totalLabel</span>.<span class="var">Text</span> = <span class="type">String</span>.<span class="func">Format</span>(<span class="string">"Order total: {0}"</span>, <span class="var">orderTotal</span>.<span class="func">ToString</span>(<span class="string">"C2"</span>));
+<span class="comment">// Displays: Order total: $37.50</span></code></pre>
+            </div>
+
+            <p>The standard numeric format string <code>"C2"</code> formats a
+                number as currency with two decimal places, following the
+                same rules introduced for console formatting. Assigning the
+                resulting string directly to a Label's <code>Text</code>
+                property immediately updates what the user sees.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-execution">▶️ Design Time and Runtime</h2>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Design Time</h4>
+                    <p>The period during which you arrange controls, set
+                        properties, and write code in the IDE, but the
+                        program is not actually running.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Runtime</h4>
+                    <p>The period during which your compiled program is
+                        actually executing, whether launched from the IDE or
+                        run directly.</p>
+                </div>
+            </div>
+
+            <h3>Running Without the Debugger</h3>
+            <p>Visual Studio offers a "Start Without Debugging" command,
+                reachable with the key combination <strong>Ctrl+F5</strong>,
+                which runs your program without attaching the debugging
+                tools. This is often faster for simply checking that a
+                program behaves correctly when you do not need to step
+                through code line by line.</p>
+
+            <h3>The "Build Failed" Message</h3>
+            <div class="warning-box">
+                If you try to re-run a program while a previous execution of
+                its form is still open, Visual Studio reports that changes
+                are not allowed, and the build fails. Close the running form
+                first, then re-run the program; the previous instance must
+                fully exit before the IDE can rebuild and launch a new one.
+            </div>
+
+            <h3>The Designer File</h3>
+            <p>Visual Studio maintains a separate file, typically named with
+                a <code>.Designer.cs</code> extension, that stores the
+                auto-generated code behind everything you arrange visually
+                in the Form Designer. This file is regenerated automatically
+                whenever you change a control's properties or position, so
+                you should avoid hand-editing it directly; changes made
+                through the Properties window and Form Designer are the
+                supported way to modify it.</p>
+
+            <h3>Where to Look Up C# Classes</h3>
+            <p>The <code>Form</code> class, like every other class built
+                into C#, is documented in Microsoft's official C#
+                documentation. When you need to know exactly what a class or
+                one of its members does, Microsoft's documentation is the
+                ultimate authority, more reliable than guesswork or
+                secondhand summaries.</p>
+
+            <!-- ===================== SECTION 9 ===================== -->
+            <h2 id="section-refactoring">🔧 Code Refactoring</h2>
+
+            <p><strong>Code refactoring</strong> is the process of changing a
+                program's internal structure, such as renaming a method or
+                reorganizing how code is written, without changing the way
+                the program behaves from the outside. Visual Studio includes
+                a built-in refactoring feature that can safely rename a
+                method everywhere it is used throughout a project in one
+                step, instead of requiring you to hunt down and edit every
+                call by hand.</p>
+
+            <div class="warning-box">
+                Refactoring is not the same thing as changing what a program
+                does. Adding a new feature or collecting different
+                information from the user changes the program's behavior,
+                so it is not refactoring; refactoring only reorganizes code
+                that already works the same way it did before.
+            </div>
+
+            <!-- ===================== SECTION 10 ===================== -->
+            <h2 id="section-console-gui">🖥️ Console Applications vs. GUI Applications</h2>
+
+            <p>Choosing between a console application and a GUI application
+                is a tradeoff between development speed and user
+                experience.</p>
+
+            <div class="comparison">
+                <div class="comparison-item good">
+                    <h4>✅ Console Applications</h4>
+                    <p>Faster and simpler to develop, since there is no
+                        visual interface to design; well suited to quick
+                        utilities, learning exercises, and tools run by
+                        programmers rather than everyday users.</p>
+                </div>
+                <div class="comparison-item good">
+                    <h4>✅ GUI Applications</h4>
+                    <p>Provide a more familiar, intuitive experience for
+                        everyday users, who can click buttons and fill in
+                        clearly labeled fields instead of typing commands at
+                        a prompt.</p>
+                </div>
+            </div>
+
+            <p>The best reason to build a GUI rather than a console
+                interface is usually about the audience: when you want users
+                to interact with your program comfortably, through
+                recognizable visual controls rather than typed input at a
+                prompt, a GUI is worth its extra development time.</p>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 3 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Menu bar</td>
+                            <td>Holds the File menu and submenus for editing,
+                                debugging, and help</td>
+                        </tr>
+                        <tr>
+                            <td>Toolbox</td>
+                            <td>Fly-out tab of controls you drag onto the
+                                Form Designer</td>
+                        </tr>
+                        <tr>
+                            <td>Solution Explorer</td>
+                            <td>Views and manages project files and settings</td>
+                        </tr>
+                        <tr>
+                            <td>Node</td>
+                            <td>An expandable/collapsible icon beside a list
+                                or code section</td>
+                        </tr>
+                        <tr>
+                            <td>Form1</td>
+                            <td>Default name of the first form in a new
+                                Windows Forms project</td>
+                        </tr>
+                        <tr>
+                            <td>Controls</td>
+                            <td>Objects like labels, buttons, and text boxes
+                                that users interact with</td>
+                        </tr>
+                        <tr>
+                            <td>Name vs. Text property</td>
+                            <td>Name is the code identifier; Text is what
+                                displays on screen</td>
+                        </tr>
+                        <tr>
+                            <td>(Name) in Properties window</td>
+                            <td>Appears first alphabetically because
+                                parentheses sort ahead of letters</td>
+                        </tr>
+                        <tr>
+                            <td>Resizing a control</td>
+                            <td>Drag one of the square handles on its
+                                selected border</td>
+                        </tr>
+                        <tr>
+                            <td>Fixed-pitch (monospaced) font</td>
+                            <td>Every character is the same width; used to
+                                align values in columns</td>
+                        </tr>
+                        <tr>
+                            <td>Proportional font</td>
+                            <td>Character width varies by shape; typical for
+                                body text</td>
+                        </tr>
+                        <tr>
+                            <td>Click event</td>
+                            <td>Generated when the user clicks a control</td>
+                        </tr>
+                        <tr>
+                            <td>Generated Click method name</td>
+                            <td>controlName_Click(), created by
+                                double-clicking the control</td>
+                        </tr>
+                        <tr>
+                            <td>Access specifier</td>
+                            <td>Keyword such as private that dictates which
+                                classes can use a method</td>
+                        </tr>
+                        <tr>
+                            <td>Orphaned method</td>
+                            <td>An empty, unused event method; remove via the
+                                Properties window, not by deleting code alone</td>
+                        </tr>
+                        <tr>
+                            <td>Focus</td>
+                            <td>The one control currently accepting keyboard
+                                input</td>
+                        </tr>
+                        <tr>
+                            <td>TabIndex</td>
+                            <td>Property that sets a control's position in
+                                the tab order</td>
+                        </tr>
+                        <tr>
+                            <td>String.Format()</td>
+                            <td>Builds a formatted string for GUI output,
+                                such as a Label's Text property</td>
+                        </tr>
+                        <tr>
+                            <td>Design time</td>
+                            <td>While arranging controls and writing code;
+                                the program is not running</td>
+                        </tr>
+                        <tr>
+                            <td>Runtime</td>
+                            <td>While the compiled program is actually
+                                executing</td>
+                        </tr>
+                        <tr>
+                            <td>Start Without Debugging</td>
+                            <td>Ctrl+F5; runs the program without attaching
+                                the debugger</td>
+                        </tr>
+                        <tr>
+                            <td>Build failed on re-run</td>
+                            <td>Close the previous running form before
+                                re-executing the program</td>
+                        </tr>
+                        <tr>
+                            <td>Designer.cs file</td>
+                            <td>Auto-generated code behind the visual design;
+                                avoid hand-editing it</td>
+                        </tr>
+                        <tr>
+                            <td>Code refactoring</td>
+                            <td>Restructuring code, such as renaming a
+                                method, without changing behavior</td>
+                        </tr>
+                        <tr>
+                            <td>Console vs. GUI</td>
+                            <td>Console: faster to build; GUI: more familiar
+                                for end users</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 3: Microsoft Visual C# - Using
+                GUI Objects and the Visual Studio IDE &bull; Learning
+                Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

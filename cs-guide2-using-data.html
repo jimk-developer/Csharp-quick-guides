@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 2: Microsoft Visual C# - Using Data</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #065F46;
+            --primary-light: #A7F3D0;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #059669 0%, #065F46 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(5, 150, 105, 0.25);
+            color: #A7F3D0;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(5, 150, 105, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(5, 150, 105, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #A7F3D0;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #A7F3D0;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #047857;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 2: Microsoft Visual C# - Using Data</h1>
+        <p>Variables, Constants, Data Types, Formatting Output, Operators,
+            Type Conversion, Characters, Strings, Enumerations, and Console
+            Input</p>
+        <nav class="nav-pills">
+            <a href="#section-variables" class="nav-pill">Variables &amp; Constants</a>
+            <a href="#section-data-types" class="nav-pill">Data Types</a>
+            <a href="#section-output" class="nav-pill">Output &amp; Formatting</a>
+            <a href="#section-operators" class="nav-pill">Operators &amp; Math</a>
+            <a href="#section-conversion" class="nav-pill">Type Conversion</a>
+            <a href="#section-chars-strings" class="nav-pill">Characters &amp; Strings</a>
+            <a href="#section-enums" class="nav-pill">Enumerations</a>
+            <a href="#section-input" class="nav-pill">Console Input</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">02</div>
+                <div>
+                    <h2>Working With Data in C#</h2>
+                    <p>Every C# program manipulates data, and that data has
+                        to live somewhere and be described in a way the
+                        compiler understands. This guide covers how to
+                        declare and use variables and constants, the built-in
+                        data types C# provides, how to format and display
+                        output, the operators used to work with values, how
+                        values convert between types, how characters and
+                        strings behave, how to define your own type-safe sets
+                        of constants, and how to accept input from a user.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-variables">📦 Variables and Constants</h2>
+
+            <h3>What Is a Variable?</h3>
+            <p>A <strong>variable</strong> is a named location in computer
+                memory that can hold different values at different points in
+                time while a program runs. Before you can use a variable, you
+                must declare it. A <strong>variable declaration</strong> names
+                the variable and reserves storage for it by specifying its
+                <strong>data type</strong>, which describes the format and
+                amount of memory the value will occupy and what operations
+                can be performed with it.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring and Initializing a Variable</h4>
+                <pre><code><span class="type">int</span> <span class="var">lapCount</span>;
+<span class="var">lapCount</span> = <span class="num">0</span>;
+
+<span class="comment">// Declaration and initialization combined</span>
+<span class="type">int</span> <span class="var">bestLapTime</span> = <span class="num">58</span>;</code></pre>
+            </div>
+
+            <p>Assigning a value to a variable at the same moment it is
+                declared is called <strong>initialization</strong>. The equal
+                sign (<code>=</code>) is C#'s <strong>assignment operator</strong>;
+                it does not mean "equals" the way it does in math class, it
+                means "store the value on the right into the variable on the
+                left." An <strong>assignment</strong> is the act of storing a
+                value into a variable.</p>
+
+            <h3>Constants</h3>
+            <p>A <strong>literal constant</strong> is a value, such as
+                <code>58</code> or <code>"finish line"</code>, written
+                directly into your code. A <strong>named constant</strong> is
+                an identifier that represents a value that cannot change once
+                it is set. You create a named constant with the
+                <code>const</code> keyword, and it must be initialized at the
+                moment it is declared.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring a Named Constant</h4>
+                <pre><code><span class="keyword">const</span> <span class="type">int</span> <span class="var">MAX_RUNNERS</span> = <span class="num">200</span>;
+<span class="keyword">const</span> <span class="type">double</span> <span class="var">TRACK_LENGTH_MILES</span> = <span class="num">0.25</span>;</code></pre>
+            </div>
+
+            <div class="tip-box">
+                By convention, many C# programmers write named constant
+                identifiers in <strong>screaming caps</strong> (all uppercase
+                with underscores between words), as in <code>MAX_RUNNERS</code>.
+                This convention makes constants easy to spot at a glance,
+                though it is a style choice rather than a compiler
+                requirement.
+            </div>
+
+            <div class="warning-box">
+                Once a value is declared <code>const</code>, it is
+                <strong>immutable</strong>: any later attempt to assign it a
+                new value is a compiler error. Choose <code>const</code> only
+                for values that genuinely never change while the program
+                runs.
+            </div>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-data-types">🔢 Data Types</h2>
+
+            <p>C# provides a set of built-in <strong>intrinsic types</strong>
+                (also called <strong>simple types</strong>), each with a
+                specific size and range. Intrinsic types fall into three main
+                families: integral types, floating-point types, and the
+                Boolean type.</p>
+
+            <h3>Integral Data Types</h3>
+            <p>The <strong>integral data types</strong> hold whole numbers,
+                with no decimal component. They differ from one another by
+                size (how much memory they occupy) and by whether they allow
+                negative values.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>Signed?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>byte</code></td>
+                        <td>8-bit</td>
+                        <td>Unsigned (0 and positive only)</td>
+                    </tr>
+                    <tr>
+                        <td><code>sbyte</code></td>
+                        <td>8-bit</td>
+                        <td>Signed</td>
+                    </tr>
+                    <tr>
+                        <td><code>short</code></td>
+                        <td>16-bit</td>
+                        <td>Signed</td>
+                    </tr>
+                    <tr>
+                        <td><code>ushort</code></td>
+                        <td>16-bit</td>
+                        <td>Unsigned</td>
+                    </tr>
+                    <tr>
+                        <td><code>int</code></td>
+                        <td>32-bit</td>
+                        <td>Signed</td>
+                    </tr>
+                    <tr>
+                        <td><code>uint</code></td>
+                        <td>32-bit</td>
+                        <td>Unsigned</td>
+                    </tr>
+                    <tr>
+                        <td><code>long</code></td>
+                        <td>64-bit</td>
+                        <td>Signed</td>
+                    </tr>
+                    <tr>
+                        <td><code>ulong</code></td>
+                        <td>64-bit</td>
+                        <td>Unsigned</td>
+                    </tr>
+                    <tr>
+                        <td><code>char</code></td>
+                        <td>16-bit</td>
+                        <td>Holds a single character, not a number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                Because <code>uint</code> and <code>ulong</code> are
+                unsigned, they cannot legally hold a negative value. Assigning
+                <code>-100</code> to a <code>uint</code> variable is a
+                compiler error, not a value that silently becomes positive.
+            </div>
+
+            <p>When you type a whole-number constant such as <code>58</code>
+                directly into a C# program, its default data type is
+                <code>int</code> unless you specify otherwise. Choose the
+                smallest integral type that comfortably fits the values a
+                variable will realistically hold; a <code>byte</code>, for
+                example, is well suited to something like a person's age,
+                which will never need a large range or a negative value.</p>
+
+            <h3>Digit Separators</h3>
+            <p>C# allows an underscore (<code>_</code>) as a
+                <strong>digit separator</strong> inside a numeric literal,
+                purely to improve readability. Digit separators are ignored
+                by the compiler and do not change the value in any way.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Digit Separators</h4>
+                <pre><code><span class="type">int</span> <span class="var">stadiumCapacity</span> = <span class="num">23_456_789</span>;
+<span class="comment">// Identical in value to: 23456789</span></code></pre>
+            </div>
+
+            <h3>Floating-Point Data Types</h3>
+            <p>The <strong>floating-point</strong> data types hold numbers
+                with decimal positions and can represent varying numbers of
+                <strong>significant digits</strong>, the digits in a number
+                that carry meaning for its precision.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Approximate Precision</th>
+                        <th>Typical Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>float</code></td>
+                        <td>About 7 significant digits</td>
+                        <td>Lower-precision, smaller-memory scientific values</td>
+                    </tr>
+                    <tr>
+                        <td><code>double</code></td>
+                        <td>About 15 to 16 significant digits</td>
+                        <td>The general-purpose default for most floating-point
+                            values</td>
+                    </tr>
+                    <tr>
+                        <td><code>decimal</code></td>
+                        <td>28 to 29 significant digits</td>
+                        <td>Money and other values requiring exact precision</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h4>Why decimal for Money?</h4>
+                <p>Among the floating-point types, <code>decimal</code>
+                    offers greater precision and a smaller range than
+                    <code>float</code> or <code>double</code>, which makes it
+                    the right choice for financial and monetary calculations
+                    where rounding errors are unacceptable. A
+                    <code>decimal</code> literal is written with an
+                    <code>m</code> suffix, such as <code>19.99m</code>.</p>
+            </div>
+
+            <div class="tip-box">
+                A plain floating-point literal such as <code>19.99</code>
+                defaults to type <code>double</code> unless you tell the
+                compiler otherwise. To create a <code>float</code> literal,
+                append an <code>f</code> suffix, as in <code>19.99f</code>;
+                to create a <code>decimal</code> literal, append
+                <code>m</code>, as in <code>19.99m</code>. Leaving off the
+                suffix and assigning the literal directly to a
+                <code>float</code> or <code>decimal</code> variable is a
+                common source of compiler errors.
+            </div>
+
+            <h3>Scientific Notation</h3>
+            <p>Very large or very small floating-point values may display in
+                <strong>scientific notation</strong>, such as
+                <code>9.32E-05</code>. This means 9.32 multiplied by 10 raised
+                to the -5 power, or 0.0000932. The letter <code>E</code>
+                separates the significant digits from the power of ten.</p>
+
+            <h3>The Boolean Type</h3>
+            <p>A <strong>bool</strong> (Boolean) variable can hold only one of
+                two values: <code>true</code> or <code>false</code>. A
+                <strong>Boolean expression</strong> is any expression that
+                evaluates to a Boolean value, most commonly the result of a
+                comparison.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring a Boolean Variable</h4>
+                <pre><code><span class="type">bool</span> <span class="var">raceIsFinished</span> = <span class="keyword">false</span>;
+<span class="type">bool</span> <span class="var">personalRecordBroken</span> = <span class="var">finishTime</span> &lt; <span class="var">previousBest</span>;</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-output">🖨️ Console Output and Formatting</h2>
+
+            <h3>Three Ways to Combine Text and Variables</h3>
+            <p>C# offers three common techniques for building output that
+                mixes literal text with variable values.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">➕</span>
+                    <h4>Concatenation</h4>
+                    <p>Join strings together with the plus (<code>+</code>)
+                        sign. Works but can become hard to read with many
+                        pieces.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🔢</span>
+                    <h4>Placeholders</h4>
+                    <p>Numbered positions like <code>{0}</code> inside a
+                        format string, filled in order by a list of values
+                        that follows.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🧵</span>
+                    <h4>String Interpolation</h4>
+                    <p>A <code>$</code> prefix lets you embed variable names
+                        directly inside a string using curly braces.</p>
+                </div>
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: Three Techniques, Same Output</h4>
+                <pre><code><span class="type">string</span> <span class="var">racerName</span> = <span class="string">"Maya"</span>;
+<span class="type">int</span> <span class="var">finishPlace</span> = <span class="num">3</span>;
+
+<span class="comment">// Concatenation</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="var">racerName</span> + <span class="string">" finished in place "</span> + <span class="var">finishPlace</span>);
+
+<span class="comment">// Placeholders</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0} finished in place {1}"</span>, <span class="var">racerName</span>, <span class="var">finishPlace</span>);
+
+<span class="comment">// String interpolation</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>($<span class="string">"{racerName} finished in place {finishPlace}"</span>);</code></pre>
+            </div>
+
+            <p>A <strong>placeholder</strong> is a number enclosed in curly
+                braces, such as <code>{0}</code>, that marks which value from
+                the list following the format string belongs in that
+                position of the output. A <strong>format string</strong> is
+                the series of characters, including any placeholders, used to
+                control the appearance of text output.</p>
+
+            <h3>Alignment</h3>
+            <p>A placeholder can include an alignment component, written as
+                <code>{index, width}</code>. A positive width right-aligns the
+                value within a column of that many characters; a negative
+                width left-aligns it.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Right-Aligned Columns</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0,6}"</span>, <span class="string">"Yes"</span>);
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0,6}"</span>, <span class="string">"No"</span>);
+<span class="comment">// Output:
+//    Yes
+//     No</span></code></pre>
+            </div>
+
+            <h3>Standard Numeric Format Strings</h3>
+            <p>A <strong>standard numeric format string</strong> is a short
+                code, often combined with a <strong>precision specifier</strong>
+                (a digit indicating how many decimal places to show), that
+                controls how a number is displayed. The <code>ToString()</code>
+                method accepts a format string as an argument.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Format String</th>
+                        <th>Meaning</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>"F"</code></td>
+                        <td>Fixed-point, default 2 decimal places</td>
+                        <td><code>19.99.ToString("F")</code> &rarr; <code>19.99</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"F3"</code></td>
+                        <td>Fixed-point with 3 decimal places</td>
+                        <td><code>19.99.ToString("F3")</code> &rarr; <code>19.990</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"C"</code></td>
+                        <td>Currency, formatted for the current culture</td>
+                        <td><code>19.99.ToString("C")</code> &rarr; <code>$19.99</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"N"</code></td>
+                        <td>Number with thousands separators</td>
+                        <td><code>23456.ToString("N")</code> &rarr; <code>23,456.00</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                A <strong>culture</strong> represents the formatting
+                conventions of a locale, such as which symbol represents
+                currency and whether a comma or a period separates thousands.
+                Format strings like <code>"C"</code> automatically adapt to
+                the culture configured on the running system, which is why
+                currency and date formatting should generally rely on
+                <code>"C"</code> rather than hand-built strings.
+            </div>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-operators">➗ Operators and Math</h2>
+
+            <h3>Arithmetic Operators</h3>
+            <p>C#'s <strong>binary operators</strong> require two
+                <strong>operands</strong>, one on the left and one on the
+                right. The core arithmetic operators are addition
+                (<code>+</code>), subtraction (<code>-</code>),
+                multiplication (<code>*</code>), division (<code>/</code>),
+                and remainder (<code>%</code>).</p>
+
+            <div class="syntax-box">
+                <h4>Example: The Remainder Operator</h4>
+                <pre><code><span class="type">int</span> <span class="var">totalMinutes</span> = <span class="num">130</span>;
+<span class="type">int</span> <span class="var">wholeHours</span> = <span class="var">totalMinutes</span> / <span class="num">60</span>;      <span class="comment">// 2</span>
+<span class="type">int</span> <span class="var">leftoverMinutes</span> = <span class="var">totalMinutes</span> % <span class="num">60</span>; <span class="comment">// 10</span></code></pre>
+            </div>
+
+            <p>The <code>%</code> operator, often called the modulus or
+                remainder operator, returns what is left over after one
+                integer is divided by another. It is commonly used to test
+                whether a number divides evenly (a remainder of zero) or to
+                break a total into smaller units, as shown above.</p>
+
+            <div class="warning-box">
+                When both operands of the <code>/</code> operator are
+                integers, C# performs <strong>integer division</strong>: the
+                result is truncated to a whole number, and any fractional
+                part is simply dropped rather than rounded. In the example
+                above, <code>130 / 60</code> produces <code>2</code>, not
+                <code>2.1667</code>. If either operand is a
+                <code>float</code>, <code>double</code>, or
+                <code>decimal</code>, the division instead produces a full
+                floating-point result with a fractional part.
+            </div>
+
+            <div class="tip-box">
+                C# has no dedicated exponent operator. To raise a number to a
+                power, call the <code>Math.Pow()</code> method, which takes
+                the base and the exponent as its two arguments and returns a
+                <code>double</code>.
+                <pre style="margin-top:12px;"><code><span class="type">double</span> <span class="var">cubedValue</span> = <span class="type">Math</span>.<span class="func">Pow</span>(<span class="num">3</span>, <span class="num">3</span>);
+<span class="comment">// cubedValue holds 27, since 3 raised to the 3rd power is 27</span></code></pre>
+            </div>
+
+            <h3>Operator Precedence</h3>
+            <p><strong>Operator precedence</strong> (also called the
+                <strong>order of operation</strong>) determines the sequence
+                in which parts of an expression are evaluated.
+                Multiplication, division, and remainder are always evaluated
+                before addition and subtraction, regardless of the order in
+                which they are written. Parentheses override the default
+                precedence and are evaluated first, from the innermost pair
+                outward. When operators share the same precedence level,
+                <strong>associativity</strong> determines whether they group
+                left to right or right to left.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Precedence Changes the Result</h4>
+                <pre><code><span class="type">int</span> <span class="var">resultA</span> = <span class="num">4</span> + <span class="num">3</span> * <span class="num">2</span>;   <span class="comment">// 10 (multiplication first)</span>
+<span class="type">int</span> <span class="var">resultB</span> = (<span class="num">4</span> + <span class="num">3</span>) * <span class="num">2</span>; <span class="comment">// 14 (parentheses first)</span></code></pre>
+            </div>
+
+            <h3>Shortcut Assignment Operators</h3>
+            <p>C# provides shortcut versions of the assignment operator that
+                combine an arithmetic operation with an assignment in a
+                single step.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Equivalent To</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>x += y</code></td>
+                        <td><code>x = x + y</code></td>
+                        <td>Add and assign</td>
+                    </tr>
+                    <tr>
+                        <td><code>x -= y</code></td>
+                        <td><code>x = x - y</code></td>
+                        <td>Subtract and assign</td>
+                    </tr>
+                    <tr>
+                        <td><code>x *= y</code></td>
+                        <td><code>x = x * y</code></td>
+                        <td>Multiply and assign</td>
+                    </tr>
+                    <tr>
+                        <td><code>x /= y</code></td>
+                        <td><code>x = x / y</code></td>
+                        <td>Divide and assign</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Increment and Decrement Operators</h3>
+            <p>The <strong>unary operators</strong> require only a single
+                operand. The increment operator (<code>++</code>) adds 1 to a
+                variable, and the <strong>decrement operator</strong>
+                (<code>--</code>) subtracts 1. Both come in two forms based on
+                where the operator is placed:</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Prefix (++x)</h4>
+                    <p>The <strong>prefix increment operator</strong> changes
+                        the variable's value first, then that new value is
+                        used in the rest of the statement.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Postfix (x++)</h4>
+                    <p>The <strong>postfix increment operator</strong> uses
+                        the variable's current value in the statement first,
+                        then changes it afterward.</p>
+                </div>
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: Prefix vs. Postfix</h4>
+                <pre><code><span class="type">int</span> <span class="var">lapNumber</span> = <span class="num">5</span>;
+<span class="type">int</span> <span class="var">reportedLap</span> = --<span class="var">lapNumber</span>;
+<span class="comment">// lapNumber is decremented to 4 first, then reportedLap is set to 4</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"{0} and {1}"</span>, <span class="var">lapNumber</span>, <span class="var">reportedLap</span>);
+<span class="comment">// Output: 4 and 4</span></code></pre>
+            </div>
+
+            <h3>Comparison Operators</h3>
+            <p>A <strong>comparison operator</strong> compares two operands
+                and produces a Boolean result. Equality is tested with
+                <code>==</code> (two equal signs, not one), and inequality is
+                tested with <code>!=</code>.</p>
+
+            <div class="warning-box">
+                A single equal sign (<code>=</code>) assigns a value; a
+                double equal sign (<code>==</code>) compares two values.
+                Confusing the two is one of the most common beginner
+                mistakes in C#.
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-conversion">🔄 Type Conversion</h2>
+
+            <p>When an arithmetic operation uses operands of different types,
+                C# automatically converts the nonconforming operand or
+                operands to a single <strong>unifying type</strong> before
+                performing the calculation. This automatic process is called
+                an <strong>implicit conversion</strong>, and a conversion that
+                the compiler performs on its own, without you writing
+                anything special, is described as happening
+                <strong>implicitly</strong>.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Implicit Conversion</h4>
+                <pre><code><span class="type">int</span> <span class="var">wholeLaps</span> = <span class="num">6</span>;
+<span class="type">double</span> <span class="var">lapDistance</span> = <span class="num">0.25</span>;
+<span class="type">double</span> <span class="var">totalDistance</span> = <span class="var">wholeLaps</span> * <span class="var">lapDistance</span>;
+<span class="comment">// wholeLaps is implicitly converted from int to double before multiplying</span></code></pre>
+            </div>
+
+            <p>An <strong>implicit cast</strong> is always safe because it
+                moves a value from a smaller or less precise type to a
+                larger, more precise one, so no information is lost. Moving
+                in the opposite direction, from a type that can hold more
+                information into one that holds less, requires an
+                <strong>explicit cast</strong>, which you write yourself using
+                parentheses around the target type.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Explicit Cast</h4>
+                <pre><code><span class="type">double</span> <span class="var">averageSpeed</span> = <span class="num">7.85</span>;
+<span class="type">int</span> <span class="var">roundedSpeed</span> = (<span class="type">int</span>)<span class="var">averageSpeed</span>;
+<span class="comment">// roundedSpeed becomes 7; the fractional part is discarded, not rounded</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                Casting a <code>double</code> to an <code>int</code> truncates
+                the decimal portion instead of rounding it. Casting
+                <code>7.85</code> to <code>int</code> produces
+                <code>7</code>, not <code>8</code>. If you need mathematical
+                rounding, use a method such as <code>Math.Round()</code>
+                before casting.
+            </div>
+
+            <p>You explicitly write the target type in parentheses whenever
+                you need to force a conversion the compiler will not perform
+                on its own: <code>(int)</code>, <code>(float)</code>, and
+                similar expressions all instruct the compiler to convert the
+                value that follows.</p>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-chars-strings">🔤 Characters and Strings</h2>
+
+            <h3>The char Data Type</h3>
+            <p>A <code>char</code> variable holds exactly one character,
+                including letters, digits, symbols, and non-printing
+                characters. C# represents characters using
+                <strong>Unicode</strong>, a 16-bit coding scheme capable of
+                representing characters from virtually every written
+                language, not just the basic English alphabet.</p>
+
+            <p>A character literal is enclosed in single quotes. You can also
+                specify a character using its <strong>hexadecimal</strong>
+                Unicode value (<strong>base 16</strong> notation) with the
+                form <code>\u</code> followed by four hex digits.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Declaring char Values</h4>
+                <pre><code><span class="type">char</span> <span class="var">gradeEarned</span> = <span class="string">'A'</span>;
+<span class="type">char</span> <span class="var">capitalA</span> = <span class="string">'\u0041'</span>; <span class="comment">// also the letter A, written in hex</span></code></pre>
+            </div>
+
+            <h3>Escape Sequences</h3>
+            <p>An <strong>escape sequence</strong> represents a special
+                character, such as a new line or a tab, and always begins
+                with a backslash.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Escape Sequence</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>\n</code></td>
+                        <td>New line</td>
+                    </tr>
+                    <tr>
+                        <td><code>\t</code></td>
+                        <td>Tab</td>
+                    </tr>
+                    <tr>
+                        <td><code>\\</code></td>
+                        <td>A literal backslash</td>
+                    </tr>
+                    <tr>
+                        <td><code>\"</code></td>
+                        <td>A literal double quotation mark inside a string</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                A quotation mark that needs to appear inside a regular string
+                must be escaped with <code>\"</code>, because an unescaped
+                quotation mark would prematurely end the string. Raw string
+                literals, covered next, offer a way around this.
+            </div>
+
+            <h3>Raw String Literals</h3>
+            <p>C# 11 introduced <strong>raw string literals</strong>, written
+                with three or more double-quote characters
+                (<code>"""</code>) opening and closing the string. Inside a
+                raw string literal, quotation marks and backslashes are
+                treated as ordinary characters, so you rarely need escape
+                sequences at all.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Raw String Literal</h4>
+                <pre><code><span class="type">string</span> <span class="var">announcement</span> = <span class="string">"""
+Have you heard "Old MacDonald"?
+"""</span>;
+<span class="comment">// The quotation marks around Old MacDonald need no escaping</span></code></pre>
+            </div>
+
+            <h3>The string Data Type</h3>
+            <p>The <code>string</code> data type holds a series of
+                characters. Strings in C# are immutable: once created, a
+                string's contents cannot be changed in place. Operations that
+                appear to modify a string, such as concatenation, actually
+                produce a brand-new string.</p>
+
+            <h3>Comparing Strings</h3>
+            <p>Comparing strings with <code>==</code> checks whether two
+                string variables hold identical text. To compare strings
+                <strong>lexically</strong>, meaning in dictionary order so you
+                can tell not just whether they are equal but which one comes
+                first alphabetically, C# provides dedicated methods.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Equals()</code></td>
+                        <td>Returns true if two strings hold identical text</td>
+                    </tr>
+                    <tr>
+                        <td><code>CompareTo()</code></td>
+                        <td>Instance method; returns a negative, zero, or
+                            positive number showing lexical order relative to
+                            another string</td>
+                    </tr>
+                    <tr>
+                        <td><code>Compare()</code></td>
+                        <td>Static method on the string class; compares two
+                            strings passed in as arguments</td>
+                    </tr>
+                    <tr>
+                        <td><code>StartsWith()</code></td>
+                        <td>Returns true or false depending on whether a
+                            string begins with the specified text</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                <code>StartsWith()</code> is case-sensitive by default, so
+                <code>"Chocolate".StartsWith("ch")</code> returns
+                <code>false</code> while <code>"chocolate".StartsWith("ch")</code>
+                returns <code>true</code>.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: Lexical Comparison</h4>
+                <pre><code><span class="type">string</span> <span class="var">oldName</span> = <span class="string">"Anderson"</span>;
+<span class="type">string</span> <span class="var">newName</span> = <span class="string">"Baxter"</span>;
+
+<span class="type">int</span> <span class="var">result</span> = <span class="var">oldName</span>.<span class="func">CompareTo</span>(<span class="var">newName</span>);
+<span class="comment">// result is negative, because "Anderson" lexically precedes "Baxter"</span></code></pre>
+            </div>
+
+            <h3>Extracting Part of a String</h3>
+            <p>The <code>Substring()</code> method returns a portion of a
+                string, starting at a given character position and,
+                optionally, running for a specified number of characters.
+                String positions are counted starting at zero.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Substring()</h4>
+                <pre><code><span class="type">string</span> <span class="var">fullWord</span> = <span class="string">"overflow"</span>;
+<span class="type">string</span> <span class="var">ending</span> = <span class="var">fullWord</span>.<span class="func">Substring</span>(<span class="num">4</span>);
+<span class="comment">// ending holds "flow", starting at position 4 through the end</span></code></pre>
+            </div>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-enums">🏷️ Enumerations</h2>
+
+            <p>An <strong>enumeration</strong> is a type-safe, self-documenting
+                set of named constants, defined with the <code>enum</code>
+                keyword and placed in a class outside of any method. Being
+                <strong>type-safe</strong> means the compiler only allows a
+                value from that specific enumeration to be assigned to a
+                variable of that type, preventing accidental use of an
+                unrelated number. Being <strong>self-documenting</strong>
+                means the identifier names themselves explain what the
+                values represent, instead of relying on unexplained numbers
+                scattered through the code.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Defining and Using an Enumeration</h4>
+                <pre><code><span class="keyword">enum</span> <span class="type">RaceDistance</span>
+{
+    <span class="var">FIVE_K</span>, <span class="var">TEN_K</span>, <span class="var">HALF_MARATHON</span>, <span class="var">MARATHON</span>
+}
+
+<span class="type">RaceDistance</span> <span class="var">todaysRace</span> = <span class="type">RaceDistance</span>.<span class="var">TEN_K</span>;</code></pre>
+            </div>
+
+            <p>Behind the scenes, each member of an enumeration corresponds
+                to an underlying integer value, starting at zero for the
+                first member and increasing by one for each member that
+                follows, unless you assign specific values yourself. Even
+                so, you refer to enumeration members by name rather than by
+                number, which is what makes the code self-documenting.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-input">⌨️ Console Input</h2>
+
+            <p>An <strong>interactive program</strong> is one that accepts
+                user input while it runs and adjusts its behavior based on
+                that input. A <strong>prompt</strong> is a message a program
+                displays instructing the user what data to enter.</p>
+
+            <h3>Reading Input</h3>
+            <p>The <code>ReadLine()</code> method pauses a console program
+                and waits for the user to type a line of text, ending when
+                the user presses Enter. Whatever the user typed is returned
+                as a <code>string</code>, regardless of whether the
+                characters look like a number.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Prompting and Reading</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">Write</span>(<span class="string">"Enter the number of laps completed: "</span>);
+<span class="type">string</span> <span class="var">lapsEntered</span> = <span class="type">Console</span>.<span class="func">ReadLine</span>();</code></pre>
+            </div>
+
+            <h3>Converting Input to a Number</h3>
+            <p>Because <code>ReadLine()</code> always returns a string, you
+                must convert that string before you can use it in
+                arithmetic. C# offers two common approaches.</p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>The Convert Class</h4>
+                    <p>Static methods such as <code>Convert.ToInt32()</code>,
+                        <code>Convert.ToDouble()</code>, and
+                        <code>Convert.ToByte()</code> convert a value to the
+                        indicated type. <code>Convert.ToByte()</code>
+                        specifically converts a value to an 8-bit unsigned
+                        integer.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Parse() Methods</h4>
+                    <p>Numeric types provide their own static
+                        <code>Parse()</code> method, such as
+                        <code>int.Parse()</code> or <code>double.Parse()</code>,
+                        as an alternative way to change a string into a
+                        number.</p>
+                </div>
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: Converting User Input</h4>
+                <pre><code><span class="type">Console</span>.<span class="func">Write</span>(<span class="string">"Enter your finish time in minutes: "</span>);
+<span class="type">string</span> <span class="var">timeEntered</span> = <span class="type">Console</span>.<span class="func">ReadLine</span>();
+
+<span class="comment">// Using the Convert class</span>
+<span class="type">double</span> <span class="var">finishMinutesA</span> = <span class="type">Convert</span>.<span class="func">ToDouble</span>(<span class="var">timeEntered</span>);
+
+<span class="comment">// Using the double type's own Parse method</span>
+<span class="type">double</span> <span class="var">finishMinutesB</span> = <span class="type">double</span>.<span class="func">Parse</span>(<span class="var">timeEntered</span>);</code></pre>
+            </div>
+
+            <div class="success-box">
+                Both approaches accomplish the same goal. Either
+                <code>double.Parse(ReadLine())</code> or
+                <code>Convert.ToDouble(ReadLine())</code> reads a line of
+                console input and converts it into a usable numeric value in
+                a single step.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 2 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Variable</td>
+                            <td>A named memory location whose value can
+                                change while the program runs</td>
+                        </tr>
+                        <tr>
+                            <td>Named constant</td>
+                            <td><code>const</code>; must be initialized when
+                                declared; value is immutable afterward</td>
+                        </tr>
+                        <tr>
+                            <td>Default int type</td>
+                            <td>A whole-number literal is an <code>int</code>
+                                unless stated otherwise</td>
+                        </tr>
+                        <tr>
+                            <td>Unsigned integral types</td>
+                            <td><code>byte</code>, <code>ushort</code>,
+                                <code>uint</code>, <code>ulong</code>; cannot
+                                hold negative values</td>
+                        </tr>
+                        <tr>
+                            <td>Digit separator</td>
+                            <td>Underscore in a numeric literal, ignored by
+                                the compiler: <code>23_456_789</code></td>
+                        </tr>
+                        <tr>
+                            <td>decimal</td>
+                            <td>Highest precision floating-point type; used
+                                for money</td>
+                        </tr>
+                        <tr>
+                            <td>bool</td>
+                            <td>Holds only <code>true</code> or <code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td>Placeholder</td>
+                            <td>Numbered position in curly braces inside a
+                                format string, such as <code>{0}</code></td>
+                        </tr>
+                        <tr>
+                            <td>String interpolation</td>
+                            <td><code>$"{variableName}"</code> embeds a
+                                variable directly in a string</td>
+                        </tr>
+                        <tr>
+                            <td>"F3" format string</td>
+                            <td>A standard numeric format string with a
+                                precision specifier of 3 decimal places</td>
+                        </tr>
+                        <tr>
+                            <td>Operator precedence</td>
+                            <td>Multiplication, division, remainder evaluate
+                                before addition and subtraction</td>
+                        </tr>
+                        <tr>
+                            <td>Integer division</td>
+                            <td>int / int truncates to a whole number; a
+                                float, double, or decimal operand keeps the
+                                fractional part</td>
+                        </tr>
+                        <tr>
+                            <td>Exponents</td>
+                            <td>No exponent operator; use
+                                <code>Math.Pow(base, exponent)</code></td>
+                        </tr>
+                        <tr>
+                            <td>+=</td>
+                            <td>Add and assign shortcut operator</td>
+                        </tr>
+                        <tr>
+                            <td>Prefix vs. postfix ++/--</td>
+                            <td>Prefix changes the value before it is used;
+                                postfix uses the value first, then changes it</td>
+                        </tr>
+                        <tr>
+                            <td>== vs. =</td>
+                            <td><code>==</code> compares; <code>=</code>
+                                assigns</td>
+                        </tr>
+                        <tr>
+                            <td>Unifying type</td>
+                            <td>The common type C# implicitly converts mixed
+                                operands to before a calculation</td>
+                        </tr>
+                        <tr>
+                            <td>Explicit cast</td>
+                            <td><code>(int)</code>, <code>(float)</code>;
+                                truncates rather than rounds when narrowing</td>
+                        </tr>
+                        <tr>
+                            <td>float / decimal literal suffix</td>
+                            <td>A plain literal defaults to double; use
+                                <code>f</code> for float and <code>m</code>
+                                for decimal</td>
+                        </tr>
+                        <tr>
+                            <td>char</td>
+                            <td>Holds one Unicode character; literal in
+                                single quotes</td>
+                        </tr>
+                        <tr>
+                            <td>Escape sequence</td>
+                            <td>Begins with a backslash: <code>\n</code>,
+                                <code>\t</code>, <code>\"</code></td>
+                        </tr>
+                        <tr>
+                            <td>Raw string literal</td>
+                            <td><code>"""text"""</code>; quotes and
+                                backslashes need no escaping</td>
+                        </tr>
+                        <tr>
+                            <td>Lexical string comparison</td>
+                            <td><code>Equals()</code>, <code>CompareTo()</code>,
+                                <code>Compare()</code></td>
+                        </tr>
+                        <tr>
+                            <td>StartsWith()</td>
+                            <td>Returns true or false; case-sensitive by
+                                default</td>
+                        </tr>
+                        <tr>
+                            <td>Substring()</td>
+                            <td>Returns part of a string starting at a given
+                                zero-based position</td>
+                        </tr>
+                        <tr>
+                            <td>enum</td>
+                            <td>Defines a type-safe, self-documenting set of
+                                named constants</td>
+                        </tr>
+                        <tr>
+                            <td>ReadLine()</td>
+                            <td>Reads a line of console input as a string</td>
+                        </tr>
+                        <tr>
+                            <td>Convert / Parse</td>
+                            <td><code>Convert.ToDouble()</code> and
+                                <code>double.Parse()</code> both convert a
+                                string to a number</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 2: Microsoft Visual C# - Using
+                Data &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

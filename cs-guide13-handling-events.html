@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Guide 13: Microsoft Visual C# - Handling Events</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #06B6D4;
+            --primary-dark: #0E7490;
+            --primary-light: #A5F3FC;
+            --accent: #D97706;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --bg-dark: #1E1B2E;
+            --bg-light: #FAFAF9;
+            --text-dark: #1C1917;
+            --text-light: #FAFAF9;
+            --code-bg: #211D32;
+            --border: #E7E5E4;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #06B6D4 0%, #0E7490 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sticky Header */
+        header {
+            text-align: center;
+            padding: 15px 20px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #A5F3FC 0%, #67E8F9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #A8A29E;
+        }
+
+        /* Navigation Pills */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(6, 182, 212, 0.25);
+            color: #A5F3FC;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(6, 182, 212, 0.4);
+        }
+
+        .nav-pill:hover {
+            background: rgba(6, 182, 212, 0.5);
+            color: white;
+        }
+
+        /* Main Card */
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-top: 20px;
+        }
+
+        /* Intro Banner */
+        .intro-banner {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2D2640 100%);
+            color: var(--text-light);
+            border-radius: 16px;
+            padding: 35px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .intro-banner .badge {
+            background: var(--primary);
+            color: white;
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-banner h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            color: #A5F3FC;
+            margin-bottom: 10px;
+            border: none;
+            padding: 0;
+        }
+
+        .intro-banner p {
+            color: #D6D3D1;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.75rem;
+            color: var(--primary-dark);
+            margin: 55px 0 25px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+            scroll-margin-top: var(--header-offset, 220px);
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 22px 0 10px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin: 0 0 18px 25px;
+            font-size: 1.05rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 8px;
+        }
+
+        /* Callout Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, #ECFEFF 0%, #A5F3FC 100%);
+            border-left: 5px solid var(--primary);
+            padding: 22px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.1rem;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            background: #F5F5F4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #D6D3D1;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0, "calt" 0;
+            font-feature-settings: "liga" 0, "calt" 0;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Syntax highlighting classes */
+        pre .tag {
+            color: #569CD6;
+        }
+
+        pre .attr {
+            color: #9CDCFE;
+        }
+
+        pre .string {
+            color: #CE9178;
+        }
+
+        pre .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        pre .text {
+            color: #D4D4D4;
+        }
+
+        pre .keyword {
+            color: #C586C0;
+        }
+
+        pre .func {
+            color: #DCDCAA;
+        }
+
+        pre .num {
+            color: #B5CEA8;
+        }
+
+        pre .punct {
+            color: #D4D4D4;
+        }
+
+        pre .var {
+            color: #9CDCFE;
+        }
+
+        pre .type {
+            color: #4EC9B0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #FAFAF9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-size: 0.85rem;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.18);
+            transform: translateY(-3px);
+        }
+
+        .concept-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .concept-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+        }
+
+        .concept-card p {
+            margin-bottom: 0;
+            color: #57534E;
+            font-size: 0.95rem;
+        }
+
+        /* Syntax Box */
+        .syntax-box {
+            background: linear-gradient(135deg, #ECFEFF 0%, #A5F3FC 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .syntax-box h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-box pre {
+            margin: 0;
+            background: #1E1B2E;
+        }
+
+        /* Quick Reference Dark Panel */
+        .quick-ref {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 35px 0;
+        }
+
+        .quick-ref h3 {
+            color: #A5F3FC;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+        }
+
+        .quick-ref table {
+            background: #2D2640;
+            box-shadow: none;
+        }
+
+        .quick-ref th {
+            background: #44403C;
+        }
+
+        .quick-ref td {
+            color: #D6D3D1;
+            border-color: #44403C;
+        }
+
+        .quick-ref tr:hover {
+            background: #3C3658;
+        }
+
+        .quick-ref code {
+            background: #1E1B2E;
+            color: #C4B5FD;
+        }
+
+        /* Comparison grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            background: #FAFAF9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+
+        .comparison-item.good {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-item.caution {
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-item.neutral {
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            gap: 0;
+            margin: 25px 0;
+            align-items: stretch;
+        }
+
+        .arch-tier {
+            flex: 1;
+            background: #F5F5F4;
+            border: 2px solid var(--border);
+            border-radius: 0;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .arch-tier:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .arch-tier:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .arch-tier.highlight {
+            background: linear-gradient(135deg, #ECFEFF 0%, #A5F3FC 100%);
+            border-color: var(--primary);
+        }
+
+        .arch-tier .tier-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-tier .tier-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .arch-tier .tier-desc {
+            font-size: 0.82rem;
+            color: #78716C;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            padding: 0 4px;
+        }
+
+        /* Keyword Grid */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword-chip {
+            font-family: 'Fira Code', monospace;
+            font-variant-ligatures: none;
+            background: #F5F5F4;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #0E7490;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            main {
+                padding: 25px 20px;
+            }
+
+            .intro-banner {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                flex-direction: column;
+            }
+
+            .arch-tier:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+
+            .arch-tier:last-child {
+                border-radius: 0 0 12px 12px;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Guide 13: Microsoft Visual C# - Handling Events</h1>
+        <p>Event-Driven Architecture, Delegates, Composed Delegates, Custom
+            and Built-in Event Handlers, Control Component Events, Mouse
+            Events, Keyboard Events, and Managing Multiple Controls</p>
+        <nav class="nav-pills">
+            <a href="#section-fundamentals" class="nav-pill">Event Fundamentals</a>
+            <a href="#section-delegates" class="nav-pill">Delegates</a>
+            <a href="#section-composed" class="nav-pill">Composed Delegates</a>
+            <a href="#section-handlers" class="nav-pill">Event Handlers</a>
+            <a href="#section-control-events" class="nav-pill">Control Events</a>
+            <a href="#section-mouse" class="nav-pill">Mouse Events</a>
+            <a href="#section-keyboard" class="nav-pill">Keyboard Events</a>
+            <a href="#section-multiple" class="nav-pill">Multiple Controls</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+
+            <!-- Intro Banner -->
+            <div class="intro-banner">
+                <div class="badge">13</div>
+                <div>
+                    <h2>Responding to What the User Does</h2>
+                    <p>A GUI program spends most of its life waiting: for a
+                        click, a keystroke, a mouse movement. Rather than
+                        following a single fixed sequence from start to
+                        finish, event-driven programs respond to whatever
+                        the user happens to do, in whatever order they do
+                        it. This guide covers how events are raised and
+                        handled, the delegate objects that connect an event
+                        to the code that responds to it, how mouse and
+                        keyboard events work, and how to manage focus and
+                        shared behavior across several controls at once.</p>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 1 ===================== -->
+            <h2 id="section-fundamentals">⚡ Event-Driven Architecture</h2>
+
+            <p>When something interesting happens to an object, such as a
+                button being clicked, that object is said to have
+                <strong>raised</strong> an event, also described as
+                <strong>firing</strong> or <strong>triggering</strong> the
+                event. A GUI control that generates an event is called an
+                <strong>event sender</strong>. Because these programs
+                perform their tasks in response to user interactions like
+                clicking buttons, rather than following one fixed sequence
+                from beginning to end, they are described as
+                <strong>event-driven</strong>.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">📡</span>
+                    <h4>Event Sender</h4>
+                    <p>The control or object that generates, or raises, an
+                        event, such as a Button being clicked by the user.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🎯</span>
+                    <h4>Event Handler</h4>
+                    <p>Also called an <strong>event receiver</strong>: the
+                        method that executes in response to an event being
+                        raised.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🔌</span>
+                    <h4>Event Wiring</h4>
+                    <p>The act of connecting an event to the resulting
+                        actions that should occur when it fires, linking a
+                        sender's event to a specific handler method.</p>
+                </div>
+            </div>
+
+            <p>The act of calling an event method is described as
+                <strong>raising</strong> the event; a program uses an event
+                to notify a client of a class that some change has occurred
+                within an object of that class, without the object needing
+                to know anything about which specific methods will respond.
+            </p>
+
+            <!-- ===================== SECTION 2 ===================== -->
+            <h2 id="section-delegates">📮 Delegates</h2>
+
+            <p>A <strong>delegate</strong> is an object that encapsulates a
+                reference to a method, defined using the <code>delegate</code>
+                keyword. A C# delegate is comparable to a
+                <strong>function pointer</strong> in C++: a variable type
+                that holds a method's memory address rather than an ordinary
+                data value.</p>
+
+            <div class="syntax-box">
+                <h4>Syntax: Declaring and Using a Delegate</h4>
+                <pre><code><span class="keyword">delegate</span> <span class="type">void</span> <span class="type">AlertHandler</span>(<span class="type">string</span> <span class="var">message</span>);
+
+<span class="keyword">static</span> <span class="type">void</span> <span class="func">PlayChime</span>(<span class="type">string</span> <span class="var">message</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Chime: {0}"</span>, <span class="var">message</span>);
+}
+
+<span class="type">AlertHandler</span> <span class="var">chimeHandler</span> = <span class="func">PlayChime</span>;
+<span class="var">chimeHandler</span>(<span class="string">"Low battery"</span>);</code></pre>
+            </div>
+
+            <p>Any delegate can encapsulate any method that shares its
+                return type and parameter list; the delegate
+                <code>AlertHandler</code> above can hold a reference to
+                <em>any</em> method matching <code>void MethodName(string)</code>,
+                not just <code>PlayChime()</code>.</p>
+
+            <div class="tip-box">
+                For a static method, a delegate simply encapsulates the
+                method itself, since a static method is not tied to any
+                particular object and needs no object reference to be
+                called. A delegate referencing a nonstatic instance method,
+                by contrast, must also keep track of which specific object
+                that method should run on.
+            </div>
+
+            <!-- ===================== SECTION 3 ===================== -->
+            <h2 id="section-composed">🔗 Composed Delegates</h2>
+
+            <p>Multiple delegates can be combined into a single
+                <strong>composed delegate</strong> using the <code>+</code>
+                or <code>+=</code> operators. Invoking a composed delegate
+                calls each of its underlying delegates in sequence, one
+                after another.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Composing Two Delegates</h4>
+                <pre><code><span class="type">AlertHandler</span> <span class="var">chimeHandler</span> = <span class="func">PlayChime</span>;
+<span class="type">AlertHandler</span> <span class="var">flashHandler</span> = <span class="func">FlashLight</span>;
+
+<span class="type">AlertHandler</span> <span class="var">combinedHandler</span> = <span class="var">chimeHandler</span> + <span class="var">flashHandler</span>;
+<span class="var">combinedHandler</span>(<span class="string">"Low battery"</span>);
+<span class="comment">// Calls PlayChime("Low battery") first, then FlashLight("Low battery")</span></code></pre>
+            </div>
+
+            <p>After this assignment, calling <code>combinedHandler(...)</code>
+                invokes both <code>PlayChime()</code> and
+                <code>FlashLight()</code> in the order they were combined,
+                even though <code>combinedHandler</code> is still just a
+                single delegate variable.</p>
+
+            <p>Assigning one delegate directly to another, without
+                combining them, uses ordinary assignment:
+                <code>secondHandler = firstHandler;</code> makes
+                <code>secondHandler</code> reference exactly the same
+                method (or methods) that <code>firstHandler</code> already
+                references.</p>
+
+            <!-- ===================== SECTION 4 ===================== -->
+            <h2 id="section-handlers">🧷 Custom and Built-in Event Handlers</h2>
+
+            <h3>Declaring Your Own Events</h3>
+            <p>To declare your own custom event, you use the
+                <code>delegate</code> keyword to define the delegate type
+                that describes the shape of the handler methods your event
+                will accept, and then declare the event itself using that
+                delegate type together with the <code>event</code> keyword.
+            </p>
+
+            <div class="warning-box">
+                Events are not required to be declared private. In fact,
+                events are typically declared public precisely so that
+                client code outside the class can subscribe its own handler
+                methods to them; declaring an event private would prevent
+                outside code from ever attaching a handler to it at all.
+            </div>
+
+            <h3>The Two-Parameter .NET Convention</h3>
+            <p>Following .NET guidelines, an event delegate's signature is
+                conventionally structured to accept exactly two parameters:
+                an <code>object sender</code> parameter identifying the
+                event's source, and an <code>EventArgs e</code> parameter
+                (or a class derived from <code>EventArgs</code>) carrying
+                any additional details about the event. This two-parameter
+                pattern is a strong convention, not a hard requirement
+                enforced by the C# language itself; C# does not require
+                every event's delegate type to use any specific fixed number
+                of parameters.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Custom Event Following the Convention</h4>
+                <pre><code><span class="keyword">delegate</span> <span class="type">void</span> <span class="type">StockLowEventHandler</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">EventArgs</span> <span class="var">e</span>);
+
+<span class="keyword">class</span> <span class="type">Inventory</span>
+{
+    <span class="keyword">public</span> <span class="keyword">event</span> <span class="type">StockLowEventHandler</span> <span class="var">StockLow</span>;
+}</code></pre>
+            </div>
+
+            <h3>The EventHandler Delegate and EventArgs.Empty</h3>
+            <p>The .NET Framework provides a predefined
+                <code>EventHandler</code> delegate for events that carry no
+                additional information beyond the sender itself, saving you
+                from declaring a custom delegate for every simple event. The
+                <code>EventArgs</code> class has a field named
+                <code>Empty</code>, a read-only instance of
+                <code>EventArgs</code> used precisely for this situation,
+                when there is genuinely no extra event data to pass along.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Using EventHandler and EventArgs.Empty</h4>
+                <pre><code><span class="keyword">public</span> <span class="keyword">event</span> <span class="type">EventHandler</span> <span class="var">StockLow</span>;
+
+<span class="comment">// Raising the event with no extra information to send</span>
+<span class="var">StockLow</span>?.<span class="func">Invoke</span>(<span class="keyword">this</span>, <span class="type">EventArgs</span>.<span class="var">Empty</span>);</code></pre>
+            </div>
+
+            <!-- ===================== SECTION 5 ===================== -->
+            <h2 id="section-control-events">🎛️ Control Component Events</h2>
+
+            <p>Standard GUI Controls, such as Buttons and ListBoxes, already
+                define a set of predefined events you can handle using
+                exactly the same underlying principles that apply to a
+                custom class's own events: a delegate connects the event to
+                whichever handler method you write for it.</p>
+
+            <div class="tip-box">
+                When you double-click a Button on a Form in Visual Studio,
+                the IDE automatically generates the shell of that Button's
+                Click() event handler method, wires it to the Click event
+                for you, and drops your cursor right inside it, ready for
+                you to add your own statements.
+            </div>
+
+            <p>The generated method header for a Button's Click handler
+                follows the standard two-parameter convention: its second
+                parameter is an object of type <code>EventArgs</code>.</p>
+
+            <div class="warning-box">
+                You do not need to examine and fully understand every line
+                of code a control generates before you can use it. Visual
+                Studio's IntelliSense and the Properties window's Events
+                list expose the events and properties a control supports
+                without requiring you to read through its full generated
+                implementation first.
+            </div>
+
+            <!-- ===================== SECTION 6 ===================== -->
+            <h2 id="section-mouse">🖱️ Mouse Events</h2>
+
+            <p>Mouse interactions, such as clicking, pointing, and dragging,
+                are handled using the <code>MouseEventHandler</code>
+                delegate, paired with a <code>MouseEventArgs</code> object
+                that carries the details of the mouse action, such as which
+                button was pressed and exactly where the pointer was
+                located. Objects of the <code>MouseEventArgs</code> class
+                can carry this information for mouse events on any
+                control.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mouse Event</th>
+                        <th>Occurs When</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Click</code></td>
+                        <td>The user clicks the mouse within the control's
+                            boundaries</td>
+                    </tr>
+                    <tr>
+                        <td><code>MouseLeave</code></td>
+                        <td>The mouse cursor leaves the control's boundaries</td>
+                    </tr>
+                    <tr>
+                        <td><code>MouseUp</code></td>
+                        <td>A mouse button is released while the pointer is
+                            still within the control's boundaries</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: A Mouse Event Handler</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">canvasPanel_MouseDown</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">MouseEventArgs</span> <span class="var">e</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Clicked at X:{0}, Y:{1}"</span>, <span class="var">e</span>.<span class="var">X</span>, <span class="var">e</span>.<span class="var">Y</span>);
+}</code></pre>
+            </div>
+
+            <p>You can determine exactly where within a Form the user
+                clicked the mouse pointer by reading the <code>X</code> and
+                <code>Y</code> properties of the <code>MouseEventArgs</code>
+                parameter supplied to the handling method, as shown above.
+            </p>
+
+            <!-- ===================== SECTION 7 ===================== -->
+            <h2 id="section-keyboard">⌨️ Keyboard Events</h2>
+
+            <p>An event resulting from a user's interaction with the
+                keyboard is known as a <strong>key event</strong>. Depending
+                on the specific event, keyboard event handlers are created
+                using either the <code>KeyEventHandler</code> delegate,
+                paired with a <code>KeyEventArgs</code> parameter, or the
+                <code>KeyPressEventHandler</code> delegate, paired with a
+                <code>KeyPressEventArgs</code> parameter.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Keyboard Event Handler</h4>
+                <pre><code><span class="keyword">private</span> <span class="type">void</span> <span class="func">searchTextBox_KeyDown</span>(<span class="type">object</span> <span class="var">sender</span>, <span class="type">KeyEventArgs</span> <span class="var">e</span>)
+{
+    <span class="keyword">if</span> (<span class="var">e</span>.<span class="var">KeyData</span> == <span class="type">Keys</span>.<span class="var">Enter</span>)
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Searching..."</span>);
+    }
+}</code></pre>
+            </div>
+
+            <p>The <code>KeyData</code> property of the
+                <code>KeyEventArgs</code> class stores the key code for the
+                key that was pressed, along with any modifier key, such as
+                Shift or Ctrl, that was held down at the same time.</p>
+
+            <!-- ===================== SECTION 8 ===================== -->
+            <h2 id="section-multiple">🗂️ Managing Multiple Controls</h2>
+
+            <h3>TabStop and TabIndex</h3>
+            <p>The Boolean <code>TabStop</code> property of a Control
+                identifies whether that control will serve as a stopping
+                place as the user presses the Tab key to move between
+                controls. The numeric <code>TabIndex</code> property sets
+                where in that sequence a given control falls.</p>
+
+            <div class="warning-box">
+                If the TabIndex values of two or more controls on the same
+                form are all set to 0, their tab order relative to each
+                other becomes ambiguous; C# does not guarantee which of the
+                tied controls receives focus first, since a clear, unique
+                tab order depends on each control having a distinct
+                TabIndex value.
+            </div>
+
+            <h3>The Enter Key and AcceptButton</h3>
+            <p>When a Form has multiple GUI controls and the user presses
+                Enter, the button assigned to that Form's
+                <code>AcceptButton</code> property is usually activated
+                automatically, exactly as if the user had clicked it
+                directly. A thin, highlighted box conventionally drawn
+                around whichever button is currently set as the Form's
+                AcceptButton is what leads users to expect that pressing
+                Enter will trigger that button's action.</p>
+
+            <h3>Sharing One Event Handler Across Multiple Controls</h3>
+            <p>A single event-handler method already written for one
+                control can also be used to handle the same kind of event
+                raised by a different control. In the Visual Studio
+                Properties window, after clicking the small lightning bolt
+                icon to view a control's list of available events, you can
+                select the dropdown next to any specific event and choose
+                an existing method already written for another control,
+                rather than generating a brand-new handler.</p>
+
+            <div class="tip-box">
+                If a single Control should raise several different events,
+                each with its own distinct response, you can select that
+                Control in Visual Studio, open the Events list using the
+                lightning bolt icon in the Properties window, and then write
+                separate action statements for each event you care about,
+                one handler method per event.
+            </div>
+
+            <!-- ===================== SUMMARY ===================== -->
+            <div class="quick-ref">
+                <h3>Guide 13 Quick Reference Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Raise / fire / trigger an event</td>
+                            <td>An object experiencing something noteworthy</td>
+                        </tr>
+                        <tr>
+                            <td>Event sender</td>
+                            <td>The control or object that generates an
+                                event</td>
+                        </tr>
+                        <tr>
+                            <td>Event handler (event receiver)</td>
+                            <td>The method that runs in response to an
+                                event</td>
+                        </tr>
+                        <tr>
+                            <td>Event wiring</td>
+                            <td>Connecting an event to its resulting actions</td>
+                        </tr>
+                        <tr>
+                            <td>Event-driven</td>
+                            <td>Describes programs that respond to user
+                                interaction rather than a fixed sequence</td>
+                        </tr>
+                        <tr>
+                            <td>Delegate</td>
+                            <td>An object encapsulating a method reference;
+                                similar to a C++ function pointer</td>
+                        </tr>
+                        <tr>
+                            <td>Delegate matching rule</td>
+                            <td>Any method with a matching return type and
+                                parameter list qualifies</td>
+                        </tr>
+                        <tr>
+                            <td>Static method delegates</td>
+                            <td>Encapsulate just the method; no object
+                                reference needed</td>
+                        </tr>
+                        <tr>
+                            <td>Composed delegate</td>
+                            <td>Built with + or +=; calls each underlying
+                                delegate in sequence</td>
+                        </tr>
+                        <tr>
+                            <td>Events and access</td>
+                            <td>Typically public, not private, so clients
+                                can subscribe</td>
+                        </tr>
+                        <tr>
+                            <td>Two-parameter convention</td>
+                            <td>object sender, EventArgs e; a guideline, not
+                                a language requirement</td>
+                        </tr>
+                        <tr>
+                            <td>EventHandler</td>
+                            <td>Predefined delegate for events with no extra
+                                information</td>
+                        </tr>
+                        <tr>
+                            <td>EventArgs.Empty</td>
+                            <td>Read-only EventArgs instance for events with
+                                nothing extra to pass</td>
+                        </tr>
+                        <tr>
+                            <td>Double-click a control</td>
+                            <td>Generates the shell of its default event
+                                handler</td>
+                        </tr>
+                        <tr>
+                            <td>MouseEventHandler / MouseEventArgs</td>
+                            <td>Delegate and argument class for mouse
+                                interactions</td>
+                        </tr>
+                        <tr>
+                            <td>Click / MouseLeave / MouseUp</td>
+                            <td>Click inside bounds / cursor exits bounds /
+                                button released inside bounds</td>
+                        </tr>
+                        <tr>
+                            <td>MouseEventArgs.X / .Y</td>
+                            <td>Determine where within the form the click
+                                occurred</td>
+                        </tr>
+                        <tr>
+                            <td>Key event</td>
+                            <td>An event resulting from keyboard interaction</td>
+                        </tr>
+                        <tr>
+                            <td>KeyEventHandler / KeyPressEventHandler</td>
+                            <td>The two delegates used for keyboard events</td>
+                        </tr>
+                        <tr>
+                            <td>KeyEventArgs.KeyData</td>
+                            <td>Stores the key code plus any modifier key</td>
+                        </tr>
+                        <tr>
+                            <td>TabStop</td>
+                            <td>Boolean; whether a control is a stop in the
+                                Tab sequence</td>
+                        </tr>
+                        <tr>
+                            <td>TabIndex</td>
+                            <td>Numeric position in the tab order</td>
+                        </tr>
+                        <tr>
+                            <td>Duplicate TabIndex values</td>
+                            <td>Tab order between the tied controls becomes
+                                ambiguous</td>
+                        </tr>
+                        <tr>
+                            <td>AcceptButton</td>
+                            <td>Activated automatically when the user
+                                presses Enter</td>
+                        </tr>
+                        <tr>
+                            <td>Lightning bolt icon</td>
+                            <td>Properties window icon showing a control's
+                                available events</td>
+                        </tr>
+                        <tr>
+                            <td>Shared event handlers</td>
+                            <td>One method can handle the same event type
+                                for multiple controls</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>C# Quick Guides &bull; Guide 13: Microsoft Visual C# -
+                Handling Events &bull; Learning Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var header = document.querySelector("header");
+
+            function updateHeaderOffset() {
+                if (header) {
+                    var offset = header.offsetHeight + 20;
+                    document.documentElement.style.setProperty("--header-offset", offset + "px");
+                }
+            }
+
+            updateHeaderOffset();
+            window.addEventListener("resize", updateHeaderOffset);
+            window.addEventListener("load", updateHeaderOffset);
+
+            /* Re-apply after a hash-based navigation click, in case fonts/wrapping
+               shifted the header height between page load and the click. */
+            document.querySelectorAll(".nav-pill").forEach(function (pill) {
+                pill.addEventListener("click", function () {
+                    updateHeaderOffset();
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>
