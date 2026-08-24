@@ -635,14 +635,21 @@
             Type Conversion, Characters, Strings, Enumerations, and Console
             Input</p>
         <nav class="nav-pills">
-            <a href="#section-variables" class="nav-pill">Variables &amp; Constants</a>
+            <a href="#section-variables" class="nav-pill">Variables &amp;
+                Constants</a>
             <a href="#section-data-types" class="nav-pill">Data Types</a>
-            <a href="#section-output" class="nav-pill">Output &amp; Formatting</a>
-            <a href="#section-operators" class="nav-pill">Operators &amp; Math</a>
+            <a href="#section-output" class="nav-pill">Output &amp;
+                Formatting</a>
+            <a href="#section-operators" class="nav-pill">Operators &amp;
+                Math</a>
             <a href="#section-conversion" class="nav-pill">Type Conversion</a>
-            <a href="#section-chars-strings" class="nav-pill">Characters &amp; Strings</a>
+            <a href="#section-chars-strings" class="nav-pill">Characters &amp;
+                Strings</a>
             <a href="#section-enums" class="nav-pill">Enumerations</a>
             <a href="#section-input" class="nav-pill">Console Input</a>
+            <a href="https://docs.google.com/document/d/19M0DBWYQo0MtpvkL7Q9-rMF0IqG6EEW6SVBtXwXlx40/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
+
         </nav>
     </header>
 
@@ -677,7 +684,8 @@
                 the variable and reserves storage for it by specifying its
                 <strong>data type</strong>, which describes the format and
                 amount of memory the value will occupy and what operations
-                can be performed with it.</p>
+                can be performed with it.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: Declaring and Initializing a Variable</h4>
@@ -690,7 +698,8 @@
 
             <p>Assigning a value to a variable at the same moment it is
                 declared is called <strong>initialization</strong>. The equal
-                sign (<code>=</code>) is C#'s <strong>assignment operator</strong>;
+                sign (<code>=</code>) is C#'s <strong>assignment
+                    operator</strong>;
                 it does not mean "equals" the way it does in math class, it
                 means "store the value on the right into the variable on the
                 left." An <strong>assignment</strong> is the act of storing a
@@ -703,7 +712,8 @@
                 an identifier that represents a value that cannot change once
                 it is set. You create a named constant with the
                 <code>const</code> keyword, and it must be initialized at the
-                moment it is declared.</p>
+                moment it is declared.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: Declaring a Named Constant</h4>
@@ -813,13 +823,15 @@
                 smallest integral type that comfortably fits the values a
                 variable will realistically hold; a <code>byte</code>, for
                 example, is well suited to something like a person's age,
-                which will never need a large range or a negative value.</p>
+                which will never need a large range or a negative value.
+            </p>
 
             <h3>Digit Separators</h3>
             <p>C# allows an underscore (<code>_</code>) as a
                 <strong>digit separator</strong> inside a numeric literal,
                 purely to improve readability. Digit separators are ignored
-                by the compiler and do not change the value in any way.</p>
+                by the compiler and do not change the value in any way.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Digit Separators</h4>
@@ -831,7 +843,8 @@
             <p>The <strong>floating-point</strong> data types hold numbers
                 with decimal positions and can represent varying numbers of
                 <strong>significant digits</strong>, the digits in a number
-                that carry meaning for its precision.</p>
+                that carry meaning for its precision.
+            </p>
 
             <table>
                 <thead>
@@ -845,7 +858,8 @@
                     <tr>
                         <td><code>float</code></td>
                         <td>About 7 significant digits</td>
-                        <td>Lower-precision, smaller-memory scientific values</td>
+                        <td>Lower-precision, smaller-memory scientific values
+                        </td>
                     </tr>
                     <tr>
                         <td><code>double</code></td>
@@ -856,7 +870,8 @@
                     <tr>
                         <td><code>decimal</code></td>
                         <td>28 to 29 significant digits</td>
-                        <td>Money and other values requiring exact precision</td>
+                        <td>Money and other values requiring exact precision
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -869,7 +884,8 @@
                     the right choice for financial and monetary calculations
                     where rounding errors are unacceptable. A
                     <code>decimal</code> literal is written with an
-                    <code>m</code> suffix, such as <code>19.99m</code>.</p>
+                    <code>m</code> suffix, such as <code>19.99m</code>.
+                </p>
             </div>
 
             <div class="tip-box">
@@ -889,14 +905,16 @@
                 <strong>scientific notation</strong>, such as
                 <code>9.32E-05</code>. This means 9.32 multiplied by 10 raised
                 to the -5 power, or 0.0000932. The letter <code>E</code>
-                separates the significant digits from the power of ten.</p>
+                separates the significant digits from the power of ten.
+            </p>
 
             <h3>The Boolean Type</h3>
             <p>A <strong>bool</strong> (Boolean) variable can hold only one of
                 two values: <code>true</code> or <code>false</code>. A
                 <strong>Boolean expression</strong> is any expression that
                 evaluates to a Boolean value, most commonly the result of a
-                comparison.</p>
+                comparison.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: Declaring a Boolean Variable</h4>
@@ -960,7 +978,8 @@
             <p>A placeholder can include an alignment component, written as
                 <code>{index, width}</code>. A positive width right-aligns the
                 value within a column of that many characters; a negative
-                width left-aligns it.</p>
+                width left-aligns it.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Right-Aligned Columns</h4>
@@ -990,22 +1009,30 @@
                     <tr>
                         <td><code>"F"</code></td>
                         <td>Fixed-point, default 2 decimal places</td>
-                        <td><code>19.99.ToString("F")</code> &rarr; <code>19.99</code></td>
+                        <td><code>19.99.ToString("F")</code> &rarr;
+                            <code>19.99</code>
+                        </td>
                     </tr>
                     <tr>
                         <td><code>"F3"</code></td>
                         <td>Fixed-point with 3 decimal places</td>
-                        <td><code>19.99.ToString("F3")</code> &rarr; <code>19.990</code></td>
+                        <td><code>19.99.ToString("F3")</code> &rarr;
+                            <code>19.990</code>
+                        </td>
                     </tr>
                     <tr>
                         <td><code>"C"</code></td>
                         <td>Currency, formatted for the current culture</td>
-                        <td><code>19.99.ToString("C")</code> &rarr; <code>$19.99</code></td>
+                        <td><code>19.99.ToString("C")</code> &rarr;
+                            <code>$19.99</code>
+                        </td>
                     </tr>
                     <tr>
                         <td><code>"N"</code></td>
                         <td>Number with thousands separators</td>
-                        <td><code>23456.ToString("N")</code> &rarr; <code>23,456.00</code></td>
+                        <td><code>23456.ToString("N")</code> &rarr;
+                            <code>23,456.00</code>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -1029,7 +1056,8 @@
                 right. The core arithmetic operators are addition
                 (<code>+</code>), subtraction (<code>-</code>),
                 multiplication (<code>*</code>), division (<code>/</code>),
-                and remainder (<code>%</code>).</p>
+                and remainder (<code>%</code>).
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: The Remainder Operator</h4>
@@ -1061,7 +1089,8 @@
                 power, call the <code>Math.Pow()</code> method, which takes
                 the base and the exponent as its two arguments and returns a
                 <code>double</code>.
-                <pre style="margin-top:12px;"><code><span class="type">double</span> <span class="var">cubedValue</span> = <span class="type">Math</span>.<span class="func">Pow</span>(<span class="num">3</span>, <span class="num">3</span>);
+                <pre
+                    style="margin-top:12px;"><code><span class="type">double</span> <span class="var">cubedValue</span> = <span class="type">Math</span>.<span class="func">Pow</span>(<span class="num">3</span>, <span class="num">3</span>);
 <span class="comment">// cubedValue holds 27, since 3 raised to the 3rd power is 27</span></code></pre>
             </div>
 
@@ -1075,7 +1104,8 @@
                 precedence and are evaluated first, from the innermost pair
                 outward. When operators share the same precedence level,
                 <strong>associativity</strong> determines whether they group
-                left to right or right to left.</p>
+                left to right or right to left.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Precedence Changes the Result</h4>
@@ -1155,7 +1185,8 @@
             <p>A <strong>comparison operator</strong> compares two operands
                 and produces a Boolean result. Equality is tested with
                 <code>==</code> (two equal signs, not one), and inequality is
-                tested with <code>!=</code>.</p>
+                tested with <code>!=</code>.
+            </p>
 
             <div class="warning-box">
                 A single equal sign (<code>=</code>) assigns a value; a
@@ -1174,7 +1205,8 @@
                 an <strong>implicit conversion</strong>, and a conversion that
                 the compiler performs on its own, without you writing
                 anything special, is described as happening
-                <strong>implicitly</strong>.</p>
+                <strong>implicitly</strong>.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Implicit Conversion</h4>
@@ -1190,7 +1222,8 @@
                 in the opposite direction, from a type that can hold more
                 information into one that holds less, requires an
                 <strong>explicit cast</strong>, which you write yourself using
-                parentheses around the target type.</p>
+                parentheses around the target type.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Explicit Cast</h4>
@@ -1223,7 +1256,8 @@
                 characters. C# represents characters using
                 <strong>Unicode</strong>, a 16-bit coding scheme capable of
                 representing characters from virtually every written
-                language, not just the basic English alphabet.</p>
+                language, not just the basic English alphabet.
+            </p>
 
             <p>A character literal is enclosed in single quotes. You can also
                 specify a character using its <strong>hexadecimal</strong>
@@ -1303,7 +1337,8 @@ Have you heard "Old MacDonald"?
                 string variables hold identical text. To compare strings
                 <strong>lexically</strong>, meaning in dictionary order so you
                 can tell not just whether they are equal but which one comes
-                first alphabetically, C# provides dedicated methods.</p>
+                first alphabetically, C# provides dedicated methods.
+            </p>
 
             <table>
                 <thead>
@@ -1339,7 +1374,8 @@ Have you heard "Old MacDonald"?
             <div class="tip-box">
                 <code>StartsWith()</code> is case-sensitive by default, so
                 <code>"Chocolate".StartsWith("ch")</code> returns
-                <code>false</code> while <code>"chocolate".StartsWith("ch")</code>
+                <code>false</code> while
+                <code>"chocolate".StartsWith("ch")</code>
                 returns <code>true</code>.
             </div>
 
@@ -1377,7 +1413,8 @@ Have you heard "Old MacDonald"?
                 unrelated number. Being <strong>self-documenting</strong>
                 means the identifier names themselves explain what the
                 values represent, instead of relying on unexplained numbers
-                scattered through the code.</p>
+                scattered through the code.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Defining and Using an Enumeration</h4>
@@ -1430,7 +1467,8 @@ Have you heard "Old MacDonald"?
                         <code>Convert.ToByte()</code> convert a value to the
                         indicated type. <code>Convert.ToByte()</code>
                         specifically converts a value to an 8-bit unsigned
-                        integer.</p>
+                        integer.
+                    </p>
                 </div>
                 <div class="comparison-item neutral">
                     <h4>Parse() Methods</h4>
@@ -1438,7 +1476,8 @@ Have you heard "Old MacDonald"?
                         <code>Parse()</code> method, such as
                         <code>int.Parse()</code> or <code>double.Parse()</code>,
                         as an alternative way to change a string into a
-                        number.</p>
+                        number.
+                    </p>
                 </div>
             </div>
 
@@ -1492,7 +1531,8 @@ Have you heard "Old MacDonald"?
                             <td>Unsigned integral types</td>
                             <td><code>byte</code>, <code>ushort</code>,
                                 <code>uint</code>, <code>ulong</code>; cannot
-                                hold negative values</td>
+                                hold negative values
+                            </td>
                         </tr>
                         <tr>
                             <td>Digit separator</td>
@@ -1506,7 +1546,9 @@ Have you heard "Old MacDonald"?
                         </tr>
                         <tr>
                             <td>bool</td>
-                            <td>Holds only <code>true</code> or <code>false</code></td>
+                            <td>Holds only <code>true</code> or
+                                <code>false</code>
+                            </td>
                         </tr>
                         <tr>
                             <td>Placeholder</td>
@@ -1537,7 +1579,8 @@ Have you heard "Old MacDonald"?
                         <tr>
                             <td>Exponents</td>
                             <td>No exponent operator; use
-                                <code>Math.Pow(base, exponent)</code></td>
+                                <code>Math.Pow(base, exponent)</code>
+                            </td>
                         </tr>
                         <tr>
                             <td>+=</td>
@@ -1546,7 +1589,8 @@ Have you heard "Old MacDonald"?
                         <tr>
                             <td>Prefix vs. postfix ++/--</td>
                             <td>Prefix changes the value before it is used;
-                                postfix uses the value first, then changes it</td>
+                                postfix uses the value first, then changes it
+                            </td>
                         </tr>
                         <tr>
                             <td>== vs. =</td>
@@ -1567,7 +1611,8 @@ Have you heard "Old MacDonald"?
                             <td>float / decimal literal suffix</td>
                             <td>A plain literal defaults to double; use
                                 <code>f</code> for float and <code>m</code>
-                                for decimal</td>
+                                for decimal
+                            </td>
                         </tr>
                         <tr>
                             <td>char</td>
@@ -1577,7 +1622,8 @@ Have you heard "Old MacDonald"?
                         <tr>
                             <td>Escape sequence</td>
                             <td>Begins with a backslash: <code>\n</code>,
-                                <code>\t</code>, <code>\"</code></td>
+                                <code>\t</code>, <code>\"</code>
+                            </td>
                         </tr>
                         <tr>
                             <td>Raw string literal</td>
@@ -1587,7 +1633,8 @@ Have you heard "Old MacDonald"?
                         <tr>
                             <td>Lexical string comparison</td>
                             <td><code>Equals()</code>, <code>CompareTo()</code>,
-                                <code>Compare()</code></td>
+                                <code>Compare()</code>
+                            </td>
                         </tr>
                         <tr>
                             <td>StartsWith()</td>
@@ -1612,7 +1659,8 @@ Have you heard "Old MacDonald"?
                             <td>Convert / Parse</td>
                             <td><code>Convert.ToDouble()</code> and
                                 <code>double.Parse()</code> both convert a
-                                string to a number</td>
+                                string to a number
+                            </td>
                         </tr>
                     </tbody>
                 </table>
