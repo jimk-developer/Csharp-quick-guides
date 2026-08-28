@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="assets/favicon.png">
-    <title>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual Studio IDE</title>
+    <title>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual
+        Studio IDE</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@700&display=swap"
         rel="stylesheet">
@@ -630,21 +631,26 @@
 
 <body>
     <header>
-        <h1>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual Studio IDE</h1>
+        <h1>Guide 3: Microsoft Visual C# - Using GUI Objects and the Visual
+            Studio IDE</h1>
         <p>The Visual Studio IDE, Forms and Controls, Properties, Events and
             Methods, Focus and Tab Order, Formatting Output, Design Time and
             Runtime, Refactoring, and Console vs. GUI Applications</p>
         <nav class="nav-pills">
             <a href="#section-ide" class="nav-pill">The IDE</a>
-            <a href="#section-forms-controls" class="nav-pill">Forms &amp; Controls</a>
+            <a href="#section-forms-controls" class="nav-pill">Forms &amp;
+                Controls</a>
             <a href="#section-properties" class="nav-pill">Properties</a>
             <a href="#section-fonts" class="nav-pill">Fonts</a>
             <a href="#section-events" class="nav-pill">Events &amp; Methods</a>
             <a href="#section-focus" class="nav-pill">Focus &amp; Tab Order</a>
             <a href="#section-formatting" class="nav-pill">Formatting Output</a>
-            <a href="#section-execution" class="nav-pill">Design Time &amp; Runtime</a>
+            <a href="#section-execution" class="nav-pill">Design Time &amp;
+                Runtime</a>
             <a href="#section-refactoring" class="nav-pill">Refactoring</a>
             <a href="#section-console-gui" class="nav-pill">Console vs. GUI</a>
+            <a href="https://docs.google.com/document/d/1M1qxwQkEguGRND9bLPsI3DKdSvTmWKu8uqZxL_Oyxyk/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -737,7 +743,8 @@
                 provides an interface for collecting, displaying, and
                 delivering information to a user. Every Windows Forms
                 project begins with a form; Visual C# names this first form
-                <code>Form1</code> by default.</p>
+                <code>Form1</code> by default.
+            </p>
 
             <p>You use the C# <code>Form</code> class to build a user
                 interface with buttons, text entry boxes, and similar devices
@@ -802,7 +809,8 @@
                 <code>button1</code> or <code>textBox1</code>, but
                 professional programmers usually replace these defaults with
                 a more descriptive name before writing any event-handling
-                code.</p>
+                code.
+            </p>
 
             <div class="tip-box">
                 A common naming convention combines camel casing with the
@@ -895,7 +903,8 @@
                         a <strong>fixed-pitch</strong>, or
                         <strong>monospaced</strong>, font whenever you need
                         values in different controls to visually line up in
-                        columns.</p>
+                        columns.
+                    </p>
                 </div>
             </div>
 
@@ -929,7 +938,8 @@
                 control's <strong>Name</strong> property, followed by an
                 underscore and the word <code>Click</code>. A button named
                 <code>reportButton</code>, for instance, produces a method
-                named <code>reportButton_Click()</code> by default.</p>
+                named <code>reportButton_Click()</code> by default.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A Generated Click Method</h4>
@@ -946,7 +956,8 @@
                 event-handling methods as <code>private</code> by default,
                 meaning only code within the same class can call them
                 directly; the event system itself is what triggers a private
-                Click method when the user clicks the associated control.</p>
+                Click method when the user clicks the associated control.
+            </p>
 
             <h3>Removing Orphaned Methods</h3>
             <p>An <strong>orphaned method</strong> is an empty
@@ -975,7 +986,8 @@
                 can have focus at any given moment. When a user types into a
                 TextBox, that TextBox is the control with focus, and
                 whatever is typed is stored in that TextBox's
-                <strong>Text</strong> property.</p>
+                <strong>Text</strong> property.
+            </p>
 
             <p>Pressing the Tab key moves focus from one control to the
                 next. The order in which controls receive focus as the user
@@ -1094,7 +1106,8 @@
             </div>
 
             <!-- ===================== SECTION 10 ===================== -->
-            <h2 id="section-console-gui">🖥️ Console Applications vs. GUI Applications</h2>
+            <h2 id="section-console-gui">🖥️ Console Applications vs. GUI
+                Applications</h2>
 
             <p>Choosing between a console application and a GUI application
                 is a tradeoff between development speed and user
@@ -1146,7 +1159,8 @@
                         </tr>
                         <tr>
                             <td>Solution Explorer</td>
-                            <td>Views and manages project files and settings</td>
+                            <td>Views and manages project files and settings
+                            </td>
                         </tr>
                         <tr>
                             <td>Node</td>
@@ -1205,7 +1219,8 @@
                         <tr>
                             <td>Orphaned method</td>
                             <td>An empty, unused event method; remove via the
-                                Properties window, not by deleting code alone</td>
+                                Properties window, not by deleting code alone
+                            </td>
                         </tr>
                         <tr>
                             <td>Focus</td>
