@@ -738,6 +738,19 @@
             <!-- ===================== SECTION 2 ===================== -->
             <h2 id="section-forms-controls">🪟 Forms and Controls</h2>
 
+            <h3>Starting a New Windows Forms Project</h3>
+            <p>Before you can drag a single control onto a form, you need a
+                project for that form to live in. From the Visual Studio
+                start screen (or the <strong>File</strong> menu of an
+                already-open instance), choose
+                <strong>Create a new project</strong>, select the
+                <strong>Windows Forms App</strong> project template, and give
+                the project a name and save location. Visual Studio then
+                generates the new project and opens it with an empty form —
+                <code>Form1</code> — already sitting on the Form Designer,
+                ready for you to begin adding controls.
+            </p>
+
             <h3>What Is a Form?</h3>
             <p>A <strong>form</strong> is a rectangular GUI object that
                 provides an interface for collecting, displaying, and
@@ -838,11 +851,11 @@
 
             <h3>Exploring the Properties Window</h3>
             <p>The Properties window lists every configurable property for
-                whatever object is currently selected on the form. A form
-                exposes a large number of properties, far more than any
-                single program is likely to use, covering everything from
-                its size and color to how it behaves when the user resizes
-                or minimizes it.</p>
+                whatever object is currently selected on the form. A Form
+                object exposes <strong>well over 100 properties</strong> —
+                far more than any single program is likely to use — covering
+                everything from its size and color to how it behaves when
+                the user resizes or minimizes it.</p>
 
             <div class="tip-box">
                 When properties are sorted alphabetically in the Properties
@@ -948,6 +961,30 @@
     <span class="type">MessageBox</span>.<span class="func">Show</span>(<span class="string">"Report generated."</span>);
 }</code></pre>
             </div>
+
+            <div class="warning-box">
+                Code inside a <code>Click()</code> method still has to follow
+                every ordinary C# syntax rule — including ending each
+                statement with a semicolon. A single missing semicolon
+                anywhere in an event-handling method is a syntax error, and a
+                syntax error keeps the <strong>entire program</strong> from
+                compiling. The result isn't a partially-working form; nothing
+                runs at all until the error is fixed.
+            </div>
+
+            <h3>Main() vs. Click() Methods</h3>
+            <p>A Windows Forms App project still has the familiar
+                <code>Main()</code> method, but it plays a different role
+                than it did in a console program. Visual Studio generates
+                <code>Main()</code> once per project, and it runs
+                automatically the instant the program starts — its job is
+                simply to create and display the starting form (for example,
+                by calling <code>Application.Run(new Form1())</code>).
+                <code>Click()</code> methods, by contrast, are generated one
+                per control as you double-click buttons and other objects in
+                the designer, and each one runs only when its specific event
+                is triggered by the user — not automatically at startup, and
+                not necessarily at all during a given run of the program.</p>
 
             <h3>Access Specifiers</h3>
             <p>The keyword that appears in a method header and dictates
@@ -1168,9 +1205,19 @@
                                 or code section</td>
                         </tr>
                         <tr>
+                            <td>Starting a new project</td>
+                            <td>File &rarr; Create a new project &rarr;
+                                Windows Forms App template</td>
+                        </tr>
+                        <tr>
                             <td>Form1</td>
                             <td>Default name of the first form in a new
                                 Windows Forms project</td>
+                        </tr>
+                        <tr>
+                            <td>Form class property count</td>
+                            <td>Well over 100 properties &mdash; far more
+                                than any one program will use</td>
                         </tr>
                         <tr>
                             <td>Controls</td>
@@ -1210,6 +1257,18 @@
                             <td>Generated Click method name</td>
                             <td>controlName_Click(), created by
                                 double-clicking the control</td>
+                        </tr>
+                        <tr>
+                            <td>Main() vs. Click()</td>
+                            <td>Main() runs once, automatically, to start the
+                                program; each Click() runs only when its
+                                event is triggered</td>
+                        </tr>
+                        <tr>
+                            <td>Missing semicolon in a Click() method</td>
+                            <td>A syntax error that keeps the whole program
+                                from compiling &mdash; not just that one
+                                method</td>
                         </tr>
                         <tr>
                             <td>Access specifier</td>
