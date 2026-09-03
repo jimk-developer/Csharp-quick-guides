@@ -633,7 +633,8 @@
         <h1>Guide 4: Microsoft Visual C# - Making Decisions</h1>
         <p>Planning Program Logic, Single- and Dual-Alternative Decisions,
             Compound Boolean Expressions, Switch Structures, the Ternary
-            Operator, Negation, and Decision-Making Best Practices</p>
+            Operator, Negation, Decision-Making Best Practices, and
+            Translating Language into Logic</p>
         <nav class="nav-pills">
             <a href="#section-planning" class="nav-pill">Planning Logic</a>
             <a href="#section-single" class="nav-pill">Single-Alternative</a>
@@ -645,8 +646,12 @@
             <a href="#section-switch" class="nav-pill">Switch Structures</a>
             <a href="#section-ternary" class="nav-pill">Ternary Operator</a>
             <a href="#section-negation" class="nav-pill">Negation</a>
-            <a href="#section-best-practices" class="nav-pill">Best Practices</a>
+            <a href="#section-best-practices" class="nav-pill">Best
+                Practices</a>
+            <a href="#section-language" class="nav-pill">Language vs. Logic</a>
             <a href="#section-gui" class="nav-pill">Decisions in GUIs</a>
+            <a href="https://docs.google.com/document/d/1NygGp1WCQtjIYd5rzf7ikcYnoxnlgDFvLmavo35DHPE/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -665,9 +670,10 @@
                         dual-alternative decisions, how to build compound
                         Boolean expressions with AND and OR, how switch
                         structures handle many exact matches at once, the
-                        shorthand ternary operator, negating a condition, and
-                        the habits that keep decision-making code correct and
-                        readable.</p>
+                        shorthand ternary operator, negating a condition, why
+                        an English request does not always translate into the
+                        operator it seems to name, and the habits that keep
+                        decision-making code correct and readable.</p>
                 </div>
             </div>
 
@@ -694,13 +700,47 @@
                 </div>
             </div>
 
-            <p>Flowchart shapes carry specific meanings. A
-                <strong>diamond</strong> shape indicates a decision, marking
-                a point where the program chooses between alternative
-                courses of action based on some condition. A
-                <strong>parallelogram</strong> typically represents an
-                input or output operation, such as reading a value from the
-                user or displaying a result.</p>
+            <p>Flowchart shapes carry specific meanings. To represent a
+                decision, flowchart creators use a <strong>diamond</strong>
+                shape to hold a question, and they draw paths to the
+                alternative courses of action emerging from the corners of
+                the diamond.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shape</th>
+                        <th>Represents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Diamond</strong></td>
+                        <td>A decision — a question with alternative courses
+                            of action leading away from it</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parallelogram</strong></td>
+                        <td>An input or output statement, such as reading a
+                            value from the user or displaying a result</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rectangle</strong></td>
+                        <td>A processing step, such as a calculation or an
+                            assignment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flowline</strong></td>
+                        <td>An arrow connecting shapes to show the order in
+                            which steps occur</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>You can create a meaningful flowchart using only rectangles,
+                diamonds, and flowlines, but parallelograms have
+                traditionally been used to set input and output statements
+                apart from other processing.</p>
 
             <h3>Sequence Structures vs. Decision Structures</h3>
             <table>
@@ -725,11 +765,38 @@
                 </tbody>
             </table>
 
+            <p>These are the only two names you need here. Any structure in
+                which a condition determines whether a step is taken, or
+                which of several alternative steps is taken, is a
+                <strong>decision</strong> structure — so terms like
+                "single-decision," "dual-decision," and "branched" all
+                describe kinds of decision structures, never a sequence
+                structure. A sequence structure may contain any number of
+                steps, but one task follows another with no chance to branch
+                away or skip a step. Note also that "literal" and "fixed"
+                are not structures at all; a literal is a type of value,
+                such as the number 5.
+            </p>
+
+            <div class="highlight-box">
+                <h4>All Computer Decisions Are True-or-False Decisions</h4>
+                <p>When reduced to their most basic form, every decision a
+                    program makes is a true-or-false decision. Program code
+                    never asks an open question like "What number did the
+                    user enter?" Instead it asks a series of yes-or-no
+                    questions: "Did the user enter a 1?" "If not, did the
+                    user enter a 2?" "If not, did the user enter a 3?"</p>
+            </div>
+
             <div class="tip-box">
                 A <strong>control statement</strong> is any statement that
-                determines the order in which other statements execute.
-                Decision structures are one type of control statement; the
-                rest of this guide focuses on how C# implements them.
+                determines the order in which other statements execute. The
+                if expression that precedes a block in a decision structure
+                <em>is</em> the control statement for that structure,
+                because it controls the flow of program logic at that point
+                in execution. Note the distinction in vocabulary: sequence
+                and decision are types of <em>structure</em>, while if and
+                if-else are types of <em>statement</em>.
             </div>
 
             <!-- ===================== SECTION 2 ===================== -->
@@ -752,18 +819,39 @@
             </div>
 
             <h3>Blocks</h3>
-            <p>A <strong>block</strong> is a group of statements contained
-                within a pair of curly braces. When an if statement's true
-                case requires more than one statement, those statements must
-                be wrapped in a block so the compiler knows they all belong
-                together.</p>
+            <p>A <strong>block</strong> is a collection of one or more
+                statements contained within a pair of curly braces. If you
+                want to execute two or more statements when a condition is
+                true — and simply move on to the next unit of code when it
+                is false — those statements must be placed within a block.
+                Blocking them with braces is the only way to make multiple
+                statements depend on a single if.</p>
 
             <div class="tip-box">
-                It is legal, though not required, to use a block around even
-                a single statement. Many programmers wrap every if statement
-                in curly braces, even a one-line true case, simply because
-                it makes later edits (like adding a second statement) safer
-                and less error-prone.
+                It is <strong>perfectly legal</strong>, though not required,
+                to use a block around even a single statement. Creating a
+                block that contains no statements at all is also legal in
+                C#. Blocking a single statement that depends on an if is a
+                useful habit, because when the program is later modified to
+                include multiple dependent statements, the braces are
+                already there as a reminder to use a block.
+            </div>
+
+            <div class="warning-box">
+                <strong>Indentation alone does nothing.</strong> The C#
+                compiler pays no attention to indentation, so indented
+                statements that are not enclosed in braces do not depend on
+                the if at all. In the code below, the second
+                <code>WriteLine</code> looks like part of the decision, but
+                it is a separate statement that executes no matter what the
+                user enters.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: Misleading Indentation Without Braces</h4>
+                <pre><code><span class="keyword">if</span> (<span class="var">pizzaDiameter</span> == <span class="num">8</span>)
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You will get 4 slices."</span>);   <span class="comment">// depends on the if</span>
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"8-inch pizzas bake faster."</span>);  <span class="comment">// ALWAYS executes</span></code></pre>
             </div>
 
             <h3>Nested if Statements</h3>
@@ -802,7 +890,8 @@
                 to <code>x</code>, and in C# this specific mistake with a
                 numeric variable inside an if condition fails to compile,
                 because an if condition must evaluate to a <code>bool</code>,
-                not an <code>int</code>.</p>
+                not an <code>int</code>.
+            </p>
 
             <!-- ===================== SECTION 3 ===================== -->
             <h2 id="section-dual">⚖️ Dual-Alternative Decisions</h2>
@@ -870,7 +959,8 @@
             <p>Starting with C# 9, you can express certain AND conditions
                 using the <code>and</code> keyword together with
                 <code>is</code>, particularly when testing whether a single
-                value falls within a range.</p>
+                value falls within a range.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Range Test with is and and</h4>
@@ -881,17 +971,41 @@
 }
 
 <span class="comment">// C# 9 pattern-matching equivalent</span>
-<span class="keyword">if</span> (<span class="var">age</span> <span class="keyword">is</span> &gt;= <span class="num">13</span> <span class="keyword">and</span> &lt;= <span class="num">19</span>)
+<span class="keyword">if</span> (<span class="var">age</span> <span class="keyword">is</span> (&gt;= <span class="num">13</span> <span class="keyword">and</span> &lt;= <span class="num">19</span>))
 {
     <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Teenager"</span>);
 }</code></pre>
             </div>
 
             <p>Both statements above test the same range and produce the
-                same result. The <code>is</code>/<code>and</code> form
-                avoids repeating the variable name on both sides of the
-                comparison, which is its main advantage over
-                <code>&&</code> for this kind of range test.</p>
+                same result. Note the parts of the pattern form: the
+                variable name, then the keyword <code>is</code>, then the
+                comparisons joined by <code>and</code>, enclosed in
+                parentheses. The <code>is</code> keyword is
+                <strong>required</strong> — leaving it out is an error, and
+                so is attaching the comparison group directly to the
+                variable name, as in
+                <code>if (age(&gt;= 13 and &lt;= 19))</code>. The parentheses
+                around the comparison group are the conventional way to
+                write this pattern and are used throughout this guide.
+            </p>
+
+            <div class="comparison">
+                <div class="comparison-item good">
+                    <h4>✔️ Advantage of and</h4>
+                    <p>You do not have to write a complete Boolean
+                        expression on both sides of <code>and</code>. The
+                        variable name appears only once, which sometimes
+                        makes the code more concise.</p>
+                </div>
+                <div class="comparison-item caution">
+                    <h4>⚠️ Disadvantage of and</h4>
+                    <p>You must use the extra keyword <code>is</code>. And
+                        there is <strong>no performance benefit</strong> —
+                        short-circuit evaluation is used with either format,
+                        so the choice is purely about readability.</p>
+                </div>
+            </div>
 
             <!-- ===================== SECTION 5 ===================== -->
             <h2 id="section-or">🔀 Compound Expressions with OR</h2>
@@ -916,6 +1030,17 @@
                 expression is never evaluated, because the overall result is
                 already known to be true.</p>
 
+            <div class="warning-box">
+                Note the division of labor between the two conditional
+                operators. Only <code>&&</code> can replace nested if
+                statements, because nesting requires every condition to hold
+                before the dependent statement runs.
+                The <code>||</code> operator expresses the opposite idea —
+                that any single condition is enough — so it
+                <strong>cannot</strong> substitute for nested ifs. Neither
+                can the XOR operator described in the next section.
+            </div>
+
             <h3>The or and is Keywords (C# 9)</h3>
             <p>C# 9 offers a similar pattern-matching alternative for OR
                 conditions using <code>or</code> with <code>is</code>,
@@ -937,6 +1062,39 @@
 }</code></pre>
             </div>
 
+            <div class="tip-box">
+                The advantages and disadvantages of <code>or</code> match
+                those of <code>and</code>: it is more concise because you do
+                not need a complete Boolean expression on both sides, but it
+                requires the extra <code>is</code> keyword and offers no
+                performance gain. This is especially useful when an if
+                statement compares <strong>the same variable against
+                    several other values or variables</strong>. Instead of
+                repeating the variable name in every comparison, write it
+                once before <code>is</code>, then list just the comparison
+                operator and value for each part, separated by
+                <code>or</code>.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: One Variable, Several Comparisons</h4>
+                <pre><code><span class="comment">// Repetitive version</span>
+<span class="keyword">if</span> (<span class="var">size</span> == <span class="var">SMALL</span> || <span class="var">size</span> == <span class="var">MEDIUM</span> || <span class="var">size</span> == <span class="var">LARGE</span>)
+
+<span class="comment">// More concise C# 9 equivalent</span>
+<span class="keyword">if</span> (<span class="var">size</span> <span class="keyword">is</span> (== <span class="var">SMALL</span> <span class="keyword">or</span> == <span class="var">MEDIUM</span> <span class="keyword">or</span> == <span class="var">LARGE</span>))</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Conciseness is the <em>only</em> thing the
+                <code>or</code> pattern buys you here. Swapping
+                <code>||</code> for the non-conditional <code>|</code>
+                operator is sometimes possible — as long as losing
+                short-circuit evaluation would not cause a side effect — but
+                it does nothing to shorten the code, since the variable name
+                still has to be repeated in every comparison.
+            </div>
+
             <!-- ===================== SECTION 6 ===================== -->
             <h2 id="section-logical">🔧 Logical vs. Conditional Operators</h2>
 
@@ -947,7 +1105,12 @@
                 versions behave differently in one important way: they do
                 not support short-circuit evaluation. Every part of the
                 expression is always evaluated, even when the overall result
-                is already determined by the first part.</p>
+                is already determined by the first part. Because they lack
+                that behavior, <code>&</code> and <code>|</code> are
+                sometimes called the <strong>non-conditional</strong>
+                operators, in contrast to the conditional operators
+                <code>&&</code> and <code>||</code>.
+            </p>
 
             <div class="warning-box">
                 Because the logical AND and logical OR operators always
@@ -965,21 +1128,73 @@
             <p>When the <code>&</code> and <code>|</code> operators are used
                 between two integer expressions rather than two Boolean
                 expressions, they are called <strong>bitwise operators</strong>,
-                and they perform a bit-by-bit comparison of the two integers'
-                underlying binary representations instead of any Boolean
-                logic.</p>
+                and they are used to manipulate the individual bits of
+                values, performing a bit-by-bit comparison of the two
+                integers' underlying binary representations instead of any
+                Boolean logic.</p>
+
+            <div class="success-box">
+                Because <code>&&</code> and <code>||</code> do use
+                short-circuit evaluation, an ordinary compound condition
+                built from the <strong>conditional</strong> operators — such
+                as <code>if (hasCoupon || isVeteran || age >= 65)</code> —
+                does <strong>not</strong> pose a high risk of side effects.
+                Side effects are a concern with the single-character
+                <code>&</code> and <code>|</code> operators.
+            </div>
+
+            <h3>The Logical Exclusive OR (XOR) Operator</h3>
+            <p>C# also has a <strong>logical exclusive OR</strong>, or
+                logical XOR, operator, written as a caret
+                (<code>^</code>). For any two expressions x and y, the
+                expression <code>x ^ y</code> is true only if one of the
+                expressions is true and the other is false, which makes it
+                work much like the inequality operator. XOR is
+                <strong>not</strong> a conditional operator, and it cannot
+                substitute for nested if statements the way <code>&&</code>
+                can.
+            </p>
 
             <!-- ===================== SECTION 7 ===================== -->
             <h2 id="section-precedence">📐 Combining AND and OR</h2>
 
             <p>You can combine as many <code>&&</code> and <code>||</code>
                 operators together in a single expression as a program
-                requires. When both appear in the same expression,
-                <code>&&</code> is evaluated before <code>||</code>, the same
-                way multiplication is evaluated before addition in an
-                arithmetic expression. Parentheses can always be added to
-                make the intended grouping explicit and easier to read,
-                regardless of the default precedence.</p>
+                requires.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expression Contains</th>
+                        <th>Order of Evaluation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A series of <strong>only</strong> <code>&&</code>
+                            or <strong>only</strong> <code>||</code>
+                            operators</td>
+                        <td>Evaluated from <strong>left to right</strong>, as
+                            far as is necessary to determine the value of the
+                            entire expression</td>
+                    </tr>
+                    <tr>
+                        <td><code>&&</code> and <code>||</code> mixed in the
+                            same expression</td>
+                        <td><strong>Not</strong> necessarily left to right.
+                            The <code>&&</code> operators take precedence,
+                            meaning they are evaluated first — the same way
+                            multiplication is evaluated before addition in
+                            arithmetic</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Parentheses can always be added to make the intended
+                grouping explicit and easier to read. More importantly,
+                parentheses <strong>override</strong> the default
+                precedence, so they are how you force an OR condition to be
+                evaluated before an AND condition.</p>
 
             <div class="syntax-box">
                 <h4>Example: Mixing AND and OR</h4>
@@ -991,12 +1206,93 @@
 <span class="keyword">if</span> ((<span class="var">isMember</span> &amp;&amp; <span class="var">orderTotal</span> &gt; <span class="num">75</span>) || <span class="var">hasFreeShippingCode</span>)</code></pre>
             </div>
 
+            <h3>Using Parentheses to Override Precedence</h3>
+            <p>Suppose students may skip the final exam if <em>(1)</em> they
+                either attended all class sessions or completed an extra
+                credit project, <strong>and</strong> <em>(2)</em> their
+                current grade is at least 90. Because <code>&&</code> takes
+                precedence, the OR condition must be placed in parentheses
+                to match that requirement.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Parentheses Change the Meaning</h4>
+                <pre><code><span class="comment">// CORRECT - the OR test happens first, then the grade must also pass.</span>
+<span class="keyword">if</span> ((<span class="var">hasPerfectAttendance</span> || <span class="var">hasExtraCredit</span>) &amp;&amp; <span class="var">grade</span> &gt;= <span class="num">90</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Eligible to skip final exam"</span>);
+}
+
+<span class="comment">// WRONG - without the parentheses, &amp;&amp; binds first, so this reads as</span>
+<span class="comment">// hasPerfectAttendance || (hasExtraCredit &amp;&amp; grade &gt;= 90).</span>
+<span class="comment">// A student with perfect attendance and a grade of 50 would qualify.</span>
+<span class="keyword">if</span> (<span class="var">hasPerfectAttendance</span> || <span class="var">hasExtraCredit</span> &amp;&amp; <span class="var">grade</span> &gt;= <span class="num">90</span>)</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Adding parentheses around the <code>&&</code> portion —
+                <code>hasPerfectAttendance || (hasExtraCredit && grade >= 90)</code>
+                — changes nothing at all, because <code>&&</code> was
+                already going to be evaluated first. Only parentheses placed
+                around the <code>||</code> portion actually alter the order
+                of evaluation.
+            </div>
+
             <h3>Truth Tables</h3>
             <p>A <strong>truth table</strong> is the best tool for working
-                out every possible outcome of a compound Boolean expression:
-                a table that lists every combination of true and false
-                values for each part of the expression, alongside the
-                overall result each combination produces.</p>
+                out every possible outcome of a compound Boolean expression.
+                It is a diagram used in mathematics and logic that describes
+                the truth of an entire expression based on the truth of its
+                parts: each row represents a different combination of true
+                and false values for the parts of the expression, alongside
+                the overall result that combination produces.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>x</th>
+                        <th>y</th>
+                        <th>x && y</th>
+                        <th>x || y</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>true</td>
+                        <td>true</td>
+                        <td>true</td>
+                        <td>true</td>
+                    </tr>
+                    <tr>
+                        <td>true</td>
+                        <td>false</td>
+                        <td>false</td>
+                        <td>true</td>
+                    </tr>
+                    <tr>
+                        <td>false</td>
+                        <td>true</td>
+                        <td>false</td>
+                        <td>true</td>
+                    </tr>
+                    <tr>
+                        <td>false</td>
+                        <td>false</td>
+                        <td>false</td>
+                        <td>false</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Reading down the columns confirms the two rules in a single
+                glance: <code>x && y</code> is true <em>only</em> when both
+                parts are true, and <code>x || y</code> is false
+                <em>only</em> when both parts are false. A flowchart, by
+                contrast, shows the actions taken once an entire expression
+                evaluates to true or false; it does not show how the smaller
+                expressions inside a compound expression combine to produce
+                that final result, which is why a truth table is the better
+                tool for this particular job.
+            </p>
 
             <!-- ===================== SECTION 8 ===================== -->
             <h2 id="section-switch">🔢 Switch Structures</h2>
@@ -1027,6 +1323,17 @@
 }</code></pre>
             </div>
 
+            <div class="tip-box">
+                Read the anatomy of the example above carefully. The
+                <strong>case labels</strong> — <code>case 1:</code>,
+                <code>case 2:</code>, <code>case 3:</code> — are the lines
+                that identify which course of action the structure takes,
+                because they hold the values compared against the switch
+                expression. The <code>WriteLine</code> lines are the actions
+                themselves, and the <code>break</code> lines exit the
+                structure; neither of those determines which path is chosen.
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -1043,9 +1350,12 @@
                     </tr>
                     <tr>
                         <td><code>case</code></td>
-                        <td>Followed by a <strong>case label</strong>, one
-                            possible value that might equal the switch
-                            expression</td>
+                        <td>Followed by one possible value that might equal
+                            the switch expression, then a colon. The whole
+                            expression — for example, <code>case 1:</code> —
+                            is a <strong>case label</strong>, and it is the
+                            case labels that identify which course of action
+                            the structure takes</td>
                     </tr>
                     <tr>
                         <td><code>break</code></td>
@@ -1055,27 +1365,47 @@
                     <tr>
                         <td><code>default</code></td>
                         <td>Specifies the action to take when the test
-                            expression does not match any case</td>
+                            expression does not match any case.
+                            <code>default:</code> is <em>not</em> a case
+                            label, because it names no value to match
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
+            <div class="tip-box">
+                The <code>default</code> label is <strong>optional</strong>.
+                If the switch expression does not match any case label and
+                there is no default section, the program simply continues
+                with the next executable statement after the switch
+                structure. Even so, it is usually considered good
+                programming practice to include a default label.
+            </div>
+
             <div class="warning-box">
-                Every case section must end in a way that clearly exits the
-                switch structure, most often with <code>break</code>,
-                though <code>return</code> is also used when the case
-                appears inside a method that should immediately hand back a
-                value. If C# reaches the end of a case section's statement
-                list without hitting <code>break</code>, <code>return</code>,
-                or another way out, the compiler produces an error rather
-                than silently falling through to the next case.
+                <strong>The "no fall-through rule."</strong> Every case
+                section must end in a way that clearly exits the switch
+                structure — most often with <code>break</code>, though
+                <code>return</code> or <code>throw</code> can also end a
+                case. The keyword <code>break</code> is by far the most
+                commonly used. If C# reaches the end of a case section's
+                statement list without hitting one of these, the compiler
+                produces an error. Not allowing code to reach the end of a
+                case that contains one or more statements is known as the
+                <strong>no fall-through rule</strong>. In this respect C#
+                differs from languages such as Java and C++, where writing a
+                case without a break lets all subsequent cases execute until
+                a break is encountered.
             </div>
 
             <h3>Using an Enumeration with a Switch</h3>
-            <p>Case label values become much clearer when used together with
-                an <strong>enumeration</strong> instead of plain numbers,
-                since each case then reads as a self-documenting name rather
-                than an unexplained integer.</p>
+            <p>An <strong>enumeration</strong>, which begins with the
+                <code>enum</code> keyword, allows you to apply values to a
+                list of constants. Case label values become much clearer
+                when used together with an enumeration instead of plain
+                numbers, since each case then reads as a self-documenting
+                name rather than an unexplained integer.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Switch with an Enumeration</h4>
@@ -1097,6 +1427,36 @@
 }</code></pre>
             </div>
 
+            <h4>Assigning Integer Values and Casting User Input</h4>
+            <p>You can assign specific integer values to the constants in an
+                enumeration. When a user enters an integer, that value can
+                be cast to an enumeration value inside the switch control
+                statement; the enumeration values then become the governing
+                types for each case.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Enumeration Values Applied to Constants</h4>
+                <pre><code><span class="comment">// Applies integer values to a list of constants:</span>
+<span class="comment">// RED is 1, BLUE is 2, YELLOW is 3, WHITE is 4.</span>
+<span class="keyword">enum</span> <span class="type">Color</span> { <span class="var">RED</span> = <span class="num">1</span>, <span class="var">BLUE</span>, <span class="var">YELLOW</span>, <span class="var">WHITE</span> }
+
+<span class="type">int</span> <span class="var">color</span> = <span class="type">Convert</span>.<span class="func">ToInt32</span>(<span class="type">Console</span>.<span class="func">ReadLine</span>());
+
+<span class="comment">// The entered integer is cast to an enumeration value.</span>
+<span class="keyword">switch</span> ((<span class="type">Color</span>)<span class="var">color</span>)
+{
+    <span class="keyword">case</span> <span class="type">Color</span>.<span class="var">RED</span>:
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You chose red."</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="type">Color</span>.<span class="var">BLUE</span>:
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You chose blue."</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Unrecognized choice."</span>);
+        <span class="keyword">break</span>;
+}</code></pre>
+            </div>
+
             <div class="tip-box">
                 When a program repeatedly uses <code>||</code> to compare
                 the same variable against several different exact values,
@@ -1113,7 +1473,8 @@
                 arguments, provides an abbreviated way to write a simple
                 if-else statement. Its three arguments are a test
                 expression, a result to use when the test is true, and a
-                result to use when the test is false.</p>
+                result to use when the test is false.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax and Example: The Ternary Operator</h4>
@@ -1130,7 +1491,75 @@
                 is functionally identical to a full if-else statement that
                 assigns <code>15.00</code> in the true branch and
                 <code>5.00</code> in the false branch, just written in a
-                single line.</p>
+                single line.
+            </p>
+
+            <h3>Counting Operands: Unary, Binary, and Ternary</h3>
+            <p>Operators in C# are classified by how many operands, or
+                arguments, they require. The conditional operator
+                <code>?:</code> is the <strong>only ternary operator in
+                    C#</strong>.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Classification</th>
+                        <th>Operands</th>
+                        <th>Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Unary</strong></td>
+                        <td>One</td>
+                        <td><code>!isTaken</code>, <code>-price</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binary</strong></td>
+                        <td>Two, one on each side of the operator</td>
+                        <td><code>a + b</code>, <code>x != y</code>,
+                            <code>p && q</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ternary</strong></td>
+                        <td>Three: a test expression, a true result, and a
+                            false result</td>
+                        <td><code>age >= 12 ? 15.00 : 5.00</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Using the Conditional Operator Inside Output</h3>
+            <p>The conditional operator is most often applied when you want
+                to use the result as an expression — for example, by
+                displaying it — without creating an intermediate variable.
+                Placed inside an interpolated string, the whole conditional
+                expression must be wrapped in parentheses within the braces,
+                and each string result keeps its own quotation marks.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Ternary Expression in an Interpolated String</h4>
+                <pre><code><span class="comment">// CORRECT</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>($<span class="string">"{(orderTotal &gt;= 50 ? "</span><span class="string">Free shipping</span><span class="string">" : "</span><span class="string">$5 shipping</span><span class="string">")}"</span>);
+
+<span class="comment">// WRONG - quotation marks omitted around the results,</span>
+<span class="comment">// so the compiler reads them as invalid identifiers.</span>
+<span class="comment">// WriteLine((orderTotal &gt;= 50) ? Free shipping : $5 shipping);</span>
+
+<span class="comment">// WRONG - the ? and : symbols appear in the wrong order.</span>
+<span class="comment">// WriteLine((orderTotal &gt;= 50) : "Free shipping" ? "$5 shipping");</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                Order matters and is easy to get backwards. The result
+                <em>before</em> the colon is used when the test is
+                <strong>true</strong>, and the result <em>after</em> the
+                colon is used when it is <strong>false</strong>. Swapping
+                the two produces code that compiles cleanly but displays the
+                wrong message — a logical error rather than a syntax error.
+            </div>
 
             <!-- ===================== SECTION 10 ===================== -->
             <h2 id="section-negation">🚫 Negation</h2>
@@ -1150,22 +1579,65 @@
 }</code></pre>
             </div>
 
+            <h3>The ! Operator vs. the != Operator</h3>
+            <p>These two operators look related but are used very
+                differently. An exclamation point followed by an equal sign
+                forms the "not equal to" comparison operator, which is a
+                <strong>binary</strong> operator: it compares two operands.
+                An exclamation point that is <em>not</em> followed by an
+                equal sign is the NOT operator, a <strong>unary</strong>
+                operator that reverses the meaning of a single Boolean
+                expression.
+            </p>
+
+            <div class="warning-box">
+                Some other programming languages use <code>&lt;&gt;</code>
+                to mean "not equal to," but <code>&lt;&gt;</code> is
+                <strong>not an operator in C# at all</strong>. The two
+                characters are used separately as the relational operators
+                "less than" and "greater than."
+            </div>
+
             <h3>Negating Comparisons Directly</h3>
             <p>Rather than wrapping a comparison in <code>!(...)</code>, it
                 is often clearer to rewrite the comparison using its
-                opposite operator. For example, <code>!(temperature &lt; 80)</code>
-                means exactly the same thing as <code>temperature &gt;= 80</code>,
+                opposite operator. For example,
+                <code>!(temperature &lt; 80)</code>
+                means exactly the same thing as
+                <code>temperature &gt;= 80</code>,
                 and <code>!(pressure &lt;= 30)</code> means the same thing as
                 <code>pressure &gt; 30</code>. Applying this to a compound
                 expression, <code>!(a) && !(b)</code> can be rewritten
                 directly as the AND of each comparison's opposite, without
-                changing what the overall expression evaluates to.</p>
+                changing what the overall expression evaluates to.
+            </p>
 
             <h3>The is not Syntax (C# 9)</h3>
             <p>Starting with C# 9, you can replace the <code>!</code>
                 operator with the <code>is not</code> pattern without
                 changing how the code functions, which some programmers find
-                easier to read aloud as ordinary English.</p>
+                easier to read aloud as ordinary English. The keyword
+                <code>not</code> must always be used together with the
+                keyword <code>is</code>; <code>not</code> cannot stand in
+                for <code>!</code> on its own.
+            </p>
+
+            <div class="warning-box">
+                Using <code>is not</code> may be easier for a
+                <em>human reader</em> to understand, but it makes
+                <strong>no difference whatsoever to the compiler</strong>.
+                It is not faster, and it does not make the code easier for
+                C# to process. The only advantage is readability.
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: is not with a Range</h4>
+                <pre><code><span class="comment">// Produces output when num falls OUTSIDE the range LOW through HIGH.</span>
+<span class="keyword">if</span> (<span class="var">num</span> <span class="keyword">is not</span> (&gt;= <span class="var">LOW</span> <span class="keyword">and</span> &lt;= <span class="var">HIGH</span>))
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Value is out of range"</span>);
+}</code></pre>
+            </div>
 
             <div class="syntax-box">
                 <h4>Example: ! vs. is not</h4>
@@ -1183,7 +1655,8 @@
             </div>
 
             <!-- ===================== SECTION 11 ===================== -->
-            <h2 id="section-best-practices">✅ Decision-Making Best Practices</h2>
+            <h2 id="section-best-practices">✅ Decision-Making Best Practices
+            </h2>
 
             <h3>Range Checks and Range Matches</h3>
             <p>A <strong>range check</strong> is a series of if statements
@@ -1193,7 +1666,8 @@
                 individual values. A closely related idea, a
                 <strong>range match</strong>, tests a value against a set of
                 defined ranges to determine which one it falls into,
-                typically to assign a different result for each range.</p>
+                typically to assign a different result for each range.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A Range Match with if-else if</h4>
@@ -1224,6 +1698,63 @@
                 confirmed to be greater than 2.
             </div>
 
+            <h4>Writing a Correct and Efficient Range Check</h4>
+            <p>New programmers frequently introduce incorrect or
+                inefficient code when writing range checks. Two rules
+                prevent almost all of these errors. First, use the
+                <code>if…else if…else</code> pattern rather than a series of
+                separate if statements. Second, for efficiency, begin with
+                the condition that is <strong>most likely to be
+                    true</strong>, and never test a condition that has
+                already been established by elimination.
+            </p>
+
+            <div class="comparison">
+                <div class="comparison-item good">
+                    <h4>✔️ Correct and Efficient</h4>
+                    <pre><code><span class="keyword">if</span> (<span class="var">customerAge</span> &gt;= <span class="num">12</span>)
+    <span class="var">entryFee</span> = <span class="num">20</span>;
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="var">customerAge</span> &gt;= <span class="num">3</span>)
+    <span class="var">entryFee</span> = <span class="num">12</span>;
+<span class="keyword">else</span>
+    <span class="var">entryFee</span> = <span class="num">0</span>;</code></pre>
+                </div>
+                <div class="comparison-item caution">
+                    <h4>⚠️ Works, but Wasteful</h4>
+                    <pre><code><span class="keyword">if</span> (<span class="var">customerAge</span> &gt;= <span class="num">12</span>)
+    <span class="var">entryFee</span> = <span class="num">20</span>;
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="var">customerAge</span> &gt;= <span class="num">3</span>)
+    <span class="var">entryFee</span> = <span class="num">12</span>;
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="var">customerAge</span> &lt; <span class="num">3</span>)
+    <span class="var">entryFee</span> = <span class="num">0</span>;</code></pre>
+                    <p>The final test is unnecessary. If the age is not 3 or
+                        greater, it must be less than 3.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Separate if statements are the classic mistake.</strong>
+                Replacing the <code>else if</code> clauses above with three
+                plain if statements breaks the logic, because each one is
+                tested regardless of what came before. After
+                <code>if (customerAge >= 12) entryFee = 20;</code> correctly
+                assigns 20, the next statement
+                <code>if (customerAge >= 3) entryFee = 12;</code> is
+                <em>also</em> true for that same customer and overwrites the
+                value with 12. The <code>else</code> keyword is what stops
+                execution from continuing through the rest of the chain.
+            </div>
+
+            <div class="tip-box">
+                Two structures are poor choices for range checks. Nested if
+                statements do not work well because when the outermost
+                condition is false, none of the inner conditions are checked
+                at all. A switch structure is usually inappropriate because
+                it tests for exact matches, meaning you would need a
+                separate case label for every individual value in the range
+                — unmanageable for anything more than a handful of values.
+            </div>
+
             <h3>Common Syntax Errors to Avoid</h3>
             <div class="concept-grid">
                 <div class="concept-card">
@@ -1242,41 +1773,222 @@
                         its own complete Boolean expression. Writing
                         <code>size == 1 || 2</code> does not test whether
                         size equals 1 or 2; it must be written as
-                        <code>size == 1 || size == 2</code>.</p>
+                        <code>size == 1 || size == 2</code>.
+                    </p>
                 </div>
             </div>
 
             <h3>Brace Placement Style</h3>
-            <p>Placing the opening curly brace of an if block on the same
-                line as the if expression, rather than on its own line
-                beneath it, is a recognized programming style sometimes
-                called <strong>Kernighan and Ritchie style</strong>. Either
-                brace placement style compiles identically; the choice is a
-                matter of team convention and readability preference, not a
-                functional difference.</p>
+            <p>In C#, it is customary to align a block's opening and closing
+                braces, each on its own line. Some programmers prefer to
+                place the opening brace on the same line as the if
+                expression instead. That style is called
+                <strong>K &amp; R style</strong>, named for Brian Kernighan
+                and Dennis Ritchie, who wrote the first book on the C
+                programming language.
+            </p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>K &amp; R Style</h4>
+                    <pre><code><span class="keyword">if</span> (<span class="var">total</span> &gt; <span class="num">100</span>) {
+    <span class="var">discount</span> = <span class="num">10</span>;
+}</code></pre>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Allman Style</h4>
+                    <pre><code><span class="keyword">if</span> (<span class="var">total</span> &gt; <span class="num">100</span>)
+{
+    <span class="var">discount</span> = <span class="num">10</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <p>Allman style places braces on their own line, as the examples
+                throughout this guide do. A third convention, GNU style,
+                uses broken braces with indented blocks. All of them compile
+                identically; the choice is a matter of team convention and
+                readability preference, not a functional difference.</p>
 
             <!-- ===================== SECTION 12 ===================== -->
+            <h2 id="section-language">🗣️ When Language Does Not Match Logic
+            </h2>
+
+            <p>One of the most common sources of logical errors in decision
+                making has nothing to do with C# syntax at all. Everyday
+                English often describes a condition in words that do
+                <em>not</em> translate directly into the operator you
+                actually need. The word "and" in a request very frequently
+                calls for the <code>||</code> operator in the code.
+            </p>
+
+            <h3>English "and" Often Means OR in Logic</h3>
+
+            <p>Consider this request: <em>"Display a promotional code to a
+                    website visitor when they place an item in the shopping
+                    cart <strong>and</strong> when they click on the 'Sale'
+                    tab."</em> Although the request says "and," it describes
+                two separate situations in which the same action should
+                occur. Only one of them has to be true, so the logic
+                requires an OR operator.</p>
+
+            <div class="syntax-box">
+                <h4>Example: "Pink and Purple Items" Needs ||</h4>
+                <pre><code><span class="comment">// Request: "Change the discount to 0.25 for pink and purple items."</span>
+
+<span class="comment">// WRONG - itemColor can never be both strings at once,</span>
+<span class="comment">// so discount is never changed.</span>
+<span class="keyword">if</span> (<span class="var">itemColor</span> == <span class="string">"pink"</span> &amp;&amp; <span class="var">itemColor</span> == <span class="string">"purple"</span>)
+    <span class="var">discount</span> = <span class="num">0.25</span>;
+
+<span class="comment">// CORRECT - either color qualifies.</span>
+<span class="keyword">if</span> (<span class="var">itemColor</span> == <span class="string">"pink"</span> || <span class="var">itemColor</span> == <span class="string">"purple"</span>)
+    <span class="var">discount</span> = <span class="num">0.25</span>;
+
+<span class="comment">// Also correct, using the C# 9 pattern form:</span>
+<span class="keyword">if</span> (<span class="var">itemColor</span> <span class="keyword">is</span> (== <span class="string">"pink"</span> <span class="keyword">or</span> == <span class="string">"purple"</span>))
+    <span class="var">discount</span> = <span class="num">0.25</span>;</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Sometimes the two things joined by "and" in English are
+                <strong>mutually exclusive</strong>, which means a condition
+                written with <code>&&</code> can never be true. For the
+                English statement "Display the names of employees in
+                departments 1 and 2," the statement
+                <code>if (department == 1 && department == 2)</code> would
+                never display any name at all, because a single employee's
+                department cannot be both values at the same time. Note that
+                substituting the logical <code>&</code> operator for
+                <code>&&</code> does not help; the condition is still
+                impossible.
+            </div>
+
+            <h3>Using NOT Correctly in Compound Decisions</h3>
+
+            <p>Negated compound conditions are the other classic trap. When
+                a requirement says a value must not be <em>either</em> of
+                two values, each individual comparison must be joined with
+                <code>&&</code>, not <code>||</code>.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: "Not Either R or C"</h4>
+                <pre><code><span class="comment">// Request: change taxRate to 0.09 when taxStatus is not R and not C.</span>
+<span class="type">double</span> <span class="var">taxRate</span> = <span class="num">0</span>;
+
+<span class="comment">// CORRECT - both comparisons must be true.</span>
+<span class="keyword">if</span> (<span class="var">taxStatus</span> != <span class="string">'R'</span> &amp;&amp; <span class="var">taxStatus</span> != <span class="string">'C'</span>)
+    <span class="var">taxRate</span> = <span class="num">0.09</span>;
+
+<span class="comment">// WRONG - this is true for EVERY possible value of taxStatus.</span>
+<span class="keyword">if</span> (<span class="var">taxStatus</span> != <span class="string">'R'</span> || <span class="var">taxStatus</span> != <span class="string">'C'</span>)
+    <span class="var">taxRate</span> = <span class="num">0.09</span>;</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Look closely at why the second version above is always true.
+                If <code>taxStatus</code> holds <code>'R'</code>, then
+                <code>taxStatus != 'C'</code> is true, so the whole OR
+                expression is true. If it holds <code>'C'</code>, then
+                <code>taxStatus != 'R'</code> is true, so the expression is
+                true again. Any other character makes both sides true. An
+                expression of the form
+                <code>x != a || x != b</code> can never be false, so the
+                dependent statement always executes.
+            </div>
+
+            <p>The same reasoning applies to an English statement such as
+                <em>"Set the ticket price to $50 when the seat is not in
+                    section 1 or section 2."</em> Written as
+                <code>if (seatSection != '1' || seatSection != '2')</code>,
+                the price would be set to $50 for every seat in the stadium,
+                including sections 1 and 2 — the exact opposite of the
+                intent. Two correct versions are shown below.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Two Correct Ways to Write "Not 1 or 2"</h4>
+                <pre><code><span class="comment">// Negate the whole compound OR expression:</span>
+<span class="keyword">if</span> (!(<span class="var">seatSection</span> == <span class="string">'1'</span> || <span class="var">seatSection</span> == <span class="string">'2'</span>))
+    <span class="var">ticketPrice</span> = <span class="num">50</span>;
+
+<span class="comment">// Or distribute the negation, changing || to &amp;&amp;:</span>
+<span class="keyword">if</span> (<span class="var">seatSection</span> != <span class="string">'1'</span> &amp;&amp; <span class="var">seatSection</span> != <span class="string">'2'</span>)
+    <span class="var">ticketPrice</span> = <span class="num">50</span>;</code></pre>
+            </div>
+
+            <div class="success-box">
+                <strong>The rule to remember:</strong> negating a compound
+                expression flips its operator. Not (A or B) becomes
+                (not A) <em>and</em> (not B); not (A and B) becomes
+                (not A) <em>or</em> (not B). Whenever a requirement contains
+                the word "not" together with "or," expect
+                <code>&&</code> to appear in the finished code.
+            </div>
+
+            <!-- ===================== SECTION 13 ===================== -->
             <h2 id="section-gui">🖱️ Decisions in GUI Applications</h2>
 
             <p>The decision-making structures covered in this guide apply
                 just as directly inside GUI event-handling methods as they
-                do in console programs. A button's Click method, for
-                example, commonly uses if, if-else, or switch structures to
-                validate what the user entered before acting on it.</p>
+                do in console programs. However, event-driven programs
+                <strong>often require fewer coded decisions</strong> than
+                console applications, not more.
+            </p>
 
-            <div class="tip-box">
-                In a GUI application, decisions are typically used to
-                validate user input, such as confirming a TextBox was not
-                left empty or that an entered value falls within an
-                acceptable range, before the program uses that value in a
-                calculation or displays a result.
+            <div class="highlight-box">
+                <h4>Why GUI Programs Often Need Fewer Decisions</h4>
+                <p>In an event-driven program, some events are determined by
+                    the user's actions while the program is running (during
+                    runtime) rather than by the programmer's coding
+                    beforehand. In a GUI application, you are more likely to
+                    place controls on a Form than to ask the user to type in
+                    data. The user clicks a Button and the appropriate method
+                    executes. No decision has to be written in the program at
+                    all, because a different event is fired from each Button,
+                    causing execution of a different <code>Click()</code>
+                    method.</p>
             </div>
 
-            <p>Because users interacting with a graphical interface can type
-                anything into a TextBox, event-driven programs generally
-                need more coded decisions than console applications to
-                anticipate and handle the wider range of invalid entries a
-                free-form GUI allows.</p>
+            <div class="comparison">
+                <div class="comparison-item caution">
+                    <h4>🖥️ Console Version</h4>
+                    <p>The program prompts the user to enter 1 or 2, then
+                        needs an if-else or switch structure to determine
+                        which value was entered and what to do about it.</p>
+                </div>
+                <div class="comparison-item good">
+                    <h4>🖱️ GUI Version with Buttons</h4>
+                    <p>Two Buttons are placed on the Form. Clicking each one
+                        fires its own event and runs its own
+                        <code>Click()</code> method, so no decision statement
+                        is needed to tell the choices apart.
+                    </p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                In a GUI application, decisions are typically used
+                <strong>when users enter data — such as an integer typed
+                    into a TextBox — that the program must act on</strong>.
+                If you place a TextBox on a Form and ask a user to enter a 1
+                or a 2, the decision-making process becomes identical to
+                that of the console-based program. Using controls such as
+                Buttons that limit the selections a user can make is a
+                separate technique for preventing invalid entries; it
+                reduces the need for coded decisions rather than creating
+                it.
+            </div>
+
+            <div class="warning-box">
+                Watch the word <em>always</em> in statements about this
+                topic. It is <strong>not</strong> true that event-driven
+                programs always require more coded decisions than console
+                applications in order to handle invalid user entries. The
+                opposite is usually the case, because well-chosen controls
+                remove the need for many decisions entirely.
+            </div>
 
             <!-- ===================== SUMMARY ===================== -->
             <div class="quick-ref">
@@ -1314,8 +2026,20 @@
                         </tr>
                         <tr>
                             <td>Block</td>
-                            <td>Statements grouped in curly braces; legal
-                                even around a single statement</td>
+                            <td>One or more statements grouped in curly
+                                braces; legal around a single statement, and
+                                legal even when empty</td>
+                        </tr>
+                        <tr>
+                            <td>Indentation</td>
+                            <td>Ignored by the compiler; only braces make
+                                multiple statements depend on an if</td>
+                        </tr>
+                        <tr>
+                            <td>Control statement</td>
+                            <td>The if expression preceding a block; it
+                                determines the order other statements
+                                execute in</td>
                         </tr>
                         <tr>
                             <td>Nested if</td>
@@ -1349,6 +2073,19 @@
                                 repeated comparisons</td>
                         </tr>
                         <tr>
+                            <td>Advantage of and / or</td>
+                            <td>More concise — no complete Boolean
+                                expression needed on both sides. Costs an
+                                extra <code>is</code> keyword; no
+                                performance gain</td>
+                        </tr>
+                        <tr>
+                            <td>^ (logical XOR)</td>
+                            <td>True only when one side is true and the
+                                other is false; not a conditional
+                                operator</td>
+                        </tr>
+                        <tr>
                             <td>Short-circuit evaluation</td>
                             <td>Each part evaluated only as far as needed to
                                 determine the result</td>
@@ -1368,6 +2105,16 @@
                             <td>When combined, && is evaluated before ||</td>
                         </tr>
                         <tr>
+                            <td>Only && or only ||</td>
+                            <td>Evaluated left to right, as far as needed to
+                                determine the result</td>
+                        </tr>
+                        <tr>
+                            <td>Parentheses</td>
+                            <td>Override precedence; needed to make an ||
+                                group evaluate before an && group</td>
+                        </tr>
+                        <tr>
                             <td>Truth table</td>
                             <td>Lists every true/false combination for a
                                 compound expression and its result</td>
@@ -1380,7 +2127,33 @@
                         <tr>
                             <td>case, break, default</td>
                             <td>Labels a value, exits the structure, and
-                                handles no-match, respectively</td>
+                                handles no-match, respectively;
+                                <code>break</code> is the usual terminator,
+                                though return or throw also work
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Case label</td>
+                            <td><code>case</code> + value + colon; case
+                                labels identify the courses of action</td>
+                        </tr>
+                        <tr>
+                            <td>No fall-through rule</td>
+                            <td>Reaching the end of a case's statement list
+                                is an error in C#, unlike Java and C++</td>
+                        </tr>
+                        <tr>
+                            <td>default is optional</td>
+                            <td>Without it, an unmatched value just
+                                continues to the next statement; including
+                                it is good practice</td>
+                        </tr>
+                        <tr>
+                            <td>Enumeration</td>
+                            <td>Begins with <code>enum</code>; applies
+                                values to a list of constants, and input can
+                                be cast, as in <code>switch((Color)color)</code>
+                            </td>
                         </tr>
                         <tr>
                             <td>Governing type</td>
@@ -1390,17 +2163,40 @@
                         <tr>
                             <td>Ternary operator (?:)</td>
                             <td>Abbreviated if-else with a test, true result,
-                                and false result</td>
+                                and false result; the only ternary operator
+                                in C#</td>
+                        </tr>
+                        <tr>
+                            <td>Unary / binary / ternary</td>
+                            <td>Operators taking one, two, and three
+                                operands respectively</td>
+                        </tr>
+                        <tr>
+                            <td>?: inside interpolation</td>
+                            <td><code>$"{(total >= 50 ? "Free" : "$5")}"</code>
+                                — parenthesize the expression, quote each
+                                result</td>
                         </tr>
                         <tr>
                             <td>! (NOT operator)</td>
-                            <td>Negates a Boolean expression; is not is the
-                                C# 9 equivalent</td>
+                            <td>Unary; negates a Boolean expression. is not
+                                is the C# 9 equivalent — readability only,
+                                identical to the compiler</td>
+                        </tr>
+                        <tr>
+                            <td>! vs. !=</td>
+                            <td><code>!</code> is unary and reverses one
+                                expression; <code>!=</code> is binary and
+                                compares two operands.
+                                <code>&lt;&gt;</code> is not a C#
+                                operator
+                            </td>
                         </tr>
                         <tr>
                             <td>Range check / range match</td>
-                            <td>if-else if chain testing whether a value
-                                falls within bounds</td>
+                            <td>Use if…else if…else, starting with the most
+                                likely condition; separate ifs overwrite
+                                earlier assignments</td>
                         </tr>
                         <tr>
                             <td>Stray semicolon after if</td>
@@ -1408,14 +2204,41 @@
                                 block always runs</td>
                         </tr>
                         <tr>
-                            <td>Kernighan and Ritchie style</td>
+                            <td>K &amp; R style</td>
                             <td>Opening brace on the same line as the if
-                                expression</td>
+                                expression (Allman style gives it its own
+                                line)</td>
+                        </tr>
+                        <tr>
+                            <td>English "and" → ||</td>
+                            <td>"Do X for pink and purple items" needs
+                                <code>||</code>; <code>&&</code> would be
+                                impossible to satisfy
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>x != a || x != b</td>
+                            <td>Always true, so the dependent statement
+                                always runs. Use
+                                <code>x != a && x != b</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Negating a compound</td>
+                            <td>not (A or B) = (not A) and (not B);
+                                not (A and B) = (not A) or (not B)</td>
                         </tr>
                         <tr>
                             <td>GUI decisions</td>
-                            <td>Commonly used to validate user input before
-                                it is processed</td>
+                            <td>Event-driven programs often need
+                                <strong>fewer</strong> decisions; each
+                                Button fires its own Click() method
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>When GUIs need decisions</td>
+                            <td>When users enter data (e.g., an integer in a
+                                TextBox) that the program must act on</td>
                         </tr>
                     </tbody>
                 </table>
