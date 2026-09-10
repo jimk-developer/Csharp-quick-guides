@@ -635,16 +635,22 @@
             Accumulating Totals, Scope, Loop Optimization, and Loops in GUI
             Applications</p>
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Loop Fundamentals</a>
+            <a href="#section-fundamentals" class="nav-pill">Loop
+                Fundamentals</a>
             <a href="#section-while" class="nav-pill">While Loops</a>
             <a href="#section-for" class="nav-pill">For Loops</a>
             <a href="#section-do" class="nav-pill">Do Loops</a>
-            <a href="#section-pretest-posttest" class="nav-pill">Pretest vs. Posttest</a>
+            <a href="#section-pretest-posttest" class="nav-pill">Pretest vs.
+                Posttest</a>
             <a href="#section-nested" class="nav-pill">Nested Loops</a>
-            <a href="#section-accumulating" class="nav-pill">Accumulating Totals</a>
+            <a href="#section-accumulating" class="nav-pill">Accumulating
+                Totals</a>
             <a href="#section-scope" class="nav-pill">Scope</a>
-            <a href="#section-optimization" class="nav-pill">Loop Optimization</a>
+            <a href="#section-optimization" class="nav-pill">Loop
+                Optimization</a>
             <a href="#section-gui" class="nav-pill">Loops in GUIs</a>
+            <a href="https://docs.google.com/document/d/1hqWyeVslRAifU8s5AgVS23MJmqm87pCCpRrBqdF7Wb0/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -677,7 +683,8 @@
                 statements. The <strong>loop body</strong> is the block of
                 statements that executes with each repetition of the loop,
                 and any single execution of a loop's body is called an
-                <strong>iteration</strong>.</p>
+                <strong>iteration</strong>.
+            </p>
 
             <div class="concept-grid">
                 <div class="concept-card">
@@ -724,7 +731,8 @@
                 the loop control variable, subtracting a fixed amount with
                 each iteration using <code>--</code>. Which strategy to use
                 depends entirely on whether the task naturally counts up or
-                down.</p>
+                down.
+            </p>
 
             <div class="tip-box">
                 A loop with an <strong>empty body</strong>, meaning no
@@ -745,7 +753,8 @@
                 instead escaped by clicking the IDE's Stop Debugging button,
                 since a stuck GUI application may never respond to normal
                 window controls like the close button while it is trapped in
-                the loop.</p>
+                the loop.
+            </p>
 
             <!-- ===================== SECTION 2 ===================== -->
             <h2 id="section-while">🔄 While Loops</h2>
@@ -773,7 +782,8 @@
                     <h4>Definite (Counted) Loop</h4>
                     <p>The number of iterations is known, or predetermined,
                         before the loop begins. Also called a
-                        <strong>counted loop</strong>.</p>
+                        <strong>counted loop</strong>.
+                    </p>
                 </div>
                 <div class="comparison-item neutral">
                     <h4>Indefinite Loop</h4>
@@ -794,7 +804,8 @@
                 <strong>sentinel value</strong>: a special value, such as
                 <code>'N'</code> or <code>-1</code>, that a user enters to
                 signal the loop should stop, rather than a value that
-                represents legitimate data to be processed.</p>
+                represents legitimate data to be processed.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: An Indefinite Loop with a Sentinel Value</h4>
@@ -862,7 +873,8 @@
                 In the example above, the step value is 1, since
                 <code>++day</code> adds exactly 1 each time, but a for loop
                 can just as easily use a different step value, such as
-                <code>day += 2</code> to count by twos.</p>
+                <code>day += 2</code> to count by twos.
+            </p>
 
             <h3>Block Scope</h3>
             <p>A loop control variable declared directly inside a for
@@ -872,7 +884,8 @@
                 (usable) only from the point it is declared until the
                 closing brace of that block, and it goes
                 <strong>out of scope</strong> the moment execution leaves the
-                loop.</p>
+                loop.
+            </p>
 
             <div class="warning-box">
                 Referring to a for loop's control variable after the loop's
@@ -892,7 +905,8 @@
                 expression at the bottom of the loop, after the loop body has
                 already executed once. This guarantees that a do loop's body
                 always runs at least one time, no matter what the test
-                condition evaluates to.</p>
+                condition evaluates to.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: A Do Loop</h4>
@@ -917,7 +931,8 @@
             </div>
 
             <!-- ===================== SECTION 5 ===================== -->
-            <h2 id="section-pretest-posttest">⬆️⬇️ Pretest vs. Posttest Loops</h2>
+            <h2 id="section-pretest-posttest">⬆️⬇️ Pretest vs. Posttest Loops
+            </h2>
 
             <div class="comparison">
                 <div class="comparison-item neutral">
@@ -925,14 +940,16 @@
                     <p>Checks its Boolean expression at the "top" of the
                         loop, before the body has a chance to execute even
                         once. Both the <strong>while loop</strong> and the
-                        <strong>for loop</strong> are pretest loops.</p>
+                        <strong>for loop</strong> are pretest loops.
+                    </p>
                 </div>
                 <div class="comparison-item neutral">
                     <h4>Posttest Loop</h4>
                     <p>Checks its Boolean expression at the "bottom" of the
                         loop, after each repetition has already occurred. The
                         <strong>do...while loop</strong> is C#'s posttest
-                        loop.</p>
+                        loop.
+                    </p>
                 </div>
             </div>
 
@@ -1100,7 +1117,8 @@
                 Placing the condition that is cheapest to check, or most
                 likely to determine the result on its own, first in the
                 expression can reduce how often the second, more costly
-                condition needs to be evaluated at all.</p>
+                condition needs to be evaluated at all.
+            </p>
 
             <div class="tip-box">
                 The order of expressions in a compound Boolean expression
