@@ -636,15 +636,20 @@
             Multidimensional and Jagged Arrays, and Arrays in GUI
             Applications</p>
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Array Fundamentals</a>
-            <a href="#section-declaring" class="nav-pill">Declaring &amp; Initializing</a>
+            <a href="#section-fundamentals" class="nav-pill">Array
+                Fundamentals</a>
+            <a href="#section-declaring" class="nav-pill">Declaring &amp;
+                Initializing</a>
             <a href="#section-accessing" class="nav-pill">Accessing Elements</a>
             <a href="#section-foreach" class="nav-pill">The foreach Loop</a>
             <a href="#section-searching" class="nav-pill">Searching Arrays</a>
             <a href="#section-parallel" class="nav-pill">Parallel Arrays</a>
             <a href="#section-methods" class="nav-pill">Array Methods</a>
-            <a href="#section-multidim" class="nav-pill">Multidimensional &amp; Jagged</a>
+            <a href="#section-multidim" class="nav-pill">Multidimensional &amp;
+                Jagged</a>
             <a href="#section-gui" class="nav-pill">Arrays in GUIs</a>
+            <a href="https://docs.google.com/document/d/1Ak0KVlwa-VpKcOX-yUwrcCxvXg1z2q2DcOBNp8K2K7Y/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -677,7 +682,8 @@
                 share the same data type and the same name, distinguished
                 from one another only by their position in the list. Each
                 individual data item stored in an array is called an
-                <strong>array element</strong>.</p>
+                <strong>array element</strong>.
+            </p>
 
             <div class="tip-box">
                 Arrays are most useful for the opposite situation from
@@ -698,14 +704,16 @@
 
             <h3>Indexes and Subscripts</h3>
             <p>Each array element is distinguished from the others by its
-                <strong>index</strong>, also called a <strong>subscript</strong>:
+                <strong>index</strong>, also called a
+                <strong>subscript</strong>:
                 an integer enclosed in square brackets that indicates an
                 element's position within the array. C# array subscripts are
                 always zero-based, meaning the first element's subscript is
                 0, not 1. For an array with 15 elements, the valid
                 subscripts run from 0 through 14, so the highest legal
                 subscript is always one less than the array's total number
-                of elements.</p>
+                of elements.
+            </p>
 
             <div class="warning-box">
                 A subscript must be an integer, or an expression that
@@ -794,7 +802,8 @@
                 holds the total number of elements it contains. A loop that
                 navigates through an entire array typically runs its
                 subscript variable from 0 up through, but not including,
-                <code>Length</code>.</p>
+                <code>Length</code>.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Looping Through an Array with Length</h4>
@@ -833,7 +842,8 @@
                 <code>color</code>, is called the <strong>iteration
                     variable</strong>. It automatically holds each array
                 value in turn for one pass of the loop, without the program
-                ever writing a subscript expression.</p>
+                ever writing a subscript expression.
+            </p>
 
             <div class="warning-box">
                 The foreach iteration variable is <strong>read-only</strong>:
@@ -973,7 +983,8 @@
             <p>Because <code>petIDs</code>, <code>petNames</code>, and
                 <code>adoptionFees</code> are parallel arrays, subscript 1
                 identifies the same pet across all three: its ID, its name,
-                and its adoption fee.</p>
+                and its adoption fee.
+            </p>
 
             <h3>Range Matches</h3>
             <p>A <strong>range match</strong> uses an array of upper or
@@ -1067,7 +1078,8 @@
                 binary search eliminates roughly half of the remaining
                 elements from consideration with each comparison, making it
                 far faster than a sequential search through a large sorted
-                array.</p>
+                array.
+            </p>
 
             <div class="warning-box">
                 <code>Array.BinarySearch()</code> only produces correct
@@ -1082,7 +1094,8 @@
                 near the top of a file allows methods such as
                 <code>Sort()</code> and <code>BinarySearch()</code> to be
                 called directly, without repeatedly typing the
-                <code>Array.</code> prefix before each call.</p>
+                <code>Array.</code> prefix before each call.
+            </p>
 
             <!-- ===================== SECTION 8 ===================== -->
             <h2 id="section-multidim">🧮 Multidimensional and Jagged Arrays</h2>
@@ -1093,7 +1106,8 @@
                 is the <strong>two-dimensional array</strong>, also called a
                 <strong>rectangular array</strong>, which can be pictured as
                 a table or matrix of rows and columns where every row has
-                exactly the same number of columns.</p>
+                exactly the same number of columns.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A Rectangular Array</h4>
