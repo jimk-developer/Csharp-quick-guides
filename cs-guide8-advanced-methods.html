@@ -636,16 +636,24 @@
             References, Method Overloading, Overload Resolution, Ambiguous
             Methods, and Named and Optional Arguments</p>
         <nav class="nav-pills">
-            <a href="#section-value-reference" class="nav-pill">Value vs. Reference</a>
-            <a href="#section-mandatory-optional" class="nav-pill">Mandatory &amp; Optional</a>
+            <a href="#section-value-reference" class="nav-pill">Value vs.
+                Reference</a>
+            <a href="#section-mandatory-optional" class="nav-pill">Mandatory
+                &amp; Optional</a>
             <a href="#section-ref" class="nav-pill">ref Parameters</a>
             <a href="#section-out" class="nav-pill">out Parameters</a>
             <a href="#section-params" class="nav-pill">Parameter Arrays</a>
-            <a href="#section-returning-refs" class="nav-pill">Returning References</a>
-            <a href="#section-overloading" class="nav-pill">Method Overloading</a>
-            <a href="#section-resolution" class="nav-pill">Overload Resolution</a>
+            <a href="#section-returning-refs" class="nav-pill">Returning
+                References</a>
+            <a href="#section-overloading" class="nav-pill">Method
+                Overloading</a>
+            <a href="#section-resolution" class="nav-pill">Overload
+                Resolution</a>
             <a href="#section-ambiguous" class="nav-pill">Ambiguous Methods</a>
-            <a href="#section-named" class="nav-pill">Named &amp; Optional Arguments</a>
+            <a href="#section-named" class="nav-pill">Named &amp; Optional
+                Arguments</a>
+            <a href="https://docs.google.com/document/d/1rBfGAgCuGrv1uk0ss3GAwiS-Ml13XE_bS_LAfsKZ1Pc/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -672,7 +680,8 @@
             </div>
 
             <!-- ===================== SECTION 1 ===================== -->
-            <h2 id="section-value-reference">🔄 Value Parameters vs. Reference Parameters</h2>
+            <h2 id="section-value-reference">🔄 Value Parameters vs. Reference
+                Parameters</h2>
 
             <p>A <strong>value parameter</strong> is declared with just a
                 type and a name in a method header, and the method receives
@@ -701,15 +710,20 @@
             </div>
 
             <!-- ===================== SECTION 2 ===================== -->
-            <h2 id="section-mandatory-optional">📋 Mandatory vs. Optional Parameters</h2>
+            <h2 id="section-mandatory-optional">📋 Mandatory vs. Optional
+                Parameters</h2>
 
             <p>A <strong>mandatory parameter</strong> requires a
                 corresponding argument in every single call to the method;
-                leaving one out is a compile-time error. Value parameters,
-                reference parameters, and output parameters are all
-                mandatory in this sense: an argument must always be supplied
-                for each of them, even though an output parameter's argument
-                does not need to hold a value beforehand.</p>
+                leaving one out is a compile-time error. C#'s mandatory
+                parameters are <strong>value parameters declared without
+                    default values</strong>, <strong>reference
+                    parameters</strong>, <strong>output parameters</strong>, and
+                <strong>parameter arrays</strong>. An argument position must
+                always be accounted for with each of them, even though an
+                output parameter's argument does not need to hold a value
+                beforehand.
+            </p>
 
             <p>An <strong>optional parameter</strong>, by contrast,
                 automatically receives a default value if the method is
@@ -747,6 +761,26 @@
                 compiler error, since <code>ref</code> assumes the variable
                 already has meaningful data that the method may read from as
                 well as write to.
+            </div>
+
+            <h3>Passing Arrays with ref or out</h3>
+            <p>Arrays can be passed with <code>ref</code> or
+                <code>out</code>, just like simple variables. A common reason
+                to do so is to declare the array variable in the calling
+                method but use the <code>new</code> operator to allocate
+                memory for the array inside the called method.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Passing an Array with out</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">CreateScores</span>(<span class="keyword">out</span> <span class="type">int</span>[] <span class="var">scores</span>)
+{
+    <span class="var">scores</span> = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">90</span>, <span class="num">85</span>, <span class="num">77</span> };
+}
+
+<span class="type">int</span>[] <span class="var">myScores</span>;
+<span class="func">CreateScores</span>(<span class="keyword">out</span> <span class="var">myScores</span>);
+<span class="comment">// myScores now refers to the array created inside CreateScores()</span></code></pre>
             </div>
 
             <!-- ===================== SECTION 4 ===================== -->
@@ -788,13 +822,18 @@
 <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Welcome, {0} {1}!"</span>, <span class="var">firstName</span>, <span class="var">lastName</span>);</code></pre>
             </div>
 
-            <div class="warning-box">
-                If <code>firstName</code> and <code>lastName</code> were used
-                in the method call without either a prior declaration or the
-                inline <code>out string</code> (or <code>out var</code>)
-                syntax shown above, the program would fail to compile, since
-                the compiler would have no declared variable to attach the
-                output values to.
+            <div class="tip-box">
+                Because <code>firstName</code> and <code>lastName</code> are
+                <strong>out variables</strong>, declared at the point where
+                they are passed as <code>out</code> arguments, they
+                <strong>do not need to be declared before the method
+                    call</strong>. The method assigns each one a value, and each
+                keeps that value after the method returns, so the
+                <code>WriteLine()</code> statement that follows displays
+                whatever names the method stored in them. (When writing the
+                call yourself, include the type in the declaration, as in
+                <code>out string firstName</code> or
+                <code>out var firstName</code>.)
             </div>
 
             <p>Output parameters are the natural choice whenever a method
@@ -802,7 +841,8 @@
                 <code>return</code> statement can only hand back a single
                 value on its own; one or more <code>out</code> parameters let
                 a single method call effectively produce several results at
-                once.</p>
+                once.
+            </p>
 
             <h3>Avoiding Conversion Exceptions with TryParse()</h3>
             <p>Several of C#'s built-in conversion methods use an output
@@ -869,7 +909,8 @@
                 number of arguments; a method declared with
                 <code>params double[] prices</code> gathers whatever
                 arguments are supplied into a single array named
-                <code>prices</code> for use inside the method body.</p>
+                <code>prices</code> for use inside the method body.
+            </p>
 
             <div class="warning-box">
                 Only one <code>params</code> keyword is permitted in a
@@ -877,6 +918,41 @@
                 parameter listed in the parameter list. No other parameters
                 can follow a parameter array in the same method header.
             </div>
+
+            <p>Unlike a <code>ref</code> or <code>out</code> parameter, a
+                parameter array comes with no assignment requirements: the
+                arguments used in the call <strong>need not contain
+                    original, assigned values</strong> beforehand, and the
+                parameter array <strong>need not be assigned any values
+                    within the method</strong>. A parameter array also cannot be
+                given a default value.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter type</th>
+                        <th>Argument needs a value before the call?</th>
+                        <th>Must be assigned inside the method?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ref</code></td>
+                        <td>Yes</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><code>out</code></td>
+                        <td>No</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><code>params</code></td>
+                        <td>No</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- ===================== SECTION 6 ===================== -->
             <h2 id="section-returning-refs">↪️ Returning References</h2>
@@ -924,7 +1000,8 @@
                 the same name but a different number of parameters, a
                 different order of parameter types, or different parameter
                 types altogether have different signatures and are legal
-                overloads of one another.</p>
+                overloads of one another.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Overloaded Methods</h4>
@@ -942,7 +1019,14 @@
             <p>Both methods above share the identifier
                 <code>CalculateArea</code>, but their differing parameter
                 counts give them different signatures, making this a legal
-                overload rather than a duplicate declaration.</p>
+                overload rather than a duplicate declaration. When the
+                method is called, the compiler determines which overloaded
+                version to use <strong>based on the arguments supplied in
+                    the call</strong>: <code>CalculateArea(5)</code> runs the
+                one-parameter version, and
+                <code>CalculateArea(5, 3)</code> runs the two-parameter
+                version.
+            </p>
 
             <div class="warning-box">
                 The return type is not part of a method's signature.
@@ -956,7 +1040,9 @@
 
             <h3>Why Programmers Overload Methods</h3>
             <p>The most common reason an experienced programmer overloads a
-                method is to let callers use the same, logically meaningful
+                method is to <strong>make the method more convenient for
+                    other programmers to use in the future</strong>. Overloading
+                lets callers use the same, logically meaningful
                 method name to accomplish essentially the same task, no
                 matter what combination of data happens to be available at
                 the call site, rather than inventing several differently
@@ -967,7 +1053,8 @@
                 overloaded many times over, with separate versions that
                 accept a <code>string</code>, a <code>double</code>, a
                 <code>bool</code>, and several other types, all under the
-                same familiar method name.</p>
+                same familiar method name.
+            </p>
 
             <!-- ===================== SECTION 8 ===================== -->
             <h2 id="section-resolution">⚖️ Overload Resolution</h2>
@@ -981,7 +1068,8 @@
             <p>Any and all overloaded versions that could legally accept a
                 given call, whether through an exact type match or through
                 implicit conversion of one or more arguments, are called
-                <strong>applicable methods</strong> for that call.</p>
+                <strong>applicable methods</strong> for that call.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Multiple Applicable Overloads</h4>
@@ -1013,7 +1101,8 @@
                 argument calls the <code>int</code> overload directly,
                 because an exact match is always preferred over triggering
                 an implicit conversion to reach the <code>double</code>
-                overload.</p>
+                overload.
+            </p>
 
             <div class="tip-box">
                 Reference and output arguments are excluded from the
@@ -1022,6 +1111,29 @@
                 parameter's type exactly; no implicit conversion is possible
                 for them in the first place, so there is nothing for the
                 betterness rules to weigh for those particular arguments.
+            </div>
+
+            <h3>Optional Arguments and Betterness</h3>
+            <p>Named and optional arguments also affect overload
+                resolution. The betterness rules for argument conversions
+                apply only to arguments that are given explicitly in the
+                call; <strong>omitted optional arguments are ignored for
+                    betterness purposes</strong>. If two applicable overloads
+                are otherwise equally good, the one that does
+                <strong>not</strong> require omitting optional parameters is
+                considered better.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Optional Parameters in Overload Resolution</h4>
+                <pre><code><span class="comment">// Version 1</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DoSomething</span>(<span class="type">int</span> <span class="var">myNumber</span>, <span class="type">string</span> <span class="var">myWord</span> = <span class="string">"Happy"</span>)
+<span class="comment">// Version 2</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DoSomething</span>(<span class="type">int</span> <span class="var">myNumber</span>)
+
+<span class="func">DoSomething</span>(<span class="num">88</span>);
+<span class="comment">// Both versions are applicable, but Version 2 executes,
+// because the call omits no optional parameters for it</span></code></pre>
             </div>
 
             <h3>Finding Method Information in the IDE</h3>
@@ -1068,7 +1180,8 @@
                 other. Calling <code>CalculateFee(6, 45)</code> with two
                 integer arguments triggers exactly that situation, since
                 either argument could be the one that gets converted to
-                <code>double</code>.</p>
+                <code>double</code>.
+            </p>
 
             <!-- ===================== SECTION 10 ===================== -->
             <h2 id="section-named">🏷️ Named and Optional Arguments</h2>
@@ -1102,6 +1215,26 @@
                 default value, every parameter that follows it in the list
                 must also be given a default value; C# does not allow a
                 mandatory parameter to appear after an optional one.
+            </div>
+
+            <h3>Leaving Out Optional Arguments</h3>
+            <p>When calling a method with default values using only
+                positional arguments, you may leave out any arguments that
+                come <em>after</em> the last one you supply, and they take
+                their default values. However, you <strong>cannot leave out
+                    an unnamed argument that falls between two other unnamed
+                    arguments you provide</strong>; positional arguments are
+                matched strictly left to right, so there is no way to
+                "skip" a position.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Which Calls Are Legal?</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculatePrice</span>(<span class="type">int</span> <span class="var">numTickets</span>, <span class="type">char</span> <span class="var">sectionCode</span> = <span class="string">'N'</span>, <span class="type">double</span> <span class="var">basePrice</span> = <span class="num">54.95</span>)
+
+<span class="func">CalculatePrice</span>(<span class="num">4</span>);            <span class="comment">// Legal: both defaults used</span>
+<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="string">'A'</span>);       <span class="comment">// Legal: basePrice uses its default</span>
+<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="num">23.45</span>);     <span class="comment">// Illegal: can't skip sectionCode</span>
+<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="var">basePrice</span>: <span class="num">23.45</span>); <span class="comment">// Legal: a named argument skips it</span></code></pre>
             </div>
 
             <h3>Named Arguments</h3>
@@ -1170,7 +1303,8 @@
                     <tbody>
                         <tr>
                             <td>Value parameter</td>
-                            <td>Method gets a copy; original stays unchanged</td>
+                            <td>Method gets a copy; original stays unchanged
+                            </td>
                         </tr>
                         <tr>
                             <td>Reference parameter</td>
@@ -1183,8 +1317,8 @@
                         </tr>
                         <tr>
                             <td>Mandatory parameters</td>
-                            <td>Value, reference, and output parameters all
-                                require an argument every call</td>
+                            <td>Value parameters without defaults, ref, out,
+                                and parameter arrays</td>
                         </tr>
                         <tr>
                             <td>Optional parameter</td>
@@ -1203,8 +1337,12 @@
                         </tr>
                         <tr>
                             <td>Out variable</td>
-                            <td>Can be declared inline at the point it is
-                                passed into the call</td>
+                            <td>Declared inline at the point it is passed;
+                                needs no prior declaration</td>
+                        </tr>
+                        <tr>
+                            <td>Arrays with ref/out</td>
+                            <td>Allowed, just like simple variables</td>
                         </tr>
                         <tr>
                             <td>TryParse()</td>
@@ -1220,6 +1358,11 @@
                             <td>params restrictions</td>
                             <td>Only one per method; must be the last
                                 parameter</td>
+                        </tr>
+                        <tr>
+                            <td>params assignment rules</td>
+                            <td>Arguments need no prior values; array need not
+                                be assigned in the method</td>
                         </tr>
                         <tr>
                             <td>Returning a reference</td>
@@ -1257,6 +1400,11 @@
                                 match exactly</td>
                         </tr>
                         <tr>
+                            <td>Omitted optional arguments</td>
+                            <td>Ignored by betterness; a tie goes to the
+                                overload that omits none</td>
+                        </tr>
+                        <tr>
                             <td>Ambiguous method call</td>
                             <td>Compiler cannot pick a single best applicable
                                 match; fails to compile</td>
@@ -1275,6 +1423,11 @@
                             <td>Positional argument</td>
                             <td>Matched by position; must precede any named
                                 arguments</td>
+                        </tr>
+                        <tr>
+                            <td>Skipping positional arguments</td>
+                            <td>Can omit trailing ones, but never one between
+                                two supplied arguments</td>
                         </tr>
                         <tr>
                             <td>Named argument tradeoff</td>
