@@ -633,18 +633,23 @@
         <h1>Guide 7: Microsoft Visual C# - Using Methods</h1>
         <p>Method Fundamentals, Method Structure, Accessibility and
             Modifiers, Scope, Parameters and Arguments, Return Values,
-            Passing Arrays, Main() Method Variations, and Methods in GUI
-            Applications</p>
+            Local Functions, Built-in Methods, Passing Arrays, Main() Method
+            Variations, and Methods in GUI Applications</p>
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Method Fundamentals</a>
+            <a href="#section-fundamentals" class="nav-pill">Method
+                Fundamentals</a>
             <a href="#section-structure" class="nav-pill">Method Structure</a>
-            <a href="#section-accessibility" class="nav-pill">Accessibility &amp; Modifiers</a>
+            <a href="#section-accessibility" class="nav-pill">Accessibility
+                &amp; Modifiers</a>
             <a href="#section-scope" class="nav-pill">Scope</a>
-            <a href="#section-parameters" class="nav-pill">Parameters &amp; Arguments</a>
+            <a href="#section-parameters" class="nav-pill">Parameters &amp;
+                Arguments</a>
             <a href="#section-returns" class="nav-pill">Return Values</a>
             <a href="#section-arrays" class="nav-pill">Passing Arrays</a>
             <a href="#section-main" class="nav-pill">Main() Variations</a>
             <a href="#section-gui" class="nav-pill">Methods in GUIs</a>
+            <a href="https://docs.google.com/document/d/1Dxdwxsl0fY6UGq5PM4kjy-c15WyanE9bnD3wbJ1_Qcs/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -664,8 +669,10 @@
                         a method is and how it is structured, how
                         accessibility and static modifiers control who can
                         use a method and how, variable scope inside a
-                        method, how parameters and arguments work, how
-                        methods return values, how arrays behave when passed
+                        method and local functions, how parameters and arguments
+                        work, how
+                        methods (including built-in ones like ReadLine() and
+                        Math.Pow()) return values, how arrays behave when passed
                         to a method, the several valid ways to write
                         Main(), and how methods are used inside GUI
                         applications.</p>
@@ -684,14 +691,36 @@
                 multiple places instead of being written once and reused.
             </p>
 
+            <p>Methods also make programs easier to extend. When you want to
+                add a new task to an existing program, writing that task as
+                its own method keeps <code>Main()</code> short and readable,
+                and it lets you add the same functionality to
+                <em>other</em> programs later without rewriting it.
+            </p>
+
+            <h3>Storing Methods in Their Own Classes and Files</h3>
+            <p>To make methods easy to reuse, programmers commonly store a
+                method, or a group of related methods, in its own class and
+                its own file. That class can then be added to any application
+                that needs those methods. A program built from several
+                separate files like this is compiled into a
+                <strong>multifile assembly</strong>: a single program
+                assembled from code stored in more than one file.
+            </p>
+
             <h3>Calling Methods and Called Methods</h3>
             <p>When your code uses a method's name to make that method
                 perform its task, you are <strong>calling</strong> the
-                method. The method that does the calling is known as the
+                method. Calling a method is also known as
+                <strong>invoking</strong> it, and a method that is called is
+                often described as the <strong>invoked method</strong>; the
+                two terms mean the same thing. The method that does the calling
+                is known as the
                 <strong>calling method</strong>, and the method being used is
                 the <strong>called method</strong>. A method that uses
                 another method is therefore considered a calling method with
-                respect to whatever it calls.</p>
+                respect to whatever it calls.
+            </p>
 
             <h3>Implementation Hiding</h3>
             <p><strong>Implementation hiding</strong> is the technique that
@@ -739,7 +768,8 @@
                 <tbody>
                     <tr>
                         <td>Accessibility (<code>public</code>,
-                            <code>private</code>)</td>
+                            <code>private</code>)
+                        </td>
                         <td>Optional</td>
                         <td>Controls which other code can call the method</td>
                     </tr>
@@ -784,6 +814,83 @@
                 appears inside them.
             </div>
 
+            <h3>Rules for Method Identifiers</h3>
+            <p>A method's name must be a legal C# identifier. It
+                <strong>cannot contain spaces</strong> and must
+                <strong>begin with a letter or an underscore</strong>, never
+                a digit. It may contain letters, digits, and underscores
+                after the first character, and it cannot be a C# keyword. In
+                a declaration, the identifier is always immediately followed
+                by its parentheses.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identifier in a Header</th>
+                        <th>Legal?</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>double ComputeTax()</code></td>
+                        <td>Yes</td>
+                        <td>Starts with a letter, no spaces, followed by
+                            parentheses</td>
+                    </tr>
+                    <tr>
+                        <td><code>double _discount()</code></td>
+                        <td>Yes</td>
+                        <td>An underscore is a legal first character</td>
+                    </tr>
+                    <tr>
+                        <td><code>double Compute Tax()</code></td>
+                        <td>No</td>
+                        <td>Contains a space</td>
+                    </tr>
+                    <tr>
+                        <td><code>double 5PercentOff()</code></td>
+                        <td>No</td>
+                        <td>Begins with a digit</td>
+                    </tr>
+                    <tr>
+                        <td><code>double ComputeTax</code></td>
+                        <td>No</td>
+                        <td>Missing the required parentheses</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Writing the Parameter List</h3>
+            <p>Each parameter in a method header is written as a
+                <strong>data type followed by a name</strong>, such as
+                <code>decimal amount</code>. When a method has more than one
+                parameter, the type-and-name pairs are
+                <strong>separated by commas</strong>:
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Headers with One and Two Parameters</h4>
+                <pre><code><span class="comment">// One parameter: accepts a decimal, returns nothing</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DepositFunds</span>(<span class="type">decimal</span> <span class="var">amount</span>)
+
+<span class="comment">// Two parameters: type-name pairs separated by a comma</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">ComputeArea</span>(<span class="type">double</span> <span class="var">width</span>, <span class="type">double</span> <span class="var">height</span>)</code></pre>
+            </div>
+
+            <h3>Methods With and Without Arguments</h3>
+            <p>Every method call uses the method's identifier and a set of
+                parentheses, but only <em>some</em> method calls pass
+                <strong>arguments</strong> inside those parentheses. A method
+                that always does the same thing, such as displaying a fixed
+                welcome message, needs no parameters. A method whose work
+                depends on data that changes from call to call, such as
+                applying a discount to each customer's particular purchase
+                amount, needs parameters so the caller can send that data
+                in.
+            </p>
+
             <h3>The Return Type</h3>
             <p>A method's <strong>type</strong> is determined by its
                 declared return type. If a method's header shows
@@ -791,7 +898,25 @@
                 method sends an integer value back to whatever called it.
                 The keyword <code>void</code> in a method header, in place
                 of a return type, means the method performs its task but
-                does not send any value back to its caller at all.</p>
+                does not send any value back to its caller at all.
+            </p>
+
+            <p>Because a method call "becomes" the value it returns, you can
+                use the call anywhere a value of that type is allowed. For a
+                method whose return type is <code>int</code>, that means you
+                can assign the call directly to an <code>int</code> variable.
+                Note that the return type says nothing about the method's
+                parameters; it describes only what comes <em>back</em>.</p>
+
+            <div class="syntax-box">
+                <h4>Example: Assigning a Method Call to a Variable</h4>
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="func">GetBonusPoints</span>()
+{
+    <span class="keyword">return</span> <span class="num">250</span>;
+}
+
+<span class="type">int</span> <span class="var">points</span> = <span class="func">GetBonusPoints</span>();  <span class="comment">// points now holds 250</span></code></pre>
+            </div>
 
             <h3>Indentation Convention</h3>
             <p>By convention, C# programmers indent the statements inside a
@@ -805,13 +930,23 @@
             <h2 id="section-accessibility">🔐 Accessibility and Modifiers</h2>
 
             <h3>Private vs. Public Access</h3>
+            <p>A method's <strong>accessibility</strong> (also called its
+                access modifier) is an optional part of the header that sets
+                limits on which other methods and classes are allowed to use
+                it. C# has several access modifiers, including
+                <code>public</code>, <code>private</code>,
+                <code>protected</code>, and <code>internal</code>, but the
+                two you will use most in this chapter are
+                <code>private</code> and <code>public</code>.
+            </p>
             <p>If a method declaration does not include an accessibility
                 modifier at all, C# treats that method as
                 <strong>private access</strong> by default: usable only
                 from within the class that contains it. Adding the
                 <code>public</code> keyword instead grants
                 <strong>public access</strong>, allowing the method to be
-                called from other classes as well.</p>
+                called from other classes as well.
+            </p>
 
             <div class="warning-box">
                 Leaving off an accessibility modifier does not make a method
@@ -826,7 +961,8 @@
                 class name followed by a period and the method name, such as
                 <code>Bakery.MixDough()</code>. Using a method's complete
                 name this way makes clear exactly which class the method
-                belongs to.</p>
+                belongs to.
+            </p>
 
             <h3>Static vs. Nonstatic Methods</h3>
             <p>A <strong>static</strong> method is called by referring to
@@ -854,7 +990,8 @@
                 declared within a method's body. Locally declared items are
                 <strong>visible</strong>, meaning usable, only within the
                 specific method where they are declared; they are entirely
-                unknown to every other method in the program.</p>
+                unknown to every other method in the program.
+            </p>
 
             <div class="warning-box">
                 A variable declared inside one method cannot be referenced
@@ -865,10 +1002,37 @@
                 being only in scope until the end of its own method.
             </div>
 
+            <h3>Local Functions</h3>
+            <p>Starting with C# 7.0, you can place a method entirely inside
+                another method. A method written this way is called a
+                <strong>local function</strong>. Just like a local variable,
+                a local function is in scope only inside its containing
+                method, so it can be called only from within that method and
+                not from any other method in the class.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: A Local Function</h4>
+                <pre><code><span class="keyword">static</span> <span class="type">void</span> <span class="func">Main</span>()
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="func">Square</span>(<span class="num">6</span>));   <span class="comment">// displays 36</span>
+
+    <span class="comment">// Square() is a local function: it lives inside Main()
+    // and can be called only from Main()</span>
+    <span class="type">int</span> <span class="func">Square</span>(<span class="type">int</span> <span class="var">n</span>)
+    {
+        <span class="keyword">return</span> <span class="var">n</span> * <span class="var">n</span>;
+    }
+}</code></pre>
+            </div>
+
             <!-- ===================== SECTION 5 ===================== -->
             <h2 id="section-parameters">📥 Parameters and Arguments</h2>
 
             <h3>Formal Parameters vs. Actual Parameters</h3>
+            <p>A <strong>parameter</strong> is a variable that holds data
+                passed to a method when it is called. There are two sides to
+                every parameter. </p>
             <p>A <strong>formal parameter</strong> is a variable listed in a
                 method's header that is designed to accept a value when the
                 method is called; it is the placeholder that appears in the
@@ -892,10 +1056,15 @@
 
             <p>A formal parameter that receives a copy of the value passed
                 to it is described as an example of a parameter
-                <strong>passed by value</strong>: the method works with its
-                own separate copy, so changes made to that parameter inside
-                the method have no effect on the original argument back in
-                the calling method.</p>
+                <strong>passed by value</strong>, and such a parameter is
+                called a <strong>value parameter</strong>. A value parameter
+                is still a formal parameter (it appears in the header), but it
+                is <em>not</em> the same thing as the actual parameter, and it
+                does not receive a reference or memory address. The method
+                works with its own separate copy, so changes made to that
+                parameter inside the method have no effect on the original
+                argument back in the calling method.
+            </p>
 
             <h3>Matching Arguments to Parameters</h3>
             <p>The arguments passed in a method call must match the
@@ -917,7 +1086,8 @@
                         parameter's declared type. A value can be
                         automatically promoted to a larger, compatible type,
                         such as passing an <code>int</code> argument to a
-                        <code>double</code> parameter.</p>
+                        <code>double</code> parameter.
+                    </p>
                 </div>
             </div>
 
@@ -960,6 +1130,78 @@
 }</code></pre>
             </div>
 
+            <h3>Return Values from Built-in Methods</h3>
+            <p>The same rules apply to the methods built into C#. Knowing a
+                built-in method's return type tells you what kind of variable
+                can receive its result.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Built-in Method</th>
+                        <th>What It Returns / Accepts</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Console.ReadLine()</code></td>
+                        <td>Returns a <strong><code>string</code></strong>
+                            (whatever the user typed). Its result can be
+                            assigned directly only to a string variable; to
+                            store it as a number or bool it must first be
+                            converted.</td>
+                        <td><code>string name = ReadLine();</code><br>
+                            <code>int qty = Convert.ToInt32(ReadLine());</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>Math.Pow()</code></td>
+                        <td>Belongs to the <code>Math</code> class; it is a
+                            <strong>public static</strong> method, so any
+                            program can call it through the class name. It
+                            accepts two <code>double</code> arguments (the
+                            base and the exponent) and returns a
+                            <code>double</code>.
+                        </td>
+                        <td><code>double result = Math.Pow(2, 3);</code><br>
+                            <span style="color:#78716C">// 8</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                Built-in methods like <code>Math.Pow()</code> must be
+                <code>public</code>; if they were private, your program
+                (which is in a different class) could not call them at all.
+                They are <code>static</code> because you call them through
+                the class name, <code>Math</code>, without creating a
+                <code>Math</code> object.
+            </div>
+
+            <h3>Reading Information from a Method Call</h3>
+            <p>A correctly written call reveals a lot about a method, even if
+                you never see its declaration. Consider this call:</p>
+
+            <div class="syntax-box">
+                <h4>Example: What a Call Tells You</h4>
+                <pre><code><span class="type">double</span> <span class="var">fee</span> = <span class="type">Billing</span>.<span class="func">ComputeFee</span>(<span class="string">"Gold"</span>, <span class="num">12</span>);</code></pre>
+            </div>
+
+            <ul>
+                <li><code>Billing.</code> — the method belongs to the
+                    <code>Billing</code> class (a fully qualified name), and
+                    because it is called through the class name, it is
+                    static.
+                </li>
+                <li><code>("Gold", 12)</code> — it accepts a string parameter
+                    followed by an integer parameter.</li>
+                <li><code>double fee =</code> — it returns a value (one that
+                    can be stored in a <code>double</code>), so it is not
+                    void.</li>
+            </ul>
+
             <h3>Boolean-Returning Methods in Conditions</h3>
             <p>A method that returns a <code>bool</code> value can be called
                 directly inside a conditional expression, exactly as if it
@@ -971,6 +1213,14 @@
 {
     <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Senior discount applied."</span>);
 }</code></pre>
+            </div>
+
+            <div class="warning-box">
+                The call inside the condition must include its parentheses:
+                <code>if (IsEligibleForDiscount(age))</code>. Writing just the
+                method name without parentheses is a syntax error, and
+                writing <code>if (true)</code> or adding <code>!</code> in
+                front of the call changes the logic entirely.
             </div>
 
             <p>A Boolean-returning method can also control a loop directly,
@@ -1103,7 +1353,8 @@
                 <code>Main()</code> always includes the <code>static</code>
                 keyword because it is associated with its containing class
                 as a whole, not with any individual object created from that
-                class.</p>
+                class.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Reading Command-Line Arguments</h4>
@@ -1122,7 +1373,8 @@
                 whatever arguments it should receive, such as
                 <code>HandyTool report.txt</code>, with the arguments
                 separated from the program name and from each other by
-                spaces.</p>
+                spaces.
+            </p>
 
             <div class="tip-box">
                 Ending a <code>static int Main()</code> method with
@@ -1153,7 +1405,16 @@
                 <code>e</code>, are generated automatically by the IDE as
                 part of the standard pattern every event-handling method
                 follows; you do not need to write this parameter list
-                yourself.</p>
+                yourself.
+            </p>
+
+            <p>You also never call a Click method or pass it arguments
+                yourself. Its parameters are <strong>received automatically
+                    when the user clicks the corresponding Button</strong>:
+                <code>sender</code> is the object that generated the event
+                (the Button that was clicked), and <code>e</code> holds
+                information about the event itself.
+            </p>
 
             <div class="tip-box">
                 Because a generated Click method is associated with a Form
@@ -1207,9 +1468,18 @@
                                 avoid</td>
                         </tr>
                         <tr>
+                            <td>Multifile assembly</td>
+                            <td>A program compiled from methods/classes stored
+                                in separate files, making them reusable</td>
+                        </tr>
+                        <tr>
                             <td>Calling method / called method</td>
                             <td>The method that uses another / the method
                                 being used</td>
+                        </tr>
+                        <tr>
+                            <td>Invoking a method</td>
+                            <td>Another term for calling a method</td>
                         </tr>
                         <tr>
                             <td>Implementation hiding</td>
@@ -1229,11 +1499,27 @@
                         <tr>
                             <td>Optional header parts</td>
                             <td>Accessibility and static are optional;
-                                return type, identifier, parentheses are not</td>
+                                return type, identifier, parentheses are not
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Method identifier rules</td>
+                            <td>No spaces; must start with a letter or
+                                underscore; followed by parentheses</td>
+                        </tr>
+                        <tr>
+                            <td>Multiple parameters</td>
+                            <td>Each has its own type; type-name pairs separated
+                                by commas</td>
                         </tr>
                         <tr>
                             <td>void</td>
                             <td>Means the method returns no value</td>
+                        </tr>
+                        <tr>
+                            <td>Non-void return type</td>
+                            <td>A call can be assigned to a variable of that
+                                type, e.g. int x = GetCount();</td>
                         </tr>
                         <tr>
                             <td>Private access (default)</td>
@@ -1263,6 +1549,11 @@
                                 declared</td>
                         </tr>
                         <tr>
+                            <td>Local function</td>
+                            <td>A method inside another method; callable only
+                                from the containing method</td>
+                        </tr>
+                        <tr>
                             <td>Formal parameter</td>
                             <td>Placeholder in the method header that
                                 accepts a value</td>
@@ -1277,8 +1568,14 @@
                                 the original</td>
                         </tr>
                         <tr>
+                            <td>Value parameter</td>
+                            <td>A formal parameter that receives a copy of the
+                                argument</td>
+                        </tr>
+                        <tr>
                             <td>Fewer arguments than parameters</td>
-                            <td>Allowed only when default arguments are used</td>
+                            <td>Allowed only when default arguments are used
+                            </td>
                         </tr>
                         <tr>
                             <td>Type promotion</td>
@@ -1293,6 +1590,15 @@
                         <tr>
                             <td>return statement</td>
                             <td>Sends at most one value back to the caller</td>
+                        </tr>
+                        <tr>
+                            <td>ReadLine()</td>
+                            <td>Returns a string</td>
+                        </tr>
+                        <tr>
+                            <td>Math.Pow()</td>
+                            <td>A public static Math method; takes two doubles,
+                                returns a double</td>
                         </tr>
                         <tr>
                             <td>Boolean-returning methods</td>
@@ -1327,6 +1633,11 @@
                             <td>Generated Click method</td>
                             <td>private void controlName_Click(object
                                 sender, EventArgs e)</td>
+                        </tr>
+                        <tr>
+                            <td>Click method parameters</td>
+                            <td>Received automatically when the Button is
+                                clicked</td>
                         </tr>
                         <tr>
                             <td>Form methods</td>
