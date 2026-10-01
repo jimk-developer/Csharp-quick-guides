@@ -810,30 +810,30 @@
 
             <div class="syntax-box">
                 <h4>Syntax: Declaring an Out Variable Inline</h4>
-                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">SplitFullName</span>(<span class="type">string</span> <span class="var">fullName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">firstName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">lastName</span>)
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">SplitLocation</span>(<span class="type">string</span> <span class="var">location</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">city</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">state</span>)
 {
-    <span class="type">string</span>[] <span class="var">parts</span> = <span class="var">fullName</span>.<span class="func">Split</span>(<span class="string">' '</span>);
-    <span class="var">firstName</span> = <span class="var">parts</span>[<span class="num">0</span>];
-    <span class="var">lastName</span> = <span class="var">parts</span>[<span class="num">1</span>];
+    <span class="type">string</span>[] <span class="var">parts</span> = <span class="var">location</span>.<span class="func">Split</span>(<span class="string">','</span>);
+    <span class="var">city</span> = <span class="var">parts</span>[<span class="num">0</span>];
+    <span class="var">state</span> = <span class="var">parts</span>[<span class="num">1</span>];
 }
 
-<span class="comment">// firstName and lastName are declared right here, inline, with "out"</span>
-<span class="func">SplitFullName</span>(<span class="string">"Jordan Reyes"</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">firstName</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">lastName</span>);
-<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Welcome, {0} {1}!"</span>, <span class="var">firstName</span>, <span class="var">lastName</span>);</code></pre>
+<span class="comment">// city and state are declared right here, inline, with "out"</span>
+<span class="func">SplitLocation</span>(<span class="string">"Austin,TX"</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">city</span>, <span class="keyword">out</span> <span class="type">string</span> <span class="var">state</span>);
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"City: {0}  State: {1}"</span>, <span class="var">city</span>, <span class="var">state</span>);</code></pre>
             </div>
 
             <div class="tip-box">
-                Because <code>firstName</code> and <code>lastName</code> are
+                Because <code>city</code> and <code>state</code> are
                 <strong>out variables</strong>, declared at the point where
                 they are passed as <code>out</code> arguments, they
                 <strong>do not need to be declared before the method
                     call</strong>. The method assigns each one a value, and each
                 keeps that value after the method returns, so the
                 <code>WriteLine()</code> statement that follows displays
-                whatever names the method stored in them. (When writing the
+                whatever values the method stored in them. (When writing the
                 call yourself, include the type in the declaration, as in
-                <code>out string firstName</code> or
-                <code>out var firstName</code>.)
+                <code>out string city</code> or
+                <code>out var city</code>.)
             </div>
 
             <p>Output parameters are the natural choice whenever a method
@@ -1127,11 +1127,11 @@
             <div class="syntax-box">
                 <h4>Example: Optional Parameters in Overload Resolution</h4>
                 <pre><code><span class="comment">// Version 1</span>
-<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DoSomething</span>(<span class="type">int</span> <span class="var">myNumber</span>, <span class="type">string</span> <span class="var">myWord</span> = <span class="string">"Happy"</span>)
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">PrintLabel</span>(<span class="type">string</span> <span class="var">item</span>, <span class="type">int</span> <span class="var">copies</span> = <span class="num">1</span>)
 <span class="comment">// Version 2</span>
-<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">DoSomething</span>(<span class="type">int</span> <span class="var">myNumber</span>)
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">void</span> <span class="func">PrintLabel</span>(<span class="type">string</span> <span class="var">item</span>)
 
-<span class="func">DoSomething</span>(<span class="num">88</span>);
+<span class="func">PrintLabel</span>(<span class="string">"Box A"</span>);
 <span class="comment">// Both versions are applicable, but Version 2 executes,
 // because the call omits no optional parameters for it</span></code></pre>
             </div>
@@ -1155,19 +1155,19 @@
 
             <div class="syntax-box">
                 <h4>Example: A Potentially Ambiguous Pair of Overloads</h4>
-                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateFee</span>(<span class="type">double</span> <span class="var">amount</span>, <span class="type">int</span> <span class="var">days</span>)
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">ComputeShipping</span>(<span class="type">double</span> <span class="var">weight</span>, <span class="type">int</span> <span class="var">miles</span>)
 {
-    <span class="keyword">return</span> <span class="var">amount</span> * <span class="num">0.01</span> * <span class="var">days</span>;
+    <span class="keyword">return</span> <span class="var">weight</span> * <span class="num">0.05</span> * <span class="var">miles</span>;
 }
 
-<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculateFee</span>(<span class="type">int</span> <span class="var">amount</span>, <span class="type">double</span> <span class="var">days</span>)
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">ComputeShipping</span>(<span class="type">int</span> <span class="var">weight</span>, <span class="type">double</span> <span class="var">miles</span>)
 {
-    <span class="keyword">return</span> <span class="var">amount</span> * <span class="num">0.015</span> * <span class="var">days</span>;
+    <span class="keyword">return</span> <span class="var">weight</span> * <span class="num">0.04</span> * <span class="var">miles</span>;
 }
 
-<span class="comment">// CalculateFee(6, 45) is genuinely ambiguous:
-// int 6 could convert to double for the first overload,
-// or int 45 could convert to double for the second overload,
+<span class="comment">// ComputeShipping(3, 120) is genuinely ambiguous:
+// int 3 could convert to double for the first overload,
+// or int 120 could convert to double for the second overload,
 // and neither conversion is a better match than the other</span></code></pre>
             </div>
 
@@ -1177,7 +1177,7 @@
                 specific call is made that both versions could equally well
                 satisfy, with no available exact match and no way for the
                 betterness rules to prefer one implicit conversion over the
-                other. Calling <code>CalculateFee(6, 45)</code> with two
+                other. Calling <code>ComputeShipping(3, 120)</code> with two
                 integer arguments triggers exactly that situation, since
                 either argument could be the one that gets converted to
                 <code>double</code>.
@@ -1229,12 +1229,12 @@
 
             <div class="syntax-box">
                 <h4>Example: Which Calls Are Legal?</h4>
-                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">CalculatePrice</span>(<span class="type">int</span> <span class="var">numTickets</span>, <span class="type">char</span> <span class="var">sectionCode</span> = <span class="string">'N'</span>, <span class="type">double</span> <span class="var">basePrice</span> = <span class="num">54.95</span>)
+                <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">double</span> <span class="func">BookRoom</span>(<span class="type">int</span> <span class="var">nights</span>, <span class="type">char</span> <span class="var">roomType</span> = <span class="string">'S'</span>, <span class="type">double</span> <span class="var">nightlyRate</span> = <span class="num">89.99</span>)
 
-<span class="func">CalculatePrice</span>(<span class="num">4</span>);            <span class="comment">// Legal: both defaults used</span>
-<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="string">'A'</span>);       <span class="comment">// Legal: basePrice uses its default</span>
-<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="num">23.45</span>);     <span class="comment">// Illegal: can't skip sectionCode</span>
-<span class="func">CalculatePrice</span>(<span class="num">4</span>, <span class="var">basePrice</span>: <span class="num">23.45</span>); <span class="comment">// Legal: a named argument skips it</span></code></pre>
+<span class="func">BookRoom</span>(<span class="num">2</span>);              <span class="comment">// Legal: both defaults used</span>
+<span class="func">BookRoom</span>(<span class="num">2</span>, <span class="string">'K'</span>);         <span class="comment">// Legal: nightlyRate uses its default</span>
+<span class="func">BookRoom</span>(<span class="num">2</span>, <span class="num">120.00</span>);      <span class="comment">// Illegal: can't skip roomType</span>
+<span class="func">BookRoom</span>(<span class="num">2</span>, <span class="var">nightlyRate</span>: <span class="num">120.00</span>); <span class="comment">// Legal: a named argument skips it</span></code></pre>
             </div>
 
             <h3>Named Arguments</h3>
