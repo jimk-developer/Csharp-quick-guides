@@ -631,24 +631,27 @@
 <body>
     <header>
         <h1>Guide 9: Microsoft Visual C# - Using Classes and Objects</h1>
-        <p>Class Fundamentals, Access Modifiers, Composition, Instantiation,
-            Properties, the this Reference, Constructors, Object
-            Initializers, Operator Overloading, Arrays of Objects,
-            Interfaces, and Destructors</p>
+
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Class Fundamentals</a>
+            <a href="#section-fundamentals" class="nav-pill">Class
+                Fundamentals</a>
             <a href="#section-access" class="nav-pill">Access Modifiers</a>
             <a href="#section-composition" class="nav-pill">Composition</a>
             <a href="#section-instantiation" class="nav-pill">Instantiation</a>
             <a href="#section-properties" class="nav-pill">Properties</a>
             <a href="#section-this" class="nav-pill">The this Reference</a>
+            <a href="#section-static" class="nav-pill">Static Members</a>
             <a href="#section-constructors" class="nav-pill">Constructors</a>
-            <a href="#section-initializers" class="nav-pill">Object Initializers</a>
-            <a href="#section-operators" class="nav-pill">Operator Overloading</a>
+            <a href="#section-initializers" class="nav-pill">Object
+                Initializers</a>
+            <a href="#section-operators" class="nav-pill">Operator
+                Overloading</a>
             <a href="#section-arrays" class="nav-pill">Arrays of Objects</a>
             <a href="#section-interfaces" class="nav-pill">Interfaces</a>
             <a href="#section-destructors" class="nav-pill">Destructors</a>
             <a href="#section-gui" class="nav-pill">GUI Objects</a>
+            <a href="https://docs.google.com/document/d/1M0JYkTCqfpirOrOLNwNdC3A_FAvqE3ie2hQ9EGYB3AM/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -687,7 +690,8 @@
 
             <h3>Instance Variables and Instance Methods</h3>
             <p>The data components of a class that can differ from one
-                object to the next are called <strong>instance variables</strong>,
+                object to the next are called <strong>instance
+                    variables</strong>,
                 more commonly referred to as <strong>fields</strong>, a term
                 used specifically to distinguish them from local variables
                 and other kinds of variables in a program. Each object
@@ -724,7 +728,8 @@
                 than defining that class itself. A single well-written class
                 can serve as many different class clients across many
                 different programs, each one creating and using its own
-                objects from that same class definition.</p>
+                objects from that same class definition.
+            </p>
 
             <!-- ===================== SECTION 2 ===================== -->
             <h2 id="section-access">🔐 Class Creation and Access Modifiers</h2>
@@ -779,7 +784,17 @@
                 <strong>information hiding</strong>: a feature found in all
                 object-oriented languages that combines private data with
                 public accessors to protect an object's internal state from
-                being changed in unexpected ways.</p>
+                being changed in unexpected ways.
+            </p>
+
+            <p>An <strong>accessor</strong> specifies the statements that
+                execute when a class's fields are accessed: a get accessor
+                holds the statements that run when a field's value is
+                retrieved, and a set accessor holds the statements that run
+                when a field is assigned a value. Because outside code can
+                reach the fields only through those statements, accessors
+                also let the class control how its fields are read and
+                changed.</p>
 
             <div class="tip-box">
                 Combining private fields with public accessor methods or
@@ -789,11 +804,67 @@
                 in and modify the raw fields directly.
             </div>
 
+            <h3>Modifiers for Fields</h3>
+            <p>Fields can be declared with these modifiers:</p>
+            <div class="keyword-grid">
+                <div class="keyword-chip">new</div>
+                <div class="keyword-chip">public</div>
+                <div class="keyword-chip">protected</div>
+                <div class="keyword-chip">internal</div>
+                <div class="keyword-chip">private</div>
+                <div class="keyword-chip">static</div>
+                <div class="keyword-chip">readonly</div>
+                <div class="keyword-chip">volatile</div>
+            </div>
+            <p>Most of the fields you write will be <code>private</code>.
+                Keywords such as <code>abstract</code>, <code>virtual</code>,
+                <code>sealed</code>, <code>extern</code>, and
+                <code>implicit</code> are <em>not</em> field modifiers;
+                they apply to classes, methods, or operators instead.
+            </p>
+
+            <h3>Private Methods</h3>
+            <p>Methods are usually <code>public</code> so that class clients
+                can call them, but a method can also be <code>private</code>.
+                A private method is a helper that only the class's own
+                members can call. Private methods are a good fit for
+                internal housekeeping that clients should never trigger
+                directly, such as recalculating one field after a related
+                field changes.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Private Helper Method</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Square</span>
+{
+    <span class="keyword">private</span> <span class="type">double</span> <span class="var">side</span>;
+    <span class="keyword">private</span> <span class="type">double</span> <span class="var">area</span>;
+
+    <span class="keyword">public</span> <span class="type">double</span> <span class="var">Side</span>
+    {
+        <span class="keyword">get</span> { <span class="keyword">return</span> <span class="var">side</span>; }
+        <span class="keyword">set</span>
+        {
+            <span class="var">side</span> = <span class="var">value</span>;
+            <span class="func">RecalculateArea</span>();  <span class="comment">// keep the related field in sync</span>
+        }
+    }
+
+    <span class="comment">// Clients cannot call this; only Square's own members can</span>
+    <span class="keyword">private</span> <span class="type">void</span> <span class="func">RecalculateArea</span>()
+    {
+        <span class="var">area</span> = <span class="var">side</span> * <span class="var">side</span>;
+    }
+}</code></pre>
+            </div>
+
             <p>C#'s predefined types, such as <code>int</code>,
-                <code>double</code>, and <code>char</code>, are examples of
-                the language's built-in <strong>intrinsic types</strong>;
-                classes you write yourself become new types you can use
-                right alongside those built-in ones.</p>
+                <code>double</code>, and <code>char</code>, are
+                <strong>value types</strong> (see Reference Types vs. Value
+                Types below). They are also called built-in or
+                <strong>intrinsic types</strong>. Classes you write yourself
+                become new types that you can use alongside the built-in
+                ones.
+            </p>
 
             <!-- ===================== SECTION 3 ===================== -->
             <h2 id="section-composition">🧩 Composition</h2>
@@ -834,7 +905,8 @@
             <p>To <strong>instantiate</strong> means to create an object: a
                 concrete instance of a class, brought into existence by
                 calling one of that class's constructors with the
-                <code>new</code> operator.</p>
+                <code>new</code> operator.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: Instantiating an Object</h4>
@@ -850,6 +922,24 @@
                 <code>new</code>.
             </div>
 
+            <h3>Declaring vs. Allocating Memory</h3>
+            <p>Declaring an object variable does not create an object.
+                A statement such as <code>Vehicle sedan;</code> only
+                reserves a name that can <em>refer to</em> a
+                <code>Vehicle</code>; no memory is set aside for the
+                object's fields yet. You must use the <code>new</code>
+                operator to allocate memory for the object itself.
+                Simple value-type variables such as <code>int</code> are
+                different: their memory is allocated automatically when
+                they are declared.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Declaring Then Allocating</h4>
+                <pre><code><span class="type">Vehicle</span> <span class="var">sedan</span>;           <span class="comment">// declares a reference only; no object exists yet</span>
+<span class="var">sedan</span> = <span class="keyword">new</span> <span class="type">Vehicle</span>();   <span class="comment">// new allocates memory and calls the constructor</span></code></pre>
+            </div>
+
             <h3>Reference Types vs. Value Types</h3>
             <p>C#'s data types fall into two broad categories.</p>
 
@@ -858,7 +948,8 @@
                     <h4>Value Type</h4>
                     <p>Holds an actual data value directly, such as an
                         <code>int</code> or a <code>bool</code>. Copying a
-                        value type variable copies the value itself.</p>
+                        value type variable copies the value itself.
+                    </p>
                 </div>
                 <div class="comparison-item neutral">
                     <h4>Reference Type</h4>
@@ -875,6 +966,34 @@
                 why passing an object to a method gives that method access
                 to the actual object, not an independent copy of it, the same
                 behavior seen when passing an entire array to a method.</p>
+
+            <h3>Passing Objects to Methods</h3>
+            <p>A method parameter can be an object of a class. Declare it
+                the same way you declare any parameter: the type (the class
+                name) followed by the parameter's identifier. When you call
+                the method, pass just the object's name; do not repeat the
+                type in the call.</p>
+
+            <div class="syntax-box">
+                <h4>Example: An Object as a Parameter and an Argument</h4>
+                <pre><code><span class="comment">// Declaration: class name, then the parameter name</span>
+<span class="keyword">static</span> <span class="type">void</span> <span class="func">ShowVehicle</span>(<span class="type">Vehicle</span> <span class="var">car</span>)
+{
+    <span class="var">car</span>.<span class="func">Describe</span>();
+}
+
+<span class="comment">// Call: pass only the object's identifier</span>
+<span class="type">Vehicle</span> <span class="var">sedan</span> = <span class="keyword">new</span> <span class="type">Vehicle</span>();
+<span class="func">ShowVehicle</span>(<span class="var">sedan</span>);</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <code>ShowVehicle(Vehicle sedan);</code> (type repeated in
+                the call) and <code>static void ShowVehicle(Vehicle)</code>
+                (parameter name missing) are both errors. The type goes in
+                the declaration only, and every parameter needs both a type
+                and a name, even when other parameters have default values.
+            </div>
 
             <!-- ===================== SECTION 5 ===================== -->
             <h2 id="section-properties">🏷️ Properties</h2>
@@ -903,9 +1022,22 @@
 
             <p>Inside a set accessor, the identifier <code>value</code>
                 automatically holds whatever data was assigned to the
-                property. <code>value</code> acts like a keyword in this one
-                specific circumstance, which makes it a <strong>contextual
-                    keyword</strong> rather than a full reserved keyword.</p>
+                property. The assigned data is passed to the set accessor
+                as an <strong>implicit parameter</strong> named
+                <code>value</code>: you never declare it, and it doesn't
+                appear in any parameter list.
+            </p>
+
+            <p>A word that acts as a keyword only in one specific situation
+                is a <strong>contextual keyword</strong> rather than a full
+                reserved keyword. <code>get</code>, <code>set</code>, and
+                <code>value</code> are all contextual keywords: a set
+                accessor begins with the identifier <code>set</code>, a get
+                accessor begins with <code>get</code>, and they have special
+                meaning only inside a property. Outside a property, you
+                could legally use any of them as an ordinary variable
+                name.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Using a Property</h4>
@@ -932,7 +1064,8 @@
                 logic beyond simply storing and retrieving a value. The
                 compiler automatically generates a hidden
                 <strong>backing field</strong> to store the data, so you
-                never declare that field yourself.</p>
+                never declare that field yourself.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: An Auto-Implemented Property</h4>
@@ -942,11 +1075,20 @@
 }</code></pre>
             </div>
 
-            <p>Auto-implemented properties are most appropriate when a
-                property does not need any validation or additional logic in
-                either accessor; as soon as a property needs to check or
-                transform a value before storing it, a fully written property
-                with an explicit backing field becomes necessary instead.</p>
+            <p>Auto-implemented properties are most appropriate when you
+                want a property with both a get and a set accessor, and
+                neither accessor needs validation or any other logic. As
+                soon as a property needs to check or transform a value
+                before storing it, you need a fully written property with an
+                explicit backing field instead.</p>
+
+            <div class="tip-box">
+                An auto-implemented property is normally written with
+                <em>both</em> <code>get;</code> and <code>set;</code>.
+                Auto-implemented properties were introduced in C# 3.0, so
+                they can't be used in programs that must support older
+                versions of the language.
+            </div>
 
             <div class="tip-box">
                 A property, whether fully written or auto-implemented,
@@ -964,7 +1106,8 @@
                 whichever specific object the method or accessor was called
                 on. Because it is passed automatically rather than appearing
                 in the parameter list, <code>this</code> is described as an
-                <strong>implicit parameter</strong>.</p>
+                <strong>implicit parameter</strong>.
+            </p>
 
             <div class="warning-box">
                 Only nonstatic methods receive a this reference. A static
@@ -999,7 +1142,76 @@
                 as the field <code>seatNumber</code>. Writing
                 <code>this.seatNumber</code> explicitly tells the compiler
                 you mean the field that belongs to the invoking object,
-                distinguishing it from the parameter of the same name.</p>
+                distinguishing it from the parameter of the same name.
+            </p>
+
+            <!-- ===================== SECTION 6B ===================== -->
+            <h2 id="section-static">📌 Static vs. Instance Members</h2>
+
+            <p>Every field and method in a class is either an
+                <strong>instance member</strong> (nonstatic) or a
+                <strong>static member</strong> (declared with the
+                <code>static</code> keyword). The difference is whether the
+                member belongs to each individual object or to the class as
+                a whole.
+            </p>
+
+            <div class="comparison">
+                <div class="comparison-item neutral">
+                    <h4>Instance (Nonstatic) Members</h4>
+                    <p>Each object gets its <strong>own copy</strong> of
+                        every instance field. Create 10 objects and you
+                        store 10 separate copies. Instance methods are
+                        called on an object (<code>sedan.Describe()</code>),
+                        receive a <code>this</code> reference, and work with
+                        that specific object's data.</p>
+                </div>
+                <div class="comparison-item neutral">
+                    <h4>Static Members</h4>
+                    <p>A static field is stored <strong>only once</strong>,
+                        and <strong>all objects of the class share that same
+                            copy</strong>, however many objects exist. Static
+                        members are accessed through the class name
+                        (<code>Vehicle.Count</code>), not an object name,
+                        and static methods receive no <code>this</code>
+                        reference.</p>
+                </div>
+            </div>
+
+            <div class="syntax-box">
+                <h4>Example: A Shared Static Field</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Vehicle</span>
+{
+    <span class="keyword">private</span> <span class="type">string</span> <span class="var">make</span>;          <span class="comment">// instance: one copy per object</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="var">Count</span>;      <span class="comment">// static: one copy shared by all objects</span>
+
+    <span class="keyword">public</span> <span class="type">Vehicle</span>()
+    {
+        <span class="var">Count</span> = <span class="var">Count</span> + <span class="num">1</span>;     <span class="comment">// every new Vehicle updates the same Count</span>
+    }
+}
+
+<span class="comment">// In a client program, access the static field through the class name</span>
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="type">Vehicle</span>.<span class="var">Count</span>);</code></pre>
+            </div>
+
+            <h3>When to Omit static</h3>
+            <p>Leave out the <code>static</code> modifier whenever a method
+                will be used to work with an individual object's data, for
+                example to display or change that object's field values.
+                Such a method must be called on an object so it knows
+                <em>which</em> object's fields to use. Use
+                <code>static</code> for methods that are called on the class
+                itself and need no object data, such as <code>Main()</code>
+                and the helper methods you wrote in earlier chapters.
+            </p>
+
+            <div class="tip-box">
+                When a nonstatic method displays a field value, such as
+                <code>make</code>, it always displays the value belonging
+                to the specific object the method was called on, never a
+                single value "for the class."
+            </div>
 
             <!-- ===================== SECTION 7 ===================== -->
             <h2 id="section-constructors">🏗️ Constructors</h2>
@@ -1008,16 +1220,50 @@
                 creates, or instantiates, an object of a class and typically
                 initializes its fields. A constructor always shares its
                 class's name and never declares a return type, not even
-                <code>void</code>.</p>
+                <code>void</code>.
+            </p>
 
             <h3>Default Constructors</h3>
             <p>If you do not write any constructor for a class at all, C#
                 automatically writes a <strong>default constructor</strong>
-                for you: a parameterless constructor that takes no
-                arguments and sets every field to its default value, such as
-                0 for numeric fields, <code>false</code> for
-                <code>bool</code> fields, and <code>null</code> for
-                reference-type fields.</p>
+                for you: a <code>public</code>, parameterless constructor
+                that takes no arguments. An object created this way has
+                every field set to its default value.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Type</th>
+                        <th>Default Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Numeric (<code>int</code>, <code>double</code>,
+                            <code>decimal</code>, ...)
+                        </td>
+                        <td><code>0</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>char</code></td>
+                        <td><code>'\0'</code> (the null character)</td>
+                    </tr>
+                    <tr>
+                        <td><code>bool</code></td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td>Reference types (<code>string</code>, objects,
+                            arrays)</td>
+                        <td><code>null</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Note that not every field becomes <code>null</code>. Only
+                reference-type fields do. Fields still exist and hold these
+                defaults, so the object can be used immediately without any
+                further initialization.</p>
 
             <div class="warning-box">
                 As soon as you write even one constructor of your own, C#
@@ -1029,17 +1275,40 @@
                 automatically.
             </div>
 
-            <p>Writing an explicit default constructor yourself is most
-                useful when you want newly created objects to start out with
-                specific, meaningful values rather than the generic system
-                defaults of 0, <code>false</code>, or <code>null</code>.</p>
+            <p>The best reason to write a default constructor yourself is
+                that you want something to happen beyond the automatic
+                defaults. That can mean giving fields specific, meaningful
+                starting values, and it can also mean performing other
+                tasks whenever an object is created, such as displaying a
+                message, recording the creation time, or adding to a
+                running count of objects. A constructor is a method, so it
+                can contain any statements you need.</p>
+
+            <div class="syntax-box">
+                <h4>Example: A Default Constructor That Does More Than
+                    Initialize</h4>
+                <pre><code><span class="keyword">public</span> <span class="type">Vehicle</span>()
+{
+    <span class="var">make</span> = <span class="string">"Unknown"</span>;
+    <span class="var">Count</span> = <span class="var">Count</span> + <span class="num">1</span>;
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"A new Vehicle was created."</span>);
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                You don't need to write a constructor just to get numeric
+                fields set to 0; C# already does that. Also, a constructor
+                you write isn't required to initialize every field: any
+                field you leave alone keeps its default value.
+            </div>
 
             <h3>Overloading Constructors</h3>
             <p>Just like ordinary methods, constructors can be
                 <strong>overloaded</strong>: a class can define multiple
                 constructors as long as each one has a different parameter
                 list, so the compiler can always tell them apart without
-                ambiguity.</p>
+                ambiguity.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Overloaded Constructors</h4>
@@ -1104,7 +1373,8 @@
                 compile time, <code>readonly</code> allows a value to be
                 determined at runtime, such as when an object is actually
                 created, while still guaranteeing it cannot be modified
-                afterward.</p>
+                afterward.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A readonly Field Assigned in a Constructor</h4>
@@ -1161,6 +1431,25 @@
                 instantiated.
             </div>
 
+            <h3>Object Initializers Require a Default Constructor</h3>
+            <p>Behind the scenes, <code>new Product { ... }</code> first
+                calls the class's <strong>default (parameterless)
+                    constructor</strong> and then assigns the listed values.
+                That means you can use an object initializer with a class
+                only when the class has a default constructor, either the one
+                C# supplies automatically (when you write no constructors)
+                or one you write yourself.</p>
+
+            <div class="warning-box">
+                If you write only constructors that take parameters, C#
+                stops supplying the automatic default constructor, and
+                <code>new Product { Sku = "GB-204" }</code> no longer
+                compiles. Add an explicit parameterless constructor to make
+                object initializers work again. Writing your own
+                constructors does not rule out object initializers; what
+                matters is whether a default constructor exists.
+            </div>
+
             <!-- ===================== SECTION 9 ===================== -->
             <h2 id="section-operators">⚙️ Operator Overloading</h2>
 
@@ -1188,7 +1477,8 @@
                 <code>combinedTotal = wallet1 + wallet2;</code> becomes
                 legal for two <code>Money</code> objects, calling the
                 overloaded operator method instead of causing a compiler
-                error.</p>
+                error.
+            </p>
 
             <h3>Rules for Overloading Operators</h3>
             <div class="warning-box">
@@ -1233,7 +1523,8 @@
                 plain assignment operator (<code>=</code>) and the
                 conditional logical operators <code>&&</code> and
                 <code>||</code>. These operators always keep their built-in
-                meaning, regardless of what custom types are involved.</p>
+                meaning, regardless of what custom types are involved.
+            </p>
 
             <!-- ===================== SECTION 10 ===================== -->
             <h2 id="section-arrays">📦 Arrays of Objects</h2>
@@ -1252,6 +1543,27 @@
 <span class="var">staff</span>[<span class="num">2</span>] = <span class="keyword">new</span> <span class="type">Employee</span>();</code></pre>
             </div>
 
+            <div class="warning-box">
+                <code>new Employee[3]</code> creates only the array: three
+                empty references, each <code>null</code>. It does
+                <strong>not</strong> construct any <code>Employee</code>
+                objects. Each element must still be assigned an object
+                created with <code>new</code> before you use it; accessing
+                <code>staff[0].Name</code> before that causes an error.
+            </div>
+
+            <p>You can also create the array and construct every object it
+                holds in a single statement, using an array initializer list
+                in which each element is its own <code>new</code>
+                constructor call:</p>
+
+            <div class="syntax-box">
+                <h4>Example: Creating and Constructing in One Statement</h4>
+                <pre><code><span class="type">Employee</span>[] <span class="var">staff</span> = {<span class="keyword">new</span> <span class="type">Employee</span>(<span class="string">"Priya"</span>, <span class="num">22.50</span><span class="type">m</span>),
+                    <span class="keyword">new</span> <span class="type">Employee</span>(<span class="string">"Devon"</span>, <span class="num">19.75</span><span class="type">m</span>),
+                    <span class="keyword">new</span> <span class="type">Employee</span>()};</code></pre>
+            </div>
+
             <h3>Sorting and Searching Object Arrays</h3>
             <p>To use <code>Array.Sort()</code> or
                 <code>Array.BinarySearch()</code> on an array of custom
@@ -1260,7 +1572,8 @@
                 <code>CompareTo()</code> method: the method that provides
                 the details of how two objects of that class compare to each
                 other, returning an integer that indicates their relative
-                order.</p>
+                order.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Implementing IComparable</h4>
@@ -1282,7 +1595,8 @@
                 <code>Array.BinarySearch()</code> can locate a specific
                 employee within an already-sorted array of them, using
                 exactly the same techniques covered for arrays of built-in
-                types.</p>
+                types.
+            </p>
 
             <!-- ===================== SECTION 11 ===================== -->
             <h2 id="section-interfaces">🔌 Interfaces and Abstract Methods</h2>
@@ -1295,7 +1609,8 @@
                 interface defines with its own working implementation. When
                 a method overrides another, it replaces the inherited or
                 interface-required definition with new, concrete behavior
-                specific to that class.</p>
+                specific to that class.
+            </p>
 
             <div class="tip-box">
                 A name that appears to be a built-in C# class but begins
@@ -1354,7 +1669,8 @@
                 auto-generated designer code, sets a property, in this case
                 <code>Text</code>, on a Button object named
                 <code>startButton</code>, using exactly the same property
-                syntax covered earlier in this guide.</p>
+                syntax covered earlier in this guide.
+            </p>
 
             <!-- ===================== SUMMARY ===================== -->
             <div class="quick-ref">
@@ -1388,6 +1704,21 @@
                             <td>Private, if no modifier is written</td>
                         </tr>
                         <tr>
+                            <td>Field modifiers</td>
+                            <td>new, public, protected, internal, private,
+                                static, readonly, volatile</td>
+                        </tr>
+                        <tr>
+                            <td>Private method</td>
+                            <td>Helper only the class can call, e.g., updating
+                                related fields</td>
+                        </tr>
+                        <tr>
+                            <td>Accessor</td>
+                            <td>Specifies the statements that execute when a
+                                field is accessed</td>
+                        </tr>
+                        <tr>
                             <td>Information hiding</td>
                             <td>Private fields plus public accessors</td>
                         </tr>
@@ -1408,7 +1739,18 @@
                         </tr>
                         <tr>
                             <td>Value type</td>
-                            <td>Holds the actual data value directly</td>
+                            <td>Holds the actual data value directly; int,
+                                double, char, bool</td>
+                        </tr>
+                        <tr>
+                            <td>Declaring vs. new</td>
+                            <td>Declaring an object reserves a reference only;
+                                new allocates memory</td>
+                        </tr>
+                        <tr>
+                            <td>Object as a parameter</td>
+                            <td>Declare Type name; call with just the name:
+                                Show(sedan)</td>
                         </tr>
                         <tr>
                             <td>Property</td>
@@ -1423,16 +1765,33 @@
                         <tr>
                             <td>Auto-implemented property</td>
                             <td>Compiler generates the backing field and
-                                accessors automatically</td>
+                                accessors; use with both get and set, no
+                                validation</td>
                         </tr>
                         <tr>
                             <td>value in a setter</td>
-                            <td>Contextual keyword holding the assigned data</td>
+                            <td>Implicit parameter holding the assigned data
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Contextual keywords</td>
+                            <td>get, set, and value are keywords only inside a
+                                property</td>
                         </tr>
                         <tr>
                             <td>this reference</td>
                             <td>Implicit parameter identifying the invoking
                                 object; nonstatic only</td>
+                        </tr>
+                        <tr>
+                            <td>Static field</td>
+                            <td>One copy shared by all objects; accessed via
+                                class name</td>
+                        </tr>
+                        <tr>
+                            <td>Omit static</td>
+                            <td>When a method works with an individual object's
+                                data</td>
                         </tr>
                         <tr>
                             <td>Constructor</td>
@@ -1441,8 +1800,19 @@
                         </tr>
                         <tr>
                             <td>Default constructor</td>
-                            <td>Auto-generated only if you write no
+                            <td>Public and parameterless; auto-generated only if
+                                you write no
                                 constructor yourself</td>
+                        </tr>
+                        <tr>
+                            <td>Default field values</td>
+                            <td>0 numeric, '\0' char, false bool, null
+                                references</td>
+                        </tr>
+                        <tr>
+                            <td>Writing your own default constructor</td>
+                            <td>Best when you need tasks beyond default
+                                initialization</td>
                         </tr>
                         <tr>
                             <td>Overloaded constructors</td>
@@ -1456,7 +1826,8 @@
                         <tr>
                             <td>readonly vs. const</td>
                             <td>readonly can be set at runtime (in a
-                                constructor); const is fixed at compile time</td>
+                                constructor); const is fixed at compile time
+                            </td>
                         </tr>
                         <tr>
                             <td>Named constants in a class</td>
@@ -1465,7 +1836,8 @@
                         <tr>
                             <td>Object initializer</td>
                             <td>Sets accessible properties/fields at
-                                instantiation without a matching constructor</td>
+                                instantiation; requires a default constructor
+                            </td>
                         </tr>
                         <tr>
                             <td>Operator overloading</td>
@@ -1479,12 +1851,13 @@
                         </tr>
                         <tr>
                             <td>Non-overloadable operators</td>
-                            <td>=, &amp;&amp;, and || can never be overloaded</td>
+                            <td>=, &amp;&amp;, and || can never be overloaded
+                            </td>
                         </tr>
                         <tr>
                             <td>Array of objects</td>
                             <td>Holds object references, not actual object
-                                data</td>
+                                data; new Type[n] constructs no objects</td>
                         </tr>
                         <tr>
                             <td>IComparable / CompareTo()</td>
