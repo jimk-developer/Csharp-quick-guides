@@ -631,20 +631,25 @@
 <body>
     <header>
         <h1>Guide 11: Microsoft Visual C# - Exception Handling</h1>
-        <p>Exception Fundamentals, Object-Oriented Error Handling, Common
-            Exception Types, try/catch Structure, Exception Class Members,
-            TryParse() Methods, the finally Block, the Call Stack and
-            Propagation, and Custom Exceptions</p>
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Exception Fundamentals</a>
-            <a href="#section-oo-handling" class="nav-pill">OO Error Handling</a>
-            <a href="#section-common-types" class="nav-pill">Common Exception Types</a>
-            <a href="#section-try-catch" class="nav-pill">try/catch Structure</a>
-            <a href="#section-exception-members" class="nav-pill">Exception Members</a>
+            <a href="#section-fundamentals" class="nav-pill">Exception
+                Fundamentals</a>
+            <a href="#section-oo-handling" class="nav-pill">OO Error
+                Handling</a>
+            <a href="#section-common-types" class="nav-pill">Common Exception
+                Types</a>
+            <a href="#section-try-catch" class="nav-pill">try/catch
+                Structure</a>
+            <a href="#section-exception-members" class="nav-pill">Exception
+                Members</a>
             <a href="#section-tryparse" class="nav-pill">TryParse() Methods</a>
             <a href="#section-finally" class="nav-pill">The finally Block</a>
-            <a href="#section-callstack" class="nav-pill">Call Stack &amp; Propagation</a>
+            <a href="#section-outside" class="nav-pill">Outside Methods</a>
+            <a href="#section-callstack" class="nav-pill">Call Stack &amp;
+                Propagation</a>
             <a href="#section-custom" class="nav-pill">Custom Exceptions</a>
+            <a href="https://docs.google.com/document/d/10tQPK6DemEqm7DsgXWCNJ57O9YjmezQ4bMQQeNgnMFQ/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -680,8 +685,19 @@
                 Exceptions occur at <strong>runtime</strong>, while the
                 program is actually running; errors caught while compiling a
                 program, such as syntax mistakes, are not considered
-                exceptions at all, since the program never even reaches the
-                point of execution.</p>
+                exceptions at all; they are <strong>compiler errors</strong>,
+                and the program never even reaches the point of execution.
+                Exceptions are caused by errors in program logic or by
+                insufficient system resources.</p>
+
+            <p><strong>Exception handling</strong> is the set of
+                object-oriented techniques used to manage these unexpected
+                errors. Handling matters because an exception that is
+                <strong>not handled</strong> terminates the running program
+                abruptly; the program does not simply continue on its own.
+                With exception handling, a program can deal with the problem
+                and keep running.
+            </p>
 
             <h3>The Exception Hierarchy</h3>
             <p>In C#, all exceptions are objects that belong to, or derive
@@ -690,7 +706,8 @@
                 descends from the single built-in root class,
                 <code>System.Object</code>. C# defines more than 100 distinct
                 <code>Exception</code> subclasses to represent many specific
-                kinds of problems.</p>
+                kinds of problems.
+            </p>
 
             <table>
                 <thead>
@@ -734,18 +751,19 @@
                 possibly at a reduced level, even when some part of the
                 system fails are described as <strong>fault-tolerant</strong>.
                 Building fault-tolerant, robust applications matters most
-                for <strong>mission-critical</strong> processes: tasks whose
-                failure would have serious consequences, where the software
+                for <strong>mission-critical</strong> processes: any process
+                that is crucial to an organization, where the software
                 simply cannot be allowed to crash outright.</p>
 
             <div class="tip-box">
                 According to the creators of C#, an event is considered
-                infrequent for a program when it happens in less than
-                roughly 1% of that program's executions. This distinction
-                matters because exceptions carry more processing overhead
-                than an ordinary conditional check, so they are best
-                reserved for genuinely infrequent, unexpected situations
-                rather than routine, everyday conditions.
+                <strong>infrequent</strong> when it happens in less than
+                <strong>30 percent</strong> of a program's executions. If you
+                expect an error to occur less than 30% of the time, use an
+                exception; if you expect it more often, use traditional error
+                checking with an <code>if</code> statement. This matters
+                because creating an Exception object carries more processing
+                overhead than an ordinary conditional check.
             </div>
 
             <!-- ===================== SECTION 2 ===================== -->
@@ -768,24 +786,68 @@
                         <code>catch</code> keywords to attempt an operation,
                         signal that something went wrong, and respond to
                         that problem separately from the normal flow of the
-                        code.</p>
+                        code.
+                    </p>
                 </div>
             </div>
 
-            <p>Managing a potential error with a conditional statement,
-                rather than an exception, is most efficient when the error
-                condition is common enough, or cheap enough to check for in
-                advance, that paying the overhead of a full exception is not
-                worthwhile; a simple, everyday check like confirming a
-                divisor is nonzero fits this description well.</p>
+            <p>Checking a value with an <code>if</code> (or
+                <code>if...else</code>) statement prevents the error without
+                ever creating an Exception object, so it does not really
+                "handle an exception" at all. Managing a potential error with
+                a conditional statement is the <strong>most efficient</strong>
+                choice when you expect the error to be
+                <strong>frequent</strong>, meaning 30% of the time or more
+                (for example, an error expected more than 50% of the time).
+                Because no Exception object has to be created each time the
+                problem arises, the program saves time and memory; programmers
+                say it has little <strong>overhead</strong>.
+            </p>
 
-            <p>In object-oriented exception handling, when you anticipate
-                that a procedure might run into a problem that prevents it
-                from completing correctly, you <strong>try</strong> that
-                procedure: you place its statements inside a
-                <code>try</code> block. When a method actually detects an
-                error condition while running, it <strong>throws</strong> an
-                exception, signaling that something has gone wrong.</p>
+            <h3>Advantages of Exception Handling</h3>
+            <ul>
+                <li><strong>Efficiency for infrequent errors:</strong> when
+                    an error occurs less than 30% of the time, an
+                    <code>if</code> test would run many times when it is not
+                    needed, so it is more efficient to skip the test and
+                    throw an Exception only when the problem actually
+                    happens.
+                </li>
+                <li><strong>Clearer code:</strong> when a program's main
+                    logic is interrupted by a series of <code>if</code>
+                    statements checking for errors, the program becomes more
+                    complicated and harder to understand. Exception handling
+                    separates the program's main tasks from the code that
+                    deals with rare errors.</li>
+            </ul>
+
+            <h3>The Three Terms: try, throw, and catch</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>try</strong></td>
+                        <td>When you anticipate that a procedure might not
+                            complete correctly, you "try" it by placing its
+                            statements in a <code>try</code> block</td>
+                    </tr>
+                    <tr>
+                        <td><strong>throw</strong></td>
+                        <td>A method that detects an error condition "throws"
+                            an exception</td>
+                    </tr>
+                    <tr>
+                        <td><strong>catch</strong></td>
+                        <td>The block of code that <strong>processes</strong>
+                            the error "catches" the exception</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- ===================== SECTION 3 ===================== -->
             <h2 id="section-common-types">📋 Common Exception Types</h2>
@@ -823,8 +885,26 @@
                             writing to a file</td>
                     </tr>
                     <tr>
-                        <td><code>OperationCanceledException</code></td>
+                        <td><code>System.Data.OperationAbortedException</code>
+                        </td>
                         <td>An ongoing operation is aborted by the user</td>
+                    </tr>
+                    <tr>
+                        <td><code>InvalidPrinterException</code></td>
+                        <td>A user requests an invalid printer</td>
+                    </tr>
+                    <tr>
+                        <td><code>InvalidOperationException</code></td>
+                        <td>A method call is invalid for the object's current
+                            state</td>
+                    </tr>
+                    <tr>
+                        <td><code>FormatException</code></td>
+                        <td>A string cannot be converted to the requested
+                            type, such as letters passed to
+                            <code>int.Parse()</code> or
+                            <code>Convert.ToInt32()</code>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -852,6 +932,12 @@
                 block, one try block can safely surround several statements
                 together.</p>
 
+            <div class="warning-box">
+                A try block can never stand alone: you must code
+                <strong>at least one catch block or a finally block</strong>
+                immediately following every try block.
+            </div>
+
             <div class="syntax-box">
                 <h4>Syntax: A Basic try/catch</h4>
                 <pre><code><span class="keyword">try</span>
@@ -866,6 +952,61 @@
     <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"You cannot divide by zero."</span>);
 }</code></pre>
             </div>
+
+            <h3>What Happens When a Statement Throws</h3>
+            <p>When a try block contains several statements, only the
+                <strong>first</strong> error-generating statement throws an
+                exception. As soon as it does, the try block is abandoned and
+                control transfers to the catch blocks;
+                <strong>every remaining statement in the try block is
+                    skipped</strong>. In the example above, if the user enters
+                0,
+                the division throws a <code>DivideByZeroException</code> and
+                the <code>WriteLine("Result: ...")</code> statement never
+                runs. Whether or not an exception is caught, the statements
+                that follow the last catch block then execute normally.
+            </p>
+
+            <h3>Anatomy of a catch Block</h3>
+            <p>A catch block, which some programmers also call a
+                <strong>catch clause</strong>, is written with:
+            </p>
+            <ol>
+                <li>The keyword <code>catch</code></li>
+                <li>Parentheses containing an Exception type and,
+                    <strong>optionally</strong>, a name for the exception
+                    object, as in <code>catch (DivideByZeroException ex)</code>
+                    or simply <code>catch (DivideByZeroException)</code>
+                </li>
+                <li>A pair of curly braces containing the statements that
+                    deal with the error</li>
+            </ol>
+
+            <p>A catch block looks a little like a method, but it differs in
+                three important ways:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>catch Block</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Can be called directly by its identifier</td>
+                        <td>Cannot be called directly; it runs only when a
+                            matching exception is thrown</td>
+                    </tr>
+                    <tr>
+                        <td>Can accept multiple arguments</td>
+                        <td>Catches only one object</td>
+                    </tr>
+                    <tr>
+                        <td>Has a return type</td>
+                        <td>Has no return type</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <h3>How Many Types a catch Block Can Catch</h3>
             <p>A single <code>catch</code> block catches exactly one
@@ -946,7 +1087,8 @@
                         <td>Overridden by the Exception class to provide a
                             detailed error message, built in part using
                             <code>GetType()</code> to include the specific
-                            exception class's name</td>
+                            exception class's name
+                        </td>
                     </tr>
                     <tr>
                         <td><code>StackTrace</code></td>
@@ -979,7 +1121,26 @@
                 indicating whether the conversion succeeded, and delivers
                 the converted value through an <code>out</code> parameter,
                 rather than throwing an exception when the conversion
-                fails.</p>
+                fails.
+            </p>
+
+            <h3>Structure of Every TryParse() Method</h3>
+            <ul>
+                <li>It is <strong>public</strong>, so other classes can use
+                    it.</li>
+                <li>It is <strong>static</strong>, so no object of its class
+                    needs to be created to call it (you write
+                    <code>int.TryParse()</code>, not
+                    <code>someInt.TryParse()</code>).
+                </li>
+                <li>It accepts <strong>two</strong> parameters: the string to
+                    convert and an <code>out</code> parameter to hold the
+                    converted value.</li>
+                <li>It returns a <strong>bool</strong> indicating whether the
+                    conversion succeeded.</li>
+            </ul>
+            <p>If no TryParse() method existed, you could write one yourself
+                using try and catch blocks.</p>
 
             <div class="syntax-box">
                 <h4>Example: Avoiding an Exception with TryParse()</h4>
@@ -1035,11 +1196,15 @@
 
             <div class="tip-box">
                 A try block followed directly by a finally block, with no
-                catch block at all, is most appropriate when you want
-                guaranteed clean-up to run but you are intentionally not
-                handling the exception at this level; the exception is still
-                allowed to propagate up to the calling method after the
-                finally block's clean-up statements finish running.
+                catch block at all, is most appropriate when you need to
+                <strong>release resources</strong> that other applications
+                might be waiting for, such as <strong>database
+                    connections</strong> or open files, but you are
+                intentionally
+                not handling the exception at this level. Many well-designed
+                programs contain only try-finally pairs. The exception is
+                still allowed to propagate up to the calling method after
+                the finally block's clean-up statements finish running.
             </div>
 
             <p>If a try block includes three catch blocks and a finally
@@ -1052,7 +1217,72 @@
             <p>The <code>Environment.Exit()</code> method, part of the
                 <code>System</code> namespace, can be used to terminate an
                 application immediately from anywhere in the code,
-                regardless of where the call occurs.</p>
+                regardless of where the call occurs. A statement such as
+                <code>Environment.Exit(0);</code> ends the program and passes
+                its integer argument to the operating system.
+            </p>
+
+            <!-- ===================== SECTION 7B ===================== -->
+            <h2 id="section-outside">📤 Handling Exceptions Thrown from Outside
+                Methods</h2>
+
+            <p>One advantage of object-oriented exception handling is that an
+                exception can be handled differently depending on the
+                situation. A method often needs to <strong>detect</strong> an
+                error, but it should not always have to
+                <strong>handle</strong> it, because the right response
+                depends on the program using the method.
+            </p>
+
+            <div class="highlight-box">
+                <h4>Design Rule</h4>
+                When you design classes containing methods that might throw
+                exceptions, you most frequently should create those methods
+                so they <strong>throw the Exception object but do not handle
+                    it</strong>. Handling the exception usually should be left
+                to
+                the <strong>client</strong>, the program that uses your class,
+                so it can respond in a way that fits that application. This
+                makes the method more flexible for every program that calls
+                it.
+            </div>
+
+            <p>In practice, a method that does not handle the exceptions it
+                might throw simply <strong>lacks a try...catch pair</strong>:
+                its risky statements are not placed in a try block, and it
+                has no catch block. Such a method still compiles normally and
+                can still generate exceptions; any exception it generates is
+                passed back to the method that called it.</p>
+
+            <div class="syntax-box">
+                <h4>Example: The Method Throws, the Client Handles</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">PriceCalculator</span>
+{
+    <span class="comment">// No try/catch here: if quantity is 0, the</span>
+    <span class="comment">// DivideByZeroException goes back to the caller</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="func">UnitPrice</span>(<span class="type">int</span> <span class="var">total</span>, <span class="type">int</span> <span class="var">quantity</span>)
+    {
+        <span class="keyword">return</span> <span class="var">total</span> / <span class="var">quantity</span>;
+    }
+}
+
+<span class="comment">// Client program decides how to respond</span>
+<span class="keyword">try</span>
+{
+    <span class="type">int</span> <span class="var">price</span> = <span class="type">PriceCalculator</span>.<span class="func">UnitPrice</span>(<span class="num">500</span>, <span class="num">0</span>);
+}
+<span class="keyword">catch</span> (<span class="type">DivideByZeroException</span>)
+{
+    <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"Quantity must be at least 1."</span>);
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                Different professional programs may handle the very same
+                exception in different ways, depending on the purpose and
+                users of each application. That is exactly why the decision
+                is best left to the calling program.
+            </div>
 
             <!-- ===================== SECTION 8 ===================== -->
             <h2 id="section-callstack">🧵 The Call Stack and Propagation</h2>
@@ -1084,7 +1314,13 @@
             <p>The <code>StackTrace</code> property is most useful exactly
                 when you need to trace the precise sequence of method calls
                 that led up to an exception, in order to pinpoint where in
-                the program the underlying problem actually originated.</p>
+                the program the underlying problem actually originated. It
+                is especially helpful when you aren't sure <strong>which
+                    class</strong> in a program caused an error. (To show the
+                user a description of the error, use <code>Message</code>
+                instead; to find out what type of exception occurred, use
+                <code>ToString()</code>.)
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A Sample Stack Trace</h4>
@@ -1094,11 +1330,12 @@ at CheckoutApp.Main()</span></code></pre>
             </div>
 
             <div class="warning-box">
-                Read a stack trace from the top down: the very first line
-                shows where the exception was actually thrown, not the
-                bottommost line. In the example above, the true source of
-                the problem is inside <code>PaymentGateway.ChargeCard()</code>,
-                not <code>CheckoutApp.Main()</code>; <code>Main()</code>
+                Read a stack trace from the top down: the
+                <strong>last method executed is listed first</strong>, and
+                the class that method belongs to is the one that caused the
+                error. In the example above, the true source of the problem
+                is the <code>PaymentGateway</code> class, not
+                <code>CheckoutApp</code>; <code>Main()</code>
                 merely sits at the far end of the chain of calls that
                 eventually led there.
             </div>
@@ -1111,7 +1348,8 @@ at CheckoutApp.Main()</span></code></pre>
                 the <code>Exception</code> class directly to create your own
                 custom exception type, rather than extending
                 <code>ApplicationException</code>, which older references
-                sometimes recommended instead.</p>
+                sometimes recommended instead.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: A Custom Exception Class</h4>
@@ -1136,7 +1374,8 @@ at CheckoutApp.Main()</span></code></pre>
                 message and an inner exception, are the three recommended
                 constructors to write when defining a custom exception
                 class, matching the constructor pattern the base
-                <code>Exception</code> class itself provides.</p>
+                <code>Exception</code> class itself provides.
+            </p>
 
             <div class="warning-box">
                 One constraint on throwing objects in C#: you can only throw
@@ -1187,6 +1426,11 @@ at CheckoutApp.Main()</span></code></pre>
                                 compile-time error</td>
                         </tr>
                         <tr>
+                            <td>Unhandled exception</td>
+                            <td>Terminates the program; it does not keep
+                                running</td>
+                        </tr>
+                        <tr>
                             <td>Exception hierarchy</td>
                             <td>All exceptions derive from Exception, which
                                 derives from Object</td>
@@ -1198,18 +1442,31 @@ at CheckoutApp.Main()</span></code></pre>
                                 directly)</td>
                         </tr>
                         <tr>
-                            <td>Robustness / fault-tolerant / mission-critical</td>
+                            <td>Robustness / fault-tolerant / mission-critical
+                            </td>
                             <td>Resilience under stress / continues
-                                operating despite failure / high-stakes tasks</td>
+                                operating despite failure / high-stakes tasks
+                            </td>
                         </tr>
                         <tr>
                             <td>Infrequent event</td>
-                            <td>Roughly less than 1% of program executions</td>
+                            <td>Less than 30% of program executions; use an
+                                exception. 30% or more (e.g., 50%): use an
+                                if statement</td>
                         </tr>
                         <tr>
                             <td>try / throw / catch</td>
-                            <td>Object-oriented alternative to if-statement
-                                validation</td>
+                            <td>Try a risky procedure / a method that detects
+                                an error throws / the block that processes
+                                the error catches</td>
+                        </tr>
+                        <tr>
+                            <td>Operation aborted by user</td>
+                            <td>System.Data.OperationAbortedException</td>
+                        </tr>
+                        <tr>
+                            <td>Invalid printer requested</td>
+                            <td>InvalidPrinterException</td>
                         </tr>
                         <tr>
                             <td>Integer divide by zero</td>
@@ -1223,11 +1480,23 @@ at CheckoutApp.Main()</span></code></pre>
                         <tr>
                             <td>Try block contents</td>
                             <td>Can hold any number of statements, even ones
-                                that will never throw</td>
+                                that will never throw; must be followed by
+                                at least one catch or finally block</td>
+                        </tr>
+                        <tr>
+                            <td>Statement throws inside try</td>
+                            <td>Rest of the try block is skipped; control
+                                jumps to the catch blocks</td>
                         </tr>
                         <tr>
                             <td>catch block scope</td>
-                            <td>Catches exactly one exception type per block</td>
+                            <td>Catches exactly one exception type per block;
+                                also called a catch clause</td>
+                        </tr>
+                        <tr>
+                            <td>catch block vs. method</td>
+                            <td>Can't be called directly, catches one object,
+                                no return type</td>
                         </tr>
                         <tr>
                             <td>Multiple catch blocks</td>
@@ -1255,8 +1524,9 @@ at CheckoutApp.Main()</span></code></pre>
                         </tr>
                         <tr>
                             <td>TryParse()</td>
-                            <td>Returns bool, uses an out parameter, never
-                                throws on bad input</td>
+                            <td>public, static; takes a string and an out
+                                parameter; returns bool; never throws on bad
+                                input</td>
                         </tr>
                         <tr>
                             <td>finally block</td>
@@ -1265,8 +1535,14 @@ at CheckoutApp.Main()</span></code></pre>
                         </tr>
                         <tr>
                             <td>try/finally with no catch</td>
-                            <td>Guarantees clean-up while still letting the
-                                exception propagate</td>
+                            <td>Releases resources such as database
+                                connections while still letting the exception
+                                propagate</td>
+                        </tr>
+                        <tr>
+                            <td>Exceptions from outside methods</td>
+                            <td>Methods throw but don't handle (no try...catch);
+                                the client program handles</td>
                         </tr>
                         <tr>
                             <td>Environment.Exit()</td>
@@ -1285,8 +1561,9 @@ at CheckoutApp.Main()</span></code></pre>
                         </tr>
                         <tr>
                             <td>StackTrace property</td>
-                            <td>Lists the method call sequence; read top to
-                                bottom for the true origin</td>
+                            <td>Lists the method call sequence; last method
+                                executed is listed first, and its class caused
+                                the error</td>
                         </tr>
                         <tr>
                             <td>Custom exceptions</td>
@@ -1300,7 +1577,8 @@ at CheckoutApp.Main()</span></code></pre>
                         </tr>
                         <tr>
                             <td>Throwing constraint</td>
-                            <td>Only Exception-derived objects can be thrown</td>
+                            <td>Only Exception-derived objects can be thrown
+                            </td>
                         </tr>
                         <tr>
                             <td>Rethrowing</td>
