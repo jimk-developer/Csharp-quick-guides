@@ -631,21 +631,23 @@
 <body>
     <header>
         <h1>Guide 10: Microsoft Visual C# - Introduction to Inheritance</h1>
-        <p>Inheritance Basics, Protected Access, Polymorphism and
-            Overriding, Implicit Reference Conversions, the Object Class,
-            Base Class Constructors, Abstract and Sealed Classes,
-            Interfaces, Extension Methods, and GUI Inheritance</p>
         <nav class="nav-pills">
             <a href="#section-basics" class="nav-pill">Inheritance Basics</a>
             <a href="#section-protected" class="nav-pill">Protected Access</a>
-            <a href="#section-polymorphism" class="nav-pill">Polymorphism &amp; Overriding</a>
-            <a href="#section-conversions" class="nav-pill">Implicit Conversions</a>
+            <a href="#section-polymorphism" class="nav-pill">Polymorphism &amp;
+                Overriding</a>
+            <a href="#section-conversions" class="nav-pill">Implicit
+                Conversions</a>
             <a href="#section-object" class="nav-pill">The Object Class</a>
-            <a href="#section-base-constructors" class="nav-pill">Base Constructors</a>
-            <a href="#section-abstract-sealed" class="nav-pill">Abstract &amp; Sealed</a>
+            <a href="#section-base-constructors" class="nav-pill">Base
+                Constructors</a>
+            <a href="#section-abstract-sealed" class="nav-pill">Abstract &amp;
+                Sealed</a>
             <a href="#section-interfaces" class="nav-pill">Interfaces</a>
             <a href="#section-extension" class="nav-pill">Extension Methods</a>
             <a href="#section-gui" class="nav-pill">GUI Inheritance</a>
+            <a href="https://docs.google.com/document/d/1tY0eICXaDvJjVb75mcbOW7LkyDJ0wtMnslQuEL3fFYY/edit?usp=sharing"
+                target="_blank" class="nav-pill">Key Terms</a>
         </nav>
     </header>
 
@@ -668,7 +670,8 @@
                         descends from, how base class constructors fit into
                         the picture, classes designed purely to be inherited
                         from, interfaces, extension methods, and how
-                        inheritance shows up in GUI applications.</p>
+                        inheritance shows up in GUI applications.
+                    </p>
                 </div>
             </div>
 
@@ -680,7 +683,8 @@
                 then add its own more specific fields and methods on top of
                 them. The existing class being built upon is called the
                 <strong>base class</strong>, and the new class built from it
-                is called the <strong>derived class</strong>.</p>
+                is called the <strong>derived class</strong>.
+            </p>
 
             <div class="warning-box">
                 It is the derived class, not the base class, that ends up
@@ -741,7 +745,8 @@
                 <code>Animal</code>. A <code>Dog</code> object automatically
                 has a <code>Name</code> property, inherited from
                 <code>Animal</code>, in addition to its own
-                <code>Breed</code> property.</p>
+                <code>Breed</code> property.
+            </p>
 
             <h3>Identifying Base and Derived Classes with "Is A"</h3>
             <p>One reliable way to check whether two classes truly have a
@@ -750,7 +755,8 @@
                 is an Animal" reads naturally and correctly, confirming that
                 <code>Animal</code> belongs on the base class side and
                 <code>Dog</code> belongs on the derived class side of the
-                relationship.</p>
+                relationship.
+            </p>
 
             <h3>Inheritance Is Transitive</h3>
             <p>Inheritance is <strong>transitive</strong>: a class inherits
@@ -760,11 +766,75 @@
                 <code>Puppy</code> object would inherit members from both
                 <code>Dog</code> and, transitively, from <code>Animal</code>
                 as well; every class further up the chain is considered one
-                of its <strong>ancestors</strong>.</p>
+                of its <strong>ancestors</strong>.
+            </p>
+
+            <h3>Advantages of Inheritance</h3>
+            <p>Building a new class from an existing one, rather than
+                writing it from scratch, has several distinct benefits.
+                Each one answers a slightly different question, so it is
+                worth knowing which is which.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="card-icon">⏱️</span>
+                    <h4>Saves Time</h4>
+                    <p>The base class's fields, properties, and methods
+                        already exist, so you write less code for the
+                        derived class.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🐞</span>
+                    <h4>Reduces the Chance of Errors</h4>
+                    <p>When the base class has been in use for a while, its
+                        code has already been tested and used in different
+                        contexts, so it is less likely to contain errors.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">📘</span>
+                    <h4>Less to Learn</h4>
+                    <p>Programmers who already understand a familiar base
+                        class have less to learn when they use a class
+                        derived from it.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="card-icon">🛡️</span>
+                    <h4>Maintains Codebase Integrity</h4>
+                    <p>When you create a derived class, the base class's
+                        source code is <strong>not changed</strong>. Every
+                        program that already uses the base class keeps
+                        working exactly as before.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                Match the benefit to the question. "Reduces the chance of
+                errors" comes from the base class being <em>already
+                    tested</em>. "Maintains the integrity of the codebase"
+                comes from the base class source code being <em>left
+                    unchanged</em>.
+            </div>
 
             <!-- ===================== SECTION 2 ===================== -->
             <h2 id="section-protected">🔒 Protected Access</h2>
 
+            <h3>Information Hiding</h3>
+            <p>In typical C# classes, data fields are <code>private</code>,
+                while properties and methods are <code>public</code>. This
+                scheme is called <strong>information hiding</strong>. When
+                you choose which properties and methods of a class to make
+                public, you are assured that your data will be altered only
+                by the properties and methods you choose, and only in ways
+                that you can control. Outside code cannot reach a private
+                field directly; it must go through the public members you
+                provide.</p>
+
+            <p>Information hiding creates a problem for inheritance,
+                though: a <code>private</code> field cannot be used even by
+                a derived class. The <code>protected</code> access
+                specifier solves this.</p>
+
+            <h3>The protected Access Specifier</h3>
             <p>The <strong>protected</strong> access specifier makes a field
                 or method usable within its own class and within any class
                 derived from it, but not usable by any "outside," unrelated
@@ -783,7 +853,8 @@
             <p>Changing a field's access from <code>private</code> to
                 <code>protected</code>, as shown above, is exactly how you
                 make a base class field accessible to its descendants while
-                still keeping it inaccessible to unrelated classes.</p>
+                still keeping it inaccessible to unrelated classes.
+            </p>
 
             <h3>Fragile Classes</h3>
             <div class="warning-box">
@@ -838,7 +909,8 @@
                 <code>virtual</code> in the base class, that override
                 completely replaces the base class's implementation with
                 the derived class's own version whenever the method is
-                called on an object of the derived class.</p>
+                called on an object of the derived class.
+            </p>
 
             <div class="warning-box">
                 Overriding requires an identical signature: the same method
@@ -857,13 +929,30 @@
                 version rather than overriding it. Adding the
                 <code>new</code> keyword to the derived class method
                 signals that this hiding is intentional, silencing the
-                compiler warning that would otherwise appear.</p>
+                compiler warning that would otherwise appear.
+            </p>
+
+            <div class="highlight-box">
+                <h4>Two Ways to Avoid the Compiler Warning</h4>
+                <p style="margin-bottom: 0;">Whenever a derived class
+                    method has the same name and parameter list as a base
+                    class method, the compiler warns you unless you state
+                    your intent with one of two keywords:
+                    <code>new</code> (to hide the base method) or
+                    <code>override</code> (to replace a base method that
+                    was declared <code>virtual</code> or
+                    <code>abstract</code>). Either keyword removes the
+                    warning.
+                </p>
+            </div>
 
             <h3>Members That Are Not Hidden or Overridden</h3>
             <p>Any base class member that a derived class does not
-                explicitly hide or override remains fully <strong>visible</strong>
+                explicitly hide or override remains fully
+                <strong>visible</strong>
                 and usable in the derived class exactly as the base class
-                defined it, inherited without any change at all.</p>
+                defined it, inherited without any change at all.
+            </p>
 
             <h3>Accessing the Base Class Version with base</h3>
             <p>The <code>base</code> keyword always refers to the superclass
@@ -886,7 +975,8 @@
             <p>Calling <code>base.Play()</code> here runs
                 <code>Instrument</code>'s original <code>Play()</code>
                 implementation first, before <code>Violin</code>'s own
-                additional statement executes.</p>
+                additional statement executes.
+            </p>
 
             <!-- ===================== SECTION 4 ===================== -->
             <h2 id="section-conversions">🔄 Implicit Reference Conversions</h2>
@@ -910,7 +1000,8 @@
                 an argument of type <code>Instrument</code>,
                 <code>Violin</code>, <code>Drum</code>, or any other class
                 derived from <code>Instrument</code>, without the caller
-                needing to write any explicit conversion.</p>
+                needing to write any explicit conversion.
+            </p>
 
             <div class="tip-box">
                 You assign an object to its ancestor's type specifically
@@ -931,7 +1022,8 @@
                 from <code>Object</code>, either directly or transitively
                 through its ancestors, every object you create automatically
                 has access to a small set of methods defined by
-                <code>Object</code> itself.</p>
+                <code>Object</code> itself.
+            </p>
 
             <div class="tip-box">
                 When you create any C# object, you implicitly call the
@@ -972,7 +1064,8 @@
                     <tr>
                         <td><code>GetHashCode()</code></td>
                         <td>Returns an integer that acts like a fingerprint
-                            for the object, intended to uniquely identify it</td>
+                            for the object, intended to uniquely identify it
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -987,7 +1080,8 @@
                 <code>true</code> only if <code>firstCoin</code> and
                 <code>secondCoin</code> are references to the very same
                 object, not simply two different objects with matching
-                data.</p>
+                data.
+            </p>
 
             <h3>Overriding ToString()</h3>
             <p>Overriding <code>ToString()</code> to describe an object's
@@ -1012,7 +1106,8 @@
                 <code>ToString()</code> retrieves just the class's simple
                 name, "Membership," as a clean string, which is also the
                 general technique for displaying an object's class name to
-                a user without any extra namespace text attached.</p>
+                a user without any extra namespace text attached.
+            </p>
 
             <h3>Overriding Equals() and GetHashCode()</h3>
             <div class="warning-box">
@@ -1106,6 +1201,29 @@
                 classes to build on.
             </div>
 
+            <h3>Overriding Abstract Methods Is Required</h3>
+            <p>If a base class includes abstract methods, any concrete class
+                derived from it <strong>must</strong> override every one of
+                them using the <code>override</code> keyword. Otherwise
+                the derived class will not compile unless it is also
+                declared abstract. With a <code>virtual</code> method,
+                <code>override</code> is optional; with an
+                <code>abstract</code> method, it is mandatory.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Example: Implementing an Abstract Method</h4>
+                <pre><code><span class="keyword">class</span> <span class="type">Drum</span> : <span class="type">Instrument</span>
+{
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="type">void</span> <span class="func">Play</span>()
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="string">"The drum taps out a beat."</span>);
+    }
+}
+<span class="comment">// Omitting this override is a compiler error,</span>
+<span class="comment">// because Instrument.Play() is abstract.</span></code></pre>
+            </div>
+
             <h3>Choosing virtual vs. abstract</h3>
             <p>Declare a base class method <code>virtual</code>, rather than
                 <code>abstract</code>, whenever the method should be
@@ -1115,15 +1233,15 @@
                 An <code>abstract</code> method, by contrast, has no body at
                 all in the base class and forces every derived class to
                 supply its own implementation before it can be
-                instantiated.</p>
+                instantiated.
+            </p>
 
             <h3>Sealed Classes</h3>
             <p>A <strong>sealed class</strong> is one that cannot be
                 extended by any other class at all. Marking a class
                 <code>sealed</code> prevents any further inheritance from
-                it, which is exactly what prevents a class such as C#'s own
-                <code>System.Console</code> from being extended by other
-                code.</p>
+                it.
+            </p>
 
             <div class="syntax-box">
                 <h4>Syntax: A Sealed Class</h4>
@@ -1133,8 +1251,32 @@
 }</code></pre>
             </div>
 
+            <h3>Static Classes Cannot Be Extended Either</h3>
+            <p>A class declared <code>static</code> can contain only static
+                members, cannot be instantiated, and is automatically
+                sealed, so no class can inherit from it. C#'s own
+                <code>System.Console</code> class is declared this way:
+            </p>
+
+            <div class="syntax-box">
+                <h4>How System.Console Is Declared</h4>
+                <pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="type">Console</span>
+{
+    <span class="comment">// WriteLine(), ReadLine(), etc. are all static</span>
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                It is the <code>static</code> modifier that prevents
+                <code>System.Console</code> from being extended. The
+                <code>private</code>, <code>internal</code>, and
+                <code>protected</code> access modifiers have nothing to do
+                with it.
+            </div>
+
             <!-- ===================== SECTION 8 ===================== -->
-            <h2 id="section-interfaces">🔌 Interfaces and Multiple Inheritance</h2>
+            <h2 id="section-interfaces">🔌 Interfaces and Multiple Inheritance
+            </h2>
 
             <p>An <strong>interface</strong> is a collection of purely
                 abstract methods (and possibly other members), all without
@@ -1155,11 +1297,19 @@
                 classes: a class can have, at most, one base class. This
                 differs from languages such as C++, where a class can
                 inherit directly from more than one parent class at once.
-                One major reason multiple inheritance causes problems is
-                ambiguity: if two separate parent classes each define a
-                member with the same name, there is no clear, unambiguous
-                way to decide which parent's version a derived class should
-                use.</p>
+                Multiple inheritance causes problems for two main reasons:
+            </p>
+
+            <ul>
+                <li><strong>Constructor calls:</strong> a child class must
+                    call its parent class constructor. With two or more
+                    parents, it becomes unclear which constructors must be
+                    called, in what order, and with what arguments.</li>
+                <li><strong>Ambiguous members:</strong> if two separate
+                    parent classes each define a member with the same name,
+                    there is no clear way to decide which parent's version
+                    the child class should use.</li>
+            </ul>
 
             <div class="tip-box">
                 While a C# class can only extend one base class, it can
@@ -1211,7 +1361,8 @@
                 <code>ToFahrenheit()</code> as an extension method and
                 identifies exactly which type, <code>double</code>, it
                 extends. The class containing an extension method must
-                itself be declared <code>static</code>.</p>
+                itself be declared <code>static</code>.
+            </p>
 
             <!-- ===================== SECTION 10 ===================== -->
             <h2 id="section-gui">🖱️ GUI Application Inheritance</h2>
@@ -1274,6 +1425,18 @@
                                 the reverse</td>
                         </tr>
                         <tr>
+                            <td>Advantages of inheritance</td>
+                            <td>Saves time; reduces errors (base class
+                                already tested); less to learn; maintains
+                                integrity (base class source unchanged)</td>
+                        </tr>
+                        <tr>
+                            <td>Information hiding</td>
+                            <td>Private fields with public properties and
+                                methods, so data changes only in ways you
+                                control</td>
+                        </tr>
+                        <tr>
                             <td>protected access</td>
                             <td>Usable in the class and its derived classes
                                 only</td>
@@ -1301,7 +1464,8 @@
                         <tr>
                             <td>new keyword</td>
                             <td>Hides a non-virtual base method
-                                intentionally; suppresses the warning</td>
+                                intentionally; suppresses the warning (new
+                                or override both avoid it)</td>
                         </tr>
                         <tr>
                             <td>base keyword</td>
@@ -1367,12 +1531,24 @@
                             <td>Cannot be extended by any other class</td>
                         </tr>
                         <tr>
+                            <td>Abstract methods</td>
+                            <td>Derived concrete classes must override them;
+                                override is required</td>
+                        </tr>
+                        <tr>
+                            <td>Static class</td>
+                            <td>Automatically sealed; why System.Console
+                                cannot be extended</td>
+                        </tr>
+                        <tr>
                             <td>Interface</td>
                             <td>Collection of purely abstract methods</td>
                         </tr>
                         <tr>
                             <td>No multiple class inheritance</td>
-                            <td>One base class max; many interfaces allowed</td>
+                            <td>One base class max; many interfaces allowed.
+                                Problems: which parent constructors to call,
+                                and ambiguous same-named members</td>
                         </tr>
                         <tr>
                             <td>Extension method</td>
