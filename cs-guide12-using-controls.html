@@ -631,11 +631,9 @@
 <body>
     <header>
         <h1>Guide 12: Microsoft Visual C# - Using Controls</h1>
-        <p>Control Fundamentals and IDE Code, Fonts, Color, Selection
-            Controls, Grouping, Graphics, List Controls, Date/Time
-            Controls, Multiple Forms, Layout, and Menus</p>
         <nav class="nav-pills">
-            <a href="#section-fundamentals" class="nav-pill">Control Fundamentals</a>
+            <a href="#section-fundamentals" class="nav-pill">Control
+                Fundamentals</a>
             <a href="#section-fonts" class="nav-pill">Fonts</a>
             <a href="#section-color" class="nav-pill">Color</a>
             <a href="#section-selection" class="nav-pill">Selection Controls</a>
@@ -670,22 +668,41 @@
             </div>
 
             <!-- ===================== SECTION 1 ===================== -->
-            <h2 id="section-fundamentals">🧰 Control Fundamentals and IDE Code</h2>
+            <h2 id="section-fundamentals">🧰 Control Fundamentals and IDE Code
+            </h2>
 
             <p>The <code>Control</code> class provides the definitions for
                 GUI objects in C#; every button, label, list box, and other
                 visual element you place on a form ultimately derives from
                 it. A <code>Control</code> exposes a large surface of
-                functionality, with more than 80 public properties
-                available on every control you use.</p>
+                functionality, with more than 80 public properties and 20
+                protected properties available on every control you use,
+                such as <code>Font</code>, <code>ForeColor</code>,
+                <code>Width</code>, and <code>Height</code>. Because every
+                control inherits from <code>Control</code>, every control
+                you will ever use provides properties and methods; as you
+                learn new controls, you are mostly learning which inherited
+                and added members matter for each one.
+            </p>
 
             <p>The <code>Component</code> class, meanwhile, provides
-                containment and cleanup for other objects. Because classes
-                in this part of the framework are designed to support being
-                used remotely, some of these objects can even be
+                containment and cleanup for other objects.
+                <code>Component</code> itself descends from the
+                <code>MarshalByRefObject</code> class. A
+                <code>MarshalByRefObject</code> is an object that can be
                 instantiated on a remote computer, letting your program
-                manipulate a reference to that remote object rather than
-                working with a local copy of it.</p>
+                manipulate a <em>reference</em> to that remote object rather
+                than working with a local copy of it.
+            </p>
+
+            <div class="syntax-box">
+                <h4>Inheritance Chain for GUI Controls</h4>
+                <pre><code><span class="type">Object</span>
+  └─ <span class="type">MarshalByRefObject</span>   <span class="comment">// can be instantiated remotely; used by reference</span>
+       └─ <span class="type">Component</span>        <span class="comment">// containment and cleanup for other objects</span>
+            └─ <span class="type">Control</span>     <span class="comment">// definitions for GUI objects (80+ public properties)</span>
+                 └─ <span class="type">Button</span>, <span class="type">Label</span>, <span class="type">ListBox</span>, ...</code></pre>
+            </div>
 
             <h3>A Term for GUI Controls</h3>
             <p>A term commonly used specifically for GUI controls, borrowed
@@ -724,23 +741,81 @@
                 pauses layout logic while the remaining controls are
                 configured, which improves performance and prevents the
                 form from visually flickering while the IDE's generated
-                statements run.</p>
+                statements run.
+            </p>
 
             <div class="tip-box">
-                When designing a Form, the IDE's Form Designer, the visual,
-                drag-and-drop surface for arranging controls, is the
-                recommended feature to use rather than hand-writing every
-                control's construction and property statements yourself.
+                When designing a Form, you are recommended to use the IDE's
+                <strong>drag-and-drop code generation</strong>: drag controls
+                from the Toolbox onto the Form Designer and let Visual
+                Studio write the construction and property statements for
+                you, rather than typing every statement yourself in the code
+                editor window.
             </div>
+
+            <h3>Finding More Controls</h3>
+            <p>The Toolbox shows the controls you will use most often, but
+                many more types of controls and items are available. Click
+                <strong>Project</strong> in the Visual Studio menu bar and
+                then click <strong>Add New Item</strong> to browse them; this
+                is also how you add a second Form to a project.
+            </p>
 
             <h3>Default Events and Default Methods</h3>
             <p>Every control has a <strong>default event</strong>: the
                 specific event that Visual Studio automatically generates a
                 handler for when you double-click that control in the Form
-                Designer. A control's default method executes automatically
-                whenever that control's default event occurs, and it is
-                exactly this shell of a method that appears in your code the
-                moment you double-click the control.</p>
+                Designer. A control's default event is the event that users
+                most likely expect to generate when they encounter that
+                control in a working application: users expect to
+                <em>click</em> a Button, so its default event is
+                <code>Click</code>; users expect to <em>check</em> a
+                CheckBox, so its default event is <code>CheckedChanged</code>.
+                A control's default method executes automatically whenever
+                that control's default event occurs, and it is exactly this
+                shell of a method that appears in your code the moment you
+                double-click the control.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Control</th>
+                        <th>Default Event</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Button</code></td>
+                        <td><code>Click</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>CheckBox</code> / <code>RadioButton</code>
+                        </td>
+                        <td><code>CheckedChanged</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ListBox</code></td>
+                        <td><code>SelectedIndexChanged</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>LinkLabel</code></td>
+                        <td><code>LinkClicked</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>MonthCalendar</code></td>
+                        <td><code>DateChanged</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DateTimePicker</code></td>
+                        <td><code>ValueChanged</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>MenuStrip</code> item</td>
+                        <td><code>Click</code></td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- ===================== SECTION 2 ===================== -->
             <h2 id="section-fonts">🔤 Fonts</h2>
@@ -761,7 +836,54 @@
                 <code>headingFont</code> that formats text in a 14.5-point
                 Calibri typeface, using the same pattern, a font family
                 name followed by a point size, that any similar Font
-                constructor call would follow.</p>
+                constructor call would follow.
+            </p>
+
+            <h3>Font Constructor Arguments</h3>
+            <p>The <code>Font</code> class has many overloaded constructors
+                (far more than two). The two you will use most often are:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Constructor</th>
+                        <th>Arguments, in Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Font(string, float)</code></td>
+                        <td>Font family name as a <code>string</code>, then
+                            point size as a <code>float</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Font(string, float, FontStyle)</code></td>
+                        <td>Family name, point size, and then a
+                            <code>FontStyle</code> value as the last
+                            argument
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="syntax-box">
+                <h4>Example: Two-Argument and Three-Argument Fonts</h4>
+                <pre><code><span class="type">Font</span> <span class="var">smallPlain</span> = <span class="keyword">new</span> <span class="type">Font</span>(<span class="string">"Arial"</span>, <span class="num">10.5</span><span class="type">f</span>);
+<span class="type">Font</span> <span class="var">bigBold</span>    = <span class="keyword">new</span> <span class="type">Font</span>(<span class="string">"Arial"</span>, <span class="num">16</span><span class="type">f</span>, <span class="type">FontStyle</span>.<span class="var">Bold</span>);
+<span class="var">titleLabel</span>.<span class="var">Font</span> = <span class="var">bigBold</span>;</code></pre>
+            </div>
+
+            <div class="warning-box">
+                Watch the details: the family name comes <em>first</em> and
+                must be in quotes (it is a <code>string</code>); the size
+                comes <em>second</em> and needs the <code>f</code> suffix
+                because it is a <code>float</code>; and the style is a
+                <code>FontStyle</code> value such as
+                <code>FontStyle.Bold</code> or <code>FontStyle.Italic</code>,
+                not a string like <code>"Bold"</code>. Fonts are created with
+                <code>new</code>, not a method such as
+                <code>Font.Create()</code>.
+            </div>
 
             <h3>Serif vs. Sans Serif Fonts</h3>
             <div class="comparison">
@@ -787,6 +909,29 @@
                 ones without those lines.
             </div>
 
+            <h3>Fonts and Accessibility</h3>
+            <p>To make your applications more accessible, especially for
+                users with vision impairments or dyslexia, choose plain,
+                easy-to-read fonts for messages and labels. Fonts such as
+                <strong>Helvetica, Courier, Arial, and Verdana</strong> are
+                commonly recommended for messages to the user.
+            </p>
+
+            <div class="comparison">
+                <div class="comparison-item good">
+                    <h4>Do</h4>
+                    <p>Use clear fonts like Helvetica, Courier, Arial, or
+                        Verdana; use a readable size; keep styles
+                        consistent.</p>
+                </div>
+                <div class="comparison-item caution">
+                    <h4>Avoid</h4>
+                    <p>Fonts with decorative flourishes, and heavy use of
+                        italics for labels and messages; they look
+                        attractive but are harder to read.</p>
+                </div>
+            </div>
+
             <!-- ===================== SECTION 3 ===================== -->
             <h2 id="section-color">🎨 Color</h2>
 
@@ -794,7 +939,8 @@
                 Forms and controls, most often through a control's
                 <code>BackColor</code> (background color) and
                 <code>ForeColor</code> (foreground, or text, color)
-                properties.</p>
+                properties.
+            </p>
 
             <div class="syntax-box">
                 <h4>Example: Setting BackColor and ForeColor</h4>
@@ -810,7 +956,8 @@
                 <code>Color.Yellow</code>, and it also allows you to create
                 fully custom colors, most commonly with
                 <code>Color.FromArgb()</code>, specifying your own exact red,
-                green, and blue values.</p>
+                green, and blue values.
+            </p>
 
             <h3>Color and Accessibility</h3>
             <div class="warning-box">
@@ -818,12 +965,20 @@
                 contrast between text and background colors for users with
                 vision impairments, and never rely on color alone to convey
                 important information. People with red-green color
-                blindness specifically have difficulty distinguishing red
-                from green, so a design that uses only red versus green,
-                such as marking an error in red and success in green with
-                no other visual cue, can be genuinely unusable for these
-                users.
+                blindness have difficulty distinguishing red from green,
+                so a design that uses only red versus green, such as
+                marking an error in red and success in green with no other
+                visual cue, can be unusable for these users.
             </div>
+
+            <p>Red-green color blindness affects more than just red and
+                green. Because purple is a mix of blue and red, a person who
+                does not perceive red well sees purple as blue. As a result,
+                people with red-green color blindness also <strong>find it
+                    difficult to distinguish between blue and purple</strong>.
+                They can still see many colors, just not every distinction,
+                and they benefit from <em>high</em>-contrast combinations,
+                not low-contrast ones such as blue on green.</p>
 
             <div class="tip-box">
                 One popular assumption about how color choices affect
@@ -864,7 +1019,8 @@
                 class, alongside the ordinary <code>Button</code> class
                 itself; <code>Button</code>, <code>CheckBox</code>, and
                 <code>RadioButton</code> are all descendants of
-                <code>ButtonBase</code>.</p>
+                <code>ButtonBase</code>.
+            </p>
 
             <h3>The Checked Property and CheckedChanged Event</h3>
             <p>Both <code>CheckBox</code> and <code>RadioButton</code>
@@ -952,7 +1108,8 @@
                 <code>Panel</code> supports scroll bars but does not display
                 any caption at all. Choose between them based on which
                 feature, a visible caption or scrollable content, your
-                layout actually needs.</p>
+                layout actually needs.
+            </p>
 
             <h3>Grouping Radio Buttons into Separate Sets</h3>
             <p>Radio buttons are mutually exclusive only within the same
@@ -977,14 +1134,38 @@
                 bitmap, icon, JPEG, GIF, or other supported image file type
                 inside your program.</p>
 
-            <div class="tip-box">
-                To display a photograph saved as a JPEG, the first step in
-                Visual Studio is to add a PictureBox control to your form.
-                From there, you select an image for it directly through the
-                PictureBox's <strong>Image</strong> property in the
-                Properties window, which opens a dialog for importing an
-                image file, all without needing to write any code at all
-                for the basic task of displaying it.
+            <h3>Displaying an Image in a PictureBox</h3>
+            <p>To display a photograph saved as a JPEG, the first step is to
+                <strong>drag a PictureBox control from the Toolbox onto the
+                    Form</strong>. You do not drag the image file onto the Form,
+                and there is no separate "Image" control in the Toolbox.
+                Then select the image:
+            </p>
+
+            <ol>
+                <li>With the PictureBox selected, find its
+                    <strong>Image</strong> property in the Properties window.
+                    When no image is chosen yet, the value beside it reads
+                    <strong>(none)</strong>.
+                </li>
+                <li>Click the <strong>(none)</strong> value, then click the
+                    button with an <strong>ellipsis</strong> (<code>...</code>)
+                    that appears.</li>
+                <li>The <strong>Select Resource</strong> dialog opens. Click
+                    <strong>Import</strong>, browse to the image file, and
+                    click <strong>OK</strong>.
+                </li>
+            </ol>
+
+            <div class="warning-box">
+                There is no "Select Resource" button in the Properties
+                window itself; that is the name of the dialog that opens
+                after you click the ellipsis. If the image is larger than
+                the PictureBox, you do not have to drag its borders to fit;
+                set the <code>SizeMode</code> property (for example,
+                <code>Zoom</code> or <code>StretchImage</code>) instead. If
+                you never choose an image, the PictureBox simply stays
+                blank; Visual Studio does not insert a default image.
             </div>
 
             <!-- ===================== SECTION 7 ===================== -->
@@ -994,7 +1175,8 @@
                 <code>CheckedListBox</code> all descend from a shared parent
                 class, <code>ListControl</code>, and all three display a
                 collection of items the user can choose from, each with its
-                own particular twist.</p>
+                own particular twist.
+            </p>
 
             <div class="concept-grid">
                 <div class="concept-card">
@@ -1094,13 +1276,15 @@
 
             <p>The default event for a <code>MonthCalendar</code> object is
                 <code>DateChanged</code>, which fires whenever the user
-                selects a different date on the calendar.</p>
+                selects a different date on the calendar.
+            </p>
 
             <h3>Working with Dates</h3>
             <p>A selected date range is represented through a
                 <code>MonthCalendar</code>'s <code>SelectionStart</code> and
                 <code>SelectionEnd</code> properties. Several useful methods
-                can be applied to the date values these properties hold.</p>
+                can be applied to the date values these properties hold.
+            </p>
 
             <table>
                 <thead>
@@ -1176,10 +1360,14 @@
                 <code>LinkLabel</code> is its <code>LinkClicked</code> event
                 handler, the control's default method, generated
                 automatically when you double-click a LinkLabel in the Form
-                Designer.</p>
+                Designer.
+            </p>
 
             <h3>Adding Secondary Forms</h3>
-            <p>A C# project can include more than one <code>Form</code>. A
+            <p>A C# project can include more than one <code>Form</code>. To
+                add one, click <strong>Project</strong> in the menu bar,
+                then <strong>Add New Item</strong> (or <strong>Add
+                    Form</strong>), and choose a Windows Form. A
                 secondary form that takes control of a program, preventing
                 the user from interacting with any other open window until
                 it is closed, is known as a <strong>modal window</strong>
@@ -1217,7 +1405,8 @@
             <p>Calling <code>Show()</code> on a secondary form, rather than
                 <code>ShowDialog()</code>, is exactly how you let a user
                 continue taking action on the original form while a second
-                form is also open on screen at the same time.</p>
+                form is also open on screen at the same time.
+            </p>
 
             <!-- ===================== SECTION 10 ===================== -->
             <h2 id="section-layout">📐 Form Layout</h2>
@@ -1240,7 +1429,8 @@
                 <tbody>
                     <tr>
                         <td><code>Location</code></td>
-                        <td>Sets a control's fixed position on its container</td>
+                        <td>Sets a control's fixed position on its container
+                        </td>
                     </tr>
                     <tr>
                         <td><code>Anchor</code></td>
@@ -1292,7 +1482,8 @@
                 (<code>&amp;</code>) in front of a unique letter in a
                 <code>MenuStrip</code> menu item's text lets the user press
                 Alt plus that letter to activate the menu choice as a
-                keyboard alternative to clicking it with the mouse.</p>
+                keyboard alternative to clicking it with the mouse.
+            </p>
 
             <div class="tip-box">
                 While filling in the items of a MenuStrip control in the
@@ -1321,12 +1512,23 @@
                         <tr>
                             <td>Control class</td>
                             <td>Defines GUI objects; more than 80 public
-                                properties each</td>
+                                properties each; every control provides
+                                properties and methods</td>
                         </tr>
                         <tr>
                             <td>Component class</td>
                             <td>Provides containment and cleanup for other
                                 objects</td>
+                        </tr>
+                        <tr>
+                            <td>MarshalByRefObject</td>
+                            <td>Can be instantiated remotely and used by
+                                reference; parent of Component</td>
+                        </tr>
+                        <tr>
+                            <td>Project &gt; Add New Item</td>
+                            <td>Finds more controls and items, including
+                                new Forms</td>
                         </tr>
                         <tr>
                             <td>Widget</td>
@@ -1344,13 +1546,19 @@
                         </tr>
                         <tr>
                             <td>Default event / default method</td>
-                            <td>Generated by double-clicking a control in
-                                the Form Designer</td>
+                            <td>The event users most likely expect from the
+                                control; shell generated by double-clicking
+                                it in the Form Designer</td>
                         </tr>
                         <tr>
                             <td>Font class</td>
-                            <td>Changes printed text appearance; multiple
-                                overloaded constructors</td>
+                            <td>Changes printed text appearance; e.g.,
+                                Font(string, float, FontStyle)</td>
+                        </tr>
+                        <tr>
+                            <td>Font accessibility</td>
+                            <td>Helvetica, Courier, Arial, Verdana; avoid
+                                decorative fonts</td>
                         </tr>
                         <tr>
                             <td>Serif vs. sans serif</td>
@@ -1365,7 +1573,8 @@
                         <tr>
                             <td>Color accessibility</td>
                             <td>High contrast; never rely on color alone;
-                                mind red-green color blindness</td>
+                                red-green color blindness also confuses blue
+                                and purple</td>
                         </tr>
                         <tr>
                             <td>CheckBox</td>
@@ -1387,7 +1596,8 @@
                         </tr>
                         <tr>
                             <td>Access key (&amp;)</td>
-                            <td>Marks a letter as an Alt-key shortcut in Text</td>
+                            <td>Marks a letter as an Alt-key shortcut in Text
+                            </td>
                         </tr>
                         <tr>
                             <td>GroupBox vs. Panel</td>
@@ -1397,7 +1607,8 @@
                         <tr>
                             <td>PictureBox</td>
                             <td>Displays bitmap, icon, JPEG, GIF, and other
-                                image types</td>
+                                image types; Image property: (none) &gt;
+                                ellipsis &gt; Select Resource</td>
                         </tr>
                         <tr>
                             <td>ListControl descendants</td>
